@@ -46,10 +46,9 @@ const Page = () => {
   const router = useRouter();
   const auth = useAuth();
   const formik = useFormik({
-    initialValues,
-    validationSchema,
-    onSubmit: () => { async (values, helpers) => {
-      console.log('submit')
+    initialValues: initialValues,
+    validationSchema: validationSchema,
+    onSubmit: async (values, helpers) => {
       try {
         await auth.signIn(values.email, values.password);
         router.push('/');
@@ -58,7 +57,7 @@ const Page = () => {
         helpers.setErrors({ submit: err.message });
         helpers.setSubmitting(false);
       }
-    }}
+    }
   });
 
   const handleSkip = useCallback(
@@ -68,6 +67,11 @@ const Page = () => {
     },
     [auth, router]
   );
+
+  const handleSubmit = 
+    (e) => {
+      console.log("Submit")
+    };
 
   return (
       <Card elevation={16}>
@@ -135,7 +139,6 @@ const Page = () => {
               sx={{ mt: 2 }}
               type="submit"
               variant="contained"
-              
             >
               Log In
             </Button>

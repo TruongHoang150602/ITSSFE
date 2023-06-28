@@ -28,7 +28,7 @@ const Page = () => {
     <>
       <Head>
         <title>
-          Dashboard: Analytics | Devias Kit PRO
+          Dashboard: Analytics | GymCenter
         </title>
       </Head>
       <Box

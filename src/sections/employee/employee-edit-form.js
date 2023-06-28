@@ -17,22 +17,40 @@ import {
 } from '@mui/material';
 import { paths } from 'src/paths';
 import { wait } from 'src/utils/wait';
+import { employee } from 'src/api/employees/data';
 
-export const CustomerEditForm = (props) => {
-  const { customer, ...other } = props;
+
+const initialValues = (employee) => {
+  if(employee) return {
+    address1: employee.address1 || '',
+    address2: employee.address2 || '',
+    country: employee.country || '',
+    email: employee.email || '',
+    hasDiscount: employee.hasDiscount || false,
+    isVerified: employee.isVerified || false,
+    name: employee.name || '',
+    phone: employee.phone || '',
+    state: employee.state || '',
+    submit: null
+  }
+  return {
+    address1: '',
+    address2: '',
+    country: '',
+    email: '',
+    hasDiscount: false,
+    isVerified: false,
+    name: '',
+    phone: '',
+    state: '',
+    submit: null
+  }
+}
+
+export const EmployeeEditForm = (props) => {
+  const { employee, ...other } = props;
   const formik = useFormik({
-    initialValues: {
-      address1: customer.address1 || '',
-      address2: customer.address2 || '',
-      country: customer.country || '',
-      email: customer.email || '',
-      hasDiscount: customer.hasDiscount || false,
-      isVerified: customer.isVerified || false,
-      name: customer.name || '',
-      phone: customer.phone || '',
-      state: customer.state || '',
-      submit: null
-    },
+    initialValues:initialValues(employee),
     validationSchema: Yup.object({
       address1: Yup.string().max(255),
       address2: Yup.string().max(255),
@@ -57,7 +75,7 @@ export const CustomerEditForm = (props) => {
         await wait(500);
         helpers.setStatus({ success: true });
         helpers.setSubmitting(false);
-        toast.success('Customer updated');
+        toast.success('Employee updated');
       } catch (err) {
         console.error(err);
         toast.error('Something went wrong!');
@@ -73,7 +91,7 @@ export const CustomerEditForm = (props) => {
       onSubmit={formik.handleSubmit}
       {...other}>
       <Card>
-        <CardHeader title="Edit Customer" />
+        <CardHeader title="Edit Employee" />
         <CardContent sx={{ pt: 0 }}>
           <Grid
             container
@@ -187,72 +205,6 @@ export const CustomerEditForm = (props) => {
               />
             </Grid>
           </Grid>
-          <Stack
-            divider={<Divider />}
-            spacing={3}
-            sx={{ mt: 3 }}
-          >
-            <Stack
-              alignItems="center"
-              direction="row"
-              justifyContent="space-between"
-              spacing={3}
-            >
-              <Stack spacing={1}>
-                <Typography
-                  gutterBottom
-                  variant="subtitle1"
-                >
-                  Make Contact Info Public
-                </Typography>
-                <Typography
-                  color="text.secondary"
-                  variant="body2"
-                >
-                  Means that anyone viewing your profile will be able to see your contacts
-                  details
-                </Typography>
-              </Stack>
-              <Switch
-                checked={formik.values.isVerified}
-                color="primary"
-                edge="start"
-                name="isVerified"
-                onChange={formik.handleChange}
-                value={formik.values.isVerified}
-              />
-            </Stack>
-            <Stack
-              alignItems="center"
-              direction="row"
-              justifyContent="space-between"
-              spacing={3}
-            >
-              <Stack spacing={1}>
-                <Typography
-                  gutterBottom
-                  variant="subtitle1"
-                >
-                  Available to hire
-                </Typography>
-                <Typography
-                  color="text.secondary"
-                  variant="body2"
-                >
-                  Toggling this will let your teammates know that you are available for
-                  acquiring new projects
-                </Typography>
-              </Stack>
-              <Switch
-                checked={formik.values.hasDiscount}
-                color="primary"
-                edge="start"
-                name="hasDiscount"
-                onChange={formik.handleChange}
-                value={formik.values.hasDiscount}
-              />
-            </Stack>
-          </Stack>
         </CardContent>
         <Stack
           direction={{
@@ -284,7 +236,6 @@ export const CustomerEditForm = (props) => {
   );
 };
 
-CustomerEditForm.propTypes = {
-  // @ts-ignore
-  customer: PropTypes.object.isRequired
+EmployeeEditForm.propTypes = {
+  employee: PropTypes.object.isRequired
 };

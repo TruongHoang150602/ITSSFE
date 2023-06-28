@@ -3,45 +3,44 @@ import NextLink from 'next/link';
 import Head from 'next/head';
 import ArrowLeftIcon from '@untitled-ui/icons-react/build/esm/ArrowLeft';
 import { Avatar, Box, Chip, Container, Link, Stack, SvgIcon, Typography } from '@mui/material';
-import { customersApi } from 'src/api/customers';
+import { employeesApi } from 'src/api/employees';
 import { useMounted } from 'src/hooks/use-mounted';
 import { usePageView } from 'src/hooks/use-page-view';
 import { Layout as DashboardLayout } from 'src/layouts/dashboard/layout';
 import { paths } from 'src/paths';
-import { CustomerEditForm } from 'src/sections/employee/employee-edit-form';
+import { EmployeeEditForm } from 'src/sections/employee/employee-edit-form';
 import { getInitials } from 'src/utils/get-initials';
 
-const useCustomer = () => {
+const useEmployee = () => {
   const isMounted = useMounted();
-  const [customer, setCustomer] = useState(null);
+  const [employee, setEmployee] = useState(null);
 
-  const getCustomer = useCallback(async () => {
+  const getEmployee = useCallback(async () => {
     try {
-      const response = await customersApi.getCustomer();
-
+      const response = await employeesApi.getEmployee();
       if (isMounted()) {
-        setCustomer(response);
+        setEmployee(response);
       }
     } catch (err) {
-      console.error(err);
+      console.error(err + 'ne');
     }
   }, [isMounted]);
 
   useEffect(() => {
-      getCustomer();
+      getEmployee();
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     []);
 
-  return customer;
+  return employee;
 };
 
 const Page = () => {
-  const customer = useCustomer();
+  const employee = useEmployee();
 
   usePageView();
 
-  if (!customer) {
+  if (!employee) {
     return null;
   }
 
@@ -49,7 +48,7 @@ const Page = () => {
     <>
       <Head>
         <title>
-          Dashboard: Customer Edit | Devias Kit PRO
+          Dashboard: Employee Edit | Devias Kit PRO
         </title>
       </Head>
       <Box
@@ -77,7 +76,7 @@ const Page = () => {
                     <ArrowLeftIcon />
                   </SvgIcon>
                   <Typography variant="subtitle2">
-                    Customers
+                    Employees
                   </Typography>
                 </Link>
               </div>
@@ -96,17 +95,17 @@ const Page = () => {
                   spacing={2}
                 >
                   <Avatar
-                    src={customer.avatar}
+                    src={employee.avatar}
                     sx={{
                       height: 64,
                       width: 64
                     }}
                   >
-                    {getInitials(customer.name)}
+                    {getInitials(employee.name)}
                   </Avatar>
                   <Stack spacing={1}>
                     <Typography variant="h4">
-                      {customer.email}
+                      {employee.email}
                     </Typography>
                     <Stack
                       alignItems="center"
@@ -117,7 +116,7 @@ const Page = () => {
                         user_id:
                       </Typography>
                       <Chip
-                        label={customer.id}
+                        label={employee.id}
                         size="small"
                       />
                     </Stack>
@@ -125,7 +124,7 @@ const Page = () => {
                 </Stack>
               </Stack>
             </Stack>
-            <CustomerEditForm customer={customer} />
+            <EmployeeEditForm employee={employee} />
           </Stack>
         </Container>
       </Box>

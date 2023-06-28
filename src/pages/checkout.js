@@ -86,7 +86,7 @@ const Page = () => {
     <>
       <Head>
         <title>
-          Checkout | Devias Kit PRO
+          Checkout | GymCenter
         </title>
       </Head>
       <Box

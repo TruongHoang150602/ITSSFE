@@ -1,6 +1,5 @@
 import PropTypes from 'prop-types';
 import BellIcon from '@heroicons/react/24/solid/BellIcon';
-import UsersIcon from '@heroicons/react/24/solid/UsersIcon';
 import Bars3Icon from '@heroicons/react/24/solid/Bars3Icon';
 import MagnifyingGlassIcon from '@heroicons/react/24/solid/MagnifyingGlassIcon';
 import {
@@ -78,13 +77,6 @@ export const TopNav = (props) => {
             direction="row"
             spacing={2}
           >
-            <Tooltip title="Contacts">
-              <IconButton>
-                <SvgIcon fontSize="small">
-                  <UsersIcon />
-                </SvgIcon>
-              </IconButton>
-            </Tooltip>
             <Tooltip title="Notifications">
               <IconButton>
                 <Badge

@@ -25,29 +25,29 @@ import { Scrollbar } from 'src/components/scrollbar';
 import { paths } from 'src/paths';
 import { getInitials } from 'src/utils/get-initials';
 
-const useSelectionModel = (customers) => {
-  const customerIds = useMemo(() => {
-    return customers.map((customer) => customer.id);
-  }, [customers]);
+const useSelectionModel = (employees) => {
+  const employeeIds = useMemo(() => {
+    return employees.map((employee) => employee.id);
+  }, [employees]);
   const [selected, setSelected] = useState([]);
 
   useEffect(() => {
     setSelected([]);
-  }, [customerIds]);
+  }, [employeeIds]);
 
-  const selectOne = useCallback((customerId) => {
-    setSelected((prevState) => [...prevState, customerId]);
+  const selectOne = useCallback((employeeId) => {
+    setSelected((prevState) => [...prevState, employeeId]);
   }, []);
 
-  const deselectOne = useCallback((customerId) => {
+  const deselectOne = useCallback((employeeId) => {
     setSelected((prevState) => {
-      return prevState.filter((id) => id !== customerId);
+      return prevState.filter((id) => id !== employeeId);
     });
   }, []);
 
   const selectAll = useCallback(() => {
-    setSelected([...customerIds]);
-  }, [customerIds]);
+    setSelected([...employeeIds]);
+  }, [employeeIds]);
 
   const deselectAll = useCallback(() => {
     setSelected([]);
@@ -62,17 +62,17 @@ const useSelectionModel = (customers) => {
   };
 };
 
-export const CustomerListTable = (props) => {
+export const EmployeeListTable = (props) => {
   const {
-    customers,
-    customersCount,
+    employees,
+    employeesCount,
     onPageChange,
     onRowsPerPageChange,
     page,
     rowsPerPage,
     ...other
   } = props;
-  const { deselectAll, selectAll, deselectOne, selectOne, selected } = useSelectionModel(customers);
+  const { deselectAll, selectAll, deselectOne, selectOne, selected } = useSelectionModel(employees);
 
   const handleToggleAll = useCallback((event) => {
     const { checked } = event.target;
@@ -84,8 +84,8 @@ export const CustomerListTable = (props) => {
     }
   }, [selectAll, deselectAll]);
 
-  const selectedAll = selected.length === customers.length;
-  const selectedSome = selected.length > 0 && selected.length < customers.length;
+  const selectedAll = selected.length === employees.length;
+  const selectedSome = selected.length > 0 && selected.length < employees.length;
   const enableBulkActions = selected.length > 0;
 
   return (
@@ -159,15 +159,15 @@ export const CustomerListTable = (props) => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {customers.map((customer) => {
-              const isSelected = selected.includes(customer.id);
-              const location = `${customer.city}, ${customer.state}, ${customer.country}`;
-              const totalSpent = numeral(customer.totalSpent).format(`${customer.currency}0,0.00`);
+            {employees.map((employee) => {
+              const isSelected = selected.includes(employee.id);
+              const location = `${employee.city}, ${employee.state}, ${employee.country}`;
+              const totalSpent = numeral(employee.totalSpent).format(`${employee.currency}0,0.00`);
 
               return (
                 <TableRow
                   hover
-                  key={customer.id}
+                  key={employee.id}
                   selected={isSelected}
                 >
                   <TableCell padding="checkbox">
@@ -177,9 +177,9 @@ export const CustomerListTable = (props) => {
                         const { checked } = event.target;
 
                         if (checked) {
-                          selectOne(customer.id);
+                          selectOne(employee.id);
                         } else {
-                          deselectOne(customer.id);
+                          deselectOne(employee.id);
                         }
                       }}
                       value={isSelected}
@@ -192,13 +192,13 @@ export const CustomerListTable = (props) => {
                       spacing={1}
                     >
                       <Avatar
-                        src={customer.avatar}
+                        src={employee.avatar}
                         sx={{
                           height: 42,
                           width: 42
                         }}
                       >
-                        {getInitials(customer.name)}
+                        {getInitials(employee.name)}
                       </Avatar>
                       <div>
                         <Link
@@ -207,13 +207,13 @@ export const CustomerListTable = (props) => {
                           href={paths.employees.details}
                           variant="subtitle2"
                         >
-                          {customer.name}
+                          {employee.name}
                         </Link>
                         <Typography
                           color="text.secondary"
                           variant="body2"
                         >
-                          {customer.email}
+                          {employee.email}
                         </Typography>
                       </div>
                     </Stack>
@@ -222,7 +222,7 @@ export const CustomerListTable = (props) => {
                     {location}
                   </TableCell>
                   <TableCell>
-                    {customer.totalOrders}
+                    {employee.totalOrders}
                   </TableCell>
                   <TableCell>
                     <Typography variant="subtitle2">
@@ -255,7 +255,7 @@ export const CustomerListTable = (props) => {
       </Scrollbar>
       <TablePagination
         component="div"
-        count={customersCount}
+        count={employeesCount}
         onPageChange={onPageChange}
         onRowsPerPageChange={onRowsPerPageChange}
         page={page}
@@ -266,9 +266,9 @@ export const CustomerListTable = (props) => {
   );
 };
 
-CustomerListTable.propTypes = {
-  customers: PropTypes.array.isRequired,
-  customersCount: PropTypes.number.isRequired,
+EmployeeListTable.propTypes = {
+  employees: PropTypes.array.isRequired,
+  employeesCount: PropTypes.number.isRequired,
   onPageChange: PropTypes.func.isRequired,
   onRowsPerPageChange: PropTypes.func,
   page: PropTypes.number.isRequired,

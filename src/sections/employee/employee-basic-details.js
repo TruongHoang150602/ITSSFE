@@ -3,7 +3,7 @@ import { Button, Card, CardActions, CardHeader } from '@mui/material';
 import { PropertyList } from 'src/components/property-list';
 import { PropertyListItem } from 'src/components/property-list-item';
 
-export const CustomerBasicDetails = (props) => {
+export const EmployeeBasicDetails = (props) => {
   const { address1, address2, country, email, isVerified, phone, state, ...other } = props;
 
   return (
@@ -53,7 +53,7 @@ export const CustomerBasicDetails = (props) => {
   );
 };
 
-CustomerBasicDetails.propTypes = {
+EmployeeBasicDetails.propTypes = {
   address1: PropTypes.string,
   address2: PropTypes.string,
   country: PropTypes.string,

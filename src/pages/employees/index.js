@@ -3,13 +3,14 @@ import Head from 'next/head';
 import Download01Icon from '@untitled-ui/icons-react/build/esm/Download01';
 import PlusIcon from '@untitled-ui/icons-react/build/esm/Plus';
 import Upload01Icon from '@untitled-ui/icons-react/build/esm/Upload01';
-import { Box, Button, Card, Container, Stack, SvgIcon, Typography } from '@mui/material';
-import { customersApi } from 'src/api/customers';
+import { Box, Button, Card, Container, Dialog, Stack, SvgIcon, Typography } from '@mui/material';
+import { employeesApi } from 'src/api/employees';
 import { useMounted } from 'src/hooks/use-mounted';
 import { usePageView } from 'src/hooks/use-page-view';
 import { Layout as DashboardLayout } from 'src/layouts/dashboard/layout';
-import { CustomerListSearch } from 'src/sections/employee/employee-list-search';
-import { CustomerListTable } from 'src/sections/employee/employee-list-table';
+import { EmployeeListSearch } from 'src/sections/employee/employee-list-search';
+import { EmployeeListTable } from 'src/sections/employee/employee-list-table';
+import { EmployeeEditForm } from 'src/sections/employee/employee-edit-form';
 
 const useSearch = () => {
   const [search, setSearch] = useState({
@@ -31,21 +32,21 @@ const useSearch = () => {
   };
 };
 
-const useCustomers = (search) => {
+const useEmployees = (search) => {
   const isMounted = useMounted();
   const [state, setState] = useState({
-    customers: [],
-    customersCount: 0
+    employees: [],
+    employeesCount: 0
   });
 
-  const getCustomers = useCallback(async () => {
+  const getEmployees = useCallback(async () => {
     try {
-      const response = await customersApi.getCustomers(search);
+      const response = await employeesApi.getEmployees(search);
 
       if (isMounted()) {
         setState({
-          customers: response.data,
-          customersCount: response.count
+          employees: response.data,
+          employeesCount: response.count
         });
       }
     } catch (err) {
@@ -54,7 +55,7 @@ const useCustomers = (search) => {
   }, [search, isMounted]);
 
   useEffect(() => {
-      getCustomers();
+      getEmployees();
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [search]);
@@ -63,8 +64,10 @@ const useCustomers = (search) => {
 };
 
 const Page = () => {
+
+  const [openModal, setOpenModal] = useState(false)
   const { search, updateSearch } = useSearch();
-  const { customers, customersCount } = useCustomers(search);
+  const { employees, employeesCount } = useEmployees(search);
 
   usePageView();
 
@@ -97,6 +100,10 @@ const Page = () => {
     }));
   }, [updateSearch]);
 
+  const onCloseModel = () => {
+      setOpenModal(false);
+  }
+
   return (
     <>
       <Head>
@@ -120,7 +127,7 @@ const Page = () => {
             >
               <Stack spacing={1}>
                 <Typography variant="h4">
-                  Customers
+                  Employees
                 </Typography>
                 <Stack
                   alignItems="center"
@@ -163,21 +170,22 @@ const Page = () => {
                     </SvgIcon>
                   )}
                   variant="contained"
+                  onClick={() => {setOpenModal(true)}}
                 >
                   Add
                 </Button>
               </Stack>
             </Stack>
             <Card>
-              <CustomerListSearch
+              <EmployeeListSearch
                 onFiltersChange={handleFiltersChange}
                 onSortChange={handleSortChange}
                 sortBy={search.sortBy}
                 sortDir={search.sortDir}
               />
-              <CustomerListTable
-                customers={customers}
-                customersCount={customersCount}
+              <EmployeeListTable
+                employees={employees}
+                employeesCount={employeesCount}
                 onPageChange={handlePageChange}
                 onRowsPerPageChange={handleRowsPerPageChange}
                 rowsPerPage={search.rowsPerPage}
@@ -185,6 +193,13 @@ const Page = () => {
               />
             </Card>
           </Stack>
+
+          <Dialog 
+              open={openModal} 
+              onClose={(onCloseModel)} 
+          >
+            <EmployeeEditForm></EmployeeEditForm>
+          </Dialog>
         </Container>
       </Box>
     </>

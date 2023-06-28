@@ -36,7 +36,7 @@ export const items = {
     path: '/employees',
     icon: (
       <SvgIcon fontSize="small">
-        <UsersIcon />
+        <PermContactCalendarRoundedIcon />
       </SvgIcon>
     )
   },
@@ -54,7 +54,7 @@ export const items = {
     path: '/customers',
     icon: (
       <SvgIcon fontSize="small">
-        <PermContactCalendarRoundedIcon />
+        <UsersIcon />
       </SvgIcon>
     )
   }],

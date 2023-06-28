@@ -16,7 +16,7 @@ import {
   TextField,
   Typography
 } from '@mui/material';
-import { customersApi } from 'src/api/customers';
+import { employeesApi } from 'src/api/employees';
 import { useMounted } from 'src/hooks/use-mounted';
 
 const emailOptions = [
@@ -31,7 +31,7 @@ const useEmails = () => {
 
   const getEmails = useCallback(async () => {
     try {
-      const response = await customersApi.getEmails();
+      const response = await employeesApi.getEmails();
 
       if (isMounted()) {
         setEmails(response);
@@ -50,7 +50,7 @@ const useEmails = () => {
   return emails;
 };
 
-export const CustomerEmailsSummary = (props) => {
+export const EmployeeEmailsSummary = (props) => {
   const [emailOption, setEmailOption] = useState(emailOptions[0]);
   const emails = useEmails();
 

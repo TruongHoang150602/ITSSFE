@@ -27,42 +27,14 @@ export const AccountPopover = (props) => {
   const router = useRouter();
   const auth = useAuth();
 
-  const handleLogout = useCallback(async () => {
-    try {
+  const handleLogout = useCallback(
+    () => {
       onClose?.();
-
-      switch (auth.issuer) {
-        case Issuer.Amplify: {
-          await auth.signOut();
-          break;
-        }
-
-        case Issuer.Auth0: {
-          await auth.logout();
-          break;
-        }
-
-        case Issuer.Firebase: {
-          await auth.signOut();
-          break;
-        }
-
-        case Issuer.JWT: {
-          await auth.signOut();
-          break;
-        }
-
-        default: {
-          console.warn('Using an unknown Auth Issuer, did not log out');
-        }
-      }
-
-      router.push(paths.index);
-    } catch (err) {
-      console.error(err);
-      toast.error('Something went wrong!');
-    }
-  }, [auth, router, onClose]);
+      auth.signOut();
+      router.push('/auth/login');
+    },
+    [onClose, auth, router]
+  );
 
   return (
     <Popover

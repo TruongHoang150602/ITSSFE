@@ -20,15 +20,15 @@ const tabs = [
     value: 'all'
   },
   {
-    label: 'Accepts Marketing',
+    label: 'Caring',
     value: 'hasAcceptedMarketing'
   },
   {
-    label: 'Prospect',
+    label: 'Coach',
     value: 'isProspect'
   },
   {
-    label: 'Returning',
+    label: 'Sale',
     value: 'isReturning'
   }
 ];
@@ -52,7 +52,7 @@ const sortOptions = [
   }
 ];
 
-export const CustomerListSearch = (props) => {
+export const EmployeeListSearch = (props) => {
   const { onFiltersChange, onSortChange, sortBy, sortDir } = props;
   const queryRef = useRef(null);
   const [currentTab, setCurrentTab] = useState('all');
@@ -137,7 +137,7 @@ export const CustomerListSearch = (props) => {
             defaultValue=""
             fullWidth
             inputProps={{ ref: queryRef }}
-            placeholder="Search customers"
+            placeholder="Search employee"
             startAdornment={(
               <InputAdornment position="start">
                 <SvgIcon>
@@ -169,7 +169,7 @@ export const CustomerListSearch = (props) => {
   );
 };
 
-CustomerListSearch.propTypes = {
+EmployeeListSearch.propTypes = {
   onFiltersChange: PropTypes.func,
   onSortChange: PropTypes.func,
   sortBy: PropTypes.string,

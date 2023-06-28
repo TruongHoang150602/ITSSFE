@@ -19,17 +19,17 @@ import {
   Typography,
   Unstable_Grid2 as Grid
 } from '@mui/material';
-import { customersApi } from 'src/api/customers';
+import { employeesApi } from 'src/api/employees';
 import { useMounted } from 'src/hooks/use-mounted';
 import { usePageView } from 'src/hooks/use-page-view';
 import { Layout as DashboardLayout } from 'src/layouts/dashboard/layout';
 import { paths } from 'src/paths';
-import { CustomerBasicDetails } from 'src/sections/customer/customer-basic-details';
-import { CustomerDataManagement } from 'src/sections/customer/customer-data-management';
-import { CustomerEmailsSummary } from 'src/sections/customer/customer-emails-summary';
-import { CustomerInvoices } from 'src/sections/customer/customer-invoices';
-import { CustomerPayment } from 'src/sections/customer/customer-payment';
-import { CustomerLogs } from 'src/sections/customer/customer-logs';
+import { EmployeeBasicDetails } from 'src/sections/employee/employee-basic-details';
+import { EmployeeDataManagement } from 'src/sections/employee/employee-data-management';
+import { EmployeeEmailsSummary } from 'src/sections/employee/employee-emails-summary';
+import { EmployeeInvoices } from 'src/sections/employee/employee-invoices';
+import { EmployeePayment } from 'src/sections/employee/employee-payment';
+import { EmployeeLogs } from 'src/sections/employee/employee-logs';
 import { getInitials } from 'src/utils/get-initials';
 
 const tabs = [
@@ -38,16 +38,16 @@ const tabs = [
   { label: 'Logs', value: 'logs' }
 ];
 
-const useCustomer = () => {
+const useEmployee = () => {
   const isMounted = useMounted();
-  const [customer, setCustomer] = useState(null);
+  const [employee, setEmployee] = useState(null);
 
-  const getCustomer = useCallback(async () => {
+  const getEmployee = useCallback(async () => {
     try {
-      const response = await customersApi.getCustomer();
-
+      const response = await employeesApi.getEmployee();
+        
       if (isMounted()) {
-        setCustomer(response);
+        setEmployee(response);
       }
     } catch (err) {
       console.error(err);
@@ -55,12 +55,12 @@ const useCustomer = () => {
   }, [isMounted]);
 
   useEffect(() => {
-      getCustomer();
+      getEmployee();
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     []);
 
-  return customer;
+  return employee;
 };
 
 const useInvoices = () => {
@@ -69,7 +69,7 @@ const useInvoices = () => {
 
   const getInvoices = useCallback(async () => {
     try {
-      const response = await customersApi.getInvoices();
+      const response = await employeesApi.getInvoices();
 
       if (isMounted()) {
         setInvoices(response);
@@ -94,7 +94,7 @@ const useLogs = () => {
 
   const getLogs = useCallback(async () => {
     try {
-      const response = await customersApi.getLogs();
+      const response = await employeesApi.getLogs();
 
       if (isMounted()) {
         setLogs(response);
@@ -115,7 +115,7 @@ const useLogs = () => {
 
 const Page = () => {
   const [currentTab, setCurrentTab] = useState('details');
-  const customer = useCustomer();
+  const employee = useEmployee();
   const invoices = useInvoices();
   const logs = useLogs();
 
@@ -125,7 +125,7 @@ const Page = () => {
     setCurrentTab(value);
   }, []);
 
-  if (!customer) {
+  if (!employee) {
     return null;
   }
 
@@ -133,7 +133,7 @@ const Page = () => {
     <>
       <Head>
         <title>
-          Dashboard: Customer Details | Devias Kit PRO
+          Dashboard: Employee Details | Devias Kit PRO
         </title>
       </Head>
       <Box
@@ -161,7 +161,7 @@ const Page = () => {
                     <ArrowLeftIcon />
                   </SvgIcon>
                   <Typography variant="subtitle2">
-                    Customers
+                    Employees
                   </Typography>
                 </Link>
               </div>
@@ -180,17 +180,17 @@ const Page = () => {
                   spacing={2}
                 >
                   <Avatar
-                    src={customer.avatar}
+                    src={employee.avatar}
                     sx={{
                       height: 64,
                       width: 64
                     }}
                   >
-                    {getInitials(customer.name)}
+                    {getInitials(employee.name)}
                   </Avatar>
                   <Stack spacing={1}>
                     <Typography variant="h4">
-                      {customer.email}
+                      {employee.email}
                     </Typography>
                     <Stack
                       alignItems="center"
@@ -201,7 +201,7 @@ const Page = () => {
                         user_id:
                       </Typography>
                       <Chip
-                        label={customer.id}
+                        label={employee.id}
                         size="small"
                       />
                     </Stack>
@@ -267,14 +267,14 @@ const Page = () => {
                     xs={12}
                     lg={4}
                   >
-                    <CustomerBasicDetails
-                      address1={customer.address1}
-                      address2={customer.address2}
-                      country={customer.country}
-                      email={customer.email}
-                      isVerified={!!customer.isVerified}
-                      phone={customer.phone}
-                      state={customer.state}
+                    <EmployeeBasicDetails
+                      address1={employee.address1}
+                      address2={employee.address2}
+                      country={employee.country}
+                      email={employee.email}
+                      isVerified={!!employee.isVerified}
+                      phone={employee.phone}
+                      state={employee.state}
                     />
                   </Grid>
                   <Grid
@@ -282,16 +282,16 @@ const Page = () => {
                     lg={8}
                   >
                     <Stack spacing={4}>
-                      <CustomerPayment />
-                      <CustomerEmailsSummary />
-                      <CustomerDataManagement />
+                      <EmployeePayment />
+                      <EmployeeEmailsSummary />
+                      <EmployeeDataManagement />
                     </Stack>
                   </Grid>
                 </Grid>
               </div>
             )}
-            {currentTab === 'invoices' && <CustomerInvoices invoices={invoices} />}
-            {currentTab === 'logs' && <CustomerLogs logs={logs} />}
+            {currentTab === 'invoices' && <EmployeeInvoices invoices={invoices} />}
+            {currentTab === 'logs' && <EmployeeLogs logs={logs} />}
           </Stack>
         </Container>
       </Box>

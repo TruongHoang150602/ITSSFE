@@ -2,7 +2,7 @@ import { Button, Card, CardActions, CardHeader, Divider, useMediaQuery } from '@
 import { PropertyList } from 'src/components/property-list';
 import { PropertyListItem } from 'src/components/property-list-item';
 
-export const CustomerPayment = (props) => {
+export const EmployeePayment = (props) => {
   const mdUp = useMediaQuery((theme) => theme.breakpoints.up('md'));
 
   const align = mdUp ? 'horizontal' : 'vertical';
