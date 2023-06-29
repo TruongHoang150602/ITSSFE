@@ -2,42 +2,25 @@ import { useCallback, useEffect, useState } from 'react';
 import NextLink from 'next/link';
 import Head from 'next/head';
 import ArrowLeftIcon from '@untitled-ui/icons-react/build/esm/ArrowLeft';
-import ChevronDownIcon from '@untitled-ui/icons-react/build/esm/ChevronDown';
-import Edit02Icon from '@untitled-ui/icons-react/build/esm/Edit02';
-import {
-  Avatar,
-  Box,
-  Button,
-  Chip,
-  Container,
-  Divider,
-  Link,
-  Stack,
-  SvgIcon,
-  Tab,
-  Tabs,
-  Typography,
-  Unstable_Grid2 as Grid
-} from '@mui/material';
-import { employeesApi } from 'src/api/employees';
+import { Avatar, Box, Chip, Container, Link, Stack, SvgIcon, Typography } from '@mui/material';
+import { usersApi } from 'src/api/users';
 import { useMounted } from 'src/hooks/use-mounted';
 import { usePageView } from 'src/hooks/use-page-view';
 import { Layout as DashboardLayout } from 'src/layouts/dashboard/layout';
 import { paths } from 'src/paths';
-import { EmployeeBasicDetails } from 'src/sections/employee/employee-basic-details';
-import { EmployeeDataManagement } from 'src/sections/employee/employee-data-management';
+import { UserEditForm } from 'src/sections/user/user-edit-form';
 import { getInitials } from 'src/utils/get-initials';
 
-const useEmployee = () => {
+const useUser = () => {
   const isMounted = useMounted();
-  const [employee, setEmployee] = useState(null);
+  const [user, setUser] = useState(null);
 
-  const getEmployee = useCallback(async () => {
+  const getUser = useCallback(async () => {
     try {
-      const response = await employeesApi.getEmployee();
-        
+      const response = await usersApi.getUser();
+
       if (isMounted()) {
-        setEmployee(response);
+        setUser(response);
       }
     } catch (err) {
       console.error(err);
@@ -45,25 +28,20 @@ const useEmployee = () => {
   }, [isMounted]);
 
   useEffect(() => {
-      getEmployee();
+      getUser();
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     []);
 
-  return employee;
+  return user;
 };
 
 const Page = () => {
-  const [currentTab, setCurrentTab] = useState('details');
-  const employee = useEmployee();
+  const user = useUser();
 
   usePageView();
 
-  const handleTabsChange = useCallback((event, value) => {
-    setCurrentTab(value);
-  }, []);
-
-  if (!employee) {
+  if (!user) {
     return null;
   }
 
@@ -71,7 +49,7 @@ const Page = () => {
     <>
       <Head>
         <title>
-          Dashboard: Employee Details | GymCenter
+          Dashboard: User Edit | Devias Kit PRO
         </title>
       </Head>
       <Box
@@ -81,7 +59,7 @@ const Page = () => {
           py: 8
         }}
       >
-        <Container maxWidth="xl">
+        <Container maxWidth="lg">
           <Stack spacing={4}>
             <Stack spacing={4}>
               <div>
@@ -99,7 +77,7 @@ const Page = () => {
                     <ArrowLeftIcon />
                   </SvgIcon>
                   <Typography variant="subtitle2">
-                    Employees
+                    Users
                   </Typography>
                 </Link>
               </div>
@@ -118,17 +96,17 @@ const Page = () => {
                   spacing={2}
                 >
                   <Avatar
-                    src={employee.avatar}
+                    src={user.avatar}
                     sx={{
                       height: 64,
                       width: 64
                     }}
                   >
-                    {getInitials(employee.name)}
+                    {getInitials(user.name)}
                   </Avatar>
                   <Stack spacing={1}>
                     <Typography variant="h4">
-                      {employee.name}
+                      {user.email}
                     </Typography>
                     <Stack
                       alignItems="center"
@@ -139,36 +117,15 @@ const Page = () => {
                         user_id:
                       </Typography>
                       <Chip
-                        label={employee.id}
+                        label={user.id}
                         size="small"
                       />
                     </Stack>
                   </Stack>
                 </Stack>
-                  <Button
-                    color="inherit"
-                    component={NextLink}
-                    endIcon={(
-                      <SvgIcon>
-                        <Edit02Icon />
-                      </SvgIcon>
-                    )}
-                    href={paths.employees.edit}
-                  >
-                    Edit
-                  </Button>
               </Stack>
             </Stack>
-                    <EmployeeBasicDetails
-                      address1={employee.address1}
-                      address2={employee.address2}
-                      country={employee.country}
-                      email={employee.email}
-                      isVerified={!!employee.isVerified}
-                      phone={employee.phone}
-                      state={employee.state}
-                    />
-                    <EmployeeDataManagement />
+            <UserEditForm user={user} />
           </Stack>
         </Container>
       </Box>
@@ -183,4 +140,3 @@ Page.getLayout = (page) => (
 );
 
 export default Page;
-

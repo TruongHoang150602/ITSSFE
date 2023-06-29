@@ -2,69 +2,53 @@ import { Button, Card, CardActions, CardHeader, Divider, useMediaQuery } from '@
 import { PropertyList } from 'src/components/property-list';
 import { PropertyListItem } from 'src/components/property-list-item';
 
-export const EmployeePayment = (props) => {
+export const UserPayment = (props) => {
   const mdUp = useMediaQuery((theme) => theme.breakpoints.up('md'));
 
   const align = mdUp ? 'horizontal' : 'vertical';
 
   return (
     <Card {...props}>
-      <CardHeader title="Detail Information" />
+      <CardHeader title="Member" />
       <PropertyList>
         <PropertyListItem
           align={align}
           divider
-          label="Email"
+          label="Menber Card"
           value="**** **** **** **** 4142"
         />
         <PropertyListItem
           align={align}
           divider
-          label="Paid"
-          value="2 ($50.00)"
+          label="Package"
+          value="6 múi"
         />
         <PropertyListItem
           align={align}
           divider
-          label="Draft"
-          value="1 ($5.00)"
+          label="Registration date"
+          value="1/7/2023"
         />
         <PropertyListItem
           align={align}
           divider
-          label="State/Region"
-          value="2 ($50.00)"
+          label="Expiration date"
+          value="1/8/2023"
         />
         <PropertyListItem
           align={align}
           divider
-          label="Unpaid/Due"
-          value="1 ($12.00)"
+          label="Coach"
+          value="Tống Văn Phúc"
         />
         <PropertyListItem
           align={align}
           divider
-          label="Refunded"
-          value="0 ($0.00)"
-        />
-        <PropertyListItem
-          align={align}
-          label="Gross Income"
-          value="$1,200.00"
+          label="Create by"
+          value="Nguyễn Trọng Quang"
         />
       </PropertyList>
       <Divider />
-      <CardActions sx={{ flexWrap: 'wrap' }}>
-        <Button
-          size="small"
-          variant="outlined"
-        >
-          Create Invoice
-        </Button>
-        <Button size="small">
-          Resend Due Invoices
-        </Button>
-      </CardActions>
     </Card>
   );
 };

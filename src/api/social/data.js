@@ -180,7 +180,7 @@ export const feed = [
     createdAt: subHours(now, 4).getTime(),
     isLiked: true,
     likes: 24,
-    media: '/assets/covers/minimal-1-4x3-large.png',
+    media: '/assets/products/product-1.png',
     message: 'Just made this overview screen for a project, what-cha thinkin?'
   },
   {

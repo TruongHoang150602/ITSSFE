@@ -8,7 +8,7 @@ import {
   Card,
   CardContent,
   CardHeader,
-  MenuItem,
+  Divider,
   Stack,
   Switch,
   TextField,
@@ -17,43 +17,20 @@ import {
 } from '@mui/material';
 import { paths } from 'src/paths';
 import { wait } from 'src/utils/wait';
-import { employee } from 'src/api/employees/data';
+import { user } from 'src/api/users/data';
 
-const ROLE = [{
-    label: "Admin",
-    value: 1
-},
-{
-  label: "Caring staff",
-  value: 2
-},
-{
-  label: "Coach",
-  value: 3
-},
-{
-  label: "Sale",
-  value: 4
-},
-{
-  label: "Member",
-  value: 5
-},
 
-]
-
-const initialValues = (employee) => {
-  if(employee) return {
-    address1: employee.address1 || '',
-    address2: employee.address2 || '',
-    country: employee.country || '',
-    email: employee.email || '',
-    hasDiscount: employee.hasDiscount || false,
-    isVerified: employee.isVerified || false,
-    name: employee.name || '',
-    phone: employee.phone || '',
-    state: employee.state || '',
-    role: 1,
+const initialValues = (user) => {
+  if(user) return {
+    address1: user.address1 || '',
+    address2: user.address2 || '',
+    country: user.country || '',
+    email: user.email || '',
+    hasDiscount: user.hasDiscount || false,
+    isVerified: user.isVerified || false,
+    name: user.name || '',
+    phone: user.phone || '',
+    state: user.state || '',
     submit: null
   }
   return {
@@ -66,15 +43,14 @@ const initialValues = (employee) => {
     name: '',
     phone: '',
     state: '',
-    role: 1,
     submit: null
   }
 }
 
-export const EmployeeEditForm = (props) => {
-  const { employee, ...other } = props;
+export const UserEditForm = (props) => {
+  const { user, ...other } = props;
   const formik = useFormik({
-    initialValues:initialValues(employee),
+    initialValues:initialValues(user),
     validationSchema: Yup.object({
       address1: Yup.string().max(255),
       address2: Yup.string().max(255),
@@ -91,8 +67,7 @@ export const EmployeeEditForm = (props) => {
         .max(255)
         .required('Name is required'),
       phone: Yup.string().max(15),
-      state: Yup.string().max(255),
-      role: Yup.number().required('Role is required'),
+      state: Yup.string().max(255)
     }),
     onSubmit: async (values, helpers) => {
       try {
@@ -100,7 +75,7 @@ export const EmployeeEditForm = (props) => {
         await wait(500);
         helpers.setStatus({ success: true });
         helpers.setSubmitting(false);
-        toast.success('Employee updated');
+        toast.success('user updated');
       } catch (err) {
         console.error(err);
         toast.error('Something went wrong!');
@@ -116,7 +91,7 @@ export const EmployeeEditForm = (props) => {
       onSubmit={formik.handleSubmit}
       {...other}>
       <Card>
-        <CardHeader title="Edit Employee" />
+        <CardHeader title="Edit user" />
         <CardContent sx={{ pt: 0 }}>
           <Grid
             container
@@ -183,7 +158,6 @@ export const EmployeeEditForm = (props) => {
                 onChange={formik.handleChange}
                 value={formik.values.state}
               />
-             
             </Grid>
             <Grid
               xs={12}
@@ -230,31 +204,6 @@ export const EmployeeEditForm = (props) => {
                 value={formik.values.phone}
               />
             </Grid>
-            <Grid
-              xs={12}
-              md={6}
-            >
-              <TextField
-                fullWidth
-                select
-                id="role"
-                name="role"
-                label="Role"
-                value={formik.values.role}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                error={formik.touched.role && Boolean(formik.errors.role)}
-                helperText={formik.touched.role && formik.errors.role}  
-              >
-               {ROLE.map((option) => (
-              <MenuItem 
-                key={option.value} 
-                value={option.value}>
-              {option.label}
-              </MenuItem>
-              ))}
-              </TextField>
-            </Grid>
           </Grid>
         </CardContent>
         <Stack
@@ -277,7 +226,7 @@ export const EmployeeEditForm = (props) => {
             color="inherit"
             component={NextLink}
             disabled={formik.isSubmitting}
-            href={paths.employees.details}
+            href={paths.users.details}
           >
             Cancel
           </Button>
@@ -287,6 +236,6 @@ export const EmployeeEditForm = (props) => {
   );
 };
 
-EmployeeEditForm.propTypes = {
-  employee: PropTypes.object.isRequired
+UserEditForm.propTypes = {
+  user: PropTypes.object.isRequired
 };

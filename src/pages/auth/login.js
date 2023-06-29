@@ -142,14 +142,6 @@ const Page = () => {
             >
               Log In
             </Button>
-            <Button
-                  fullWidth
-                  size="large"
-                  sx={{ mt: 2 }}
-                  onClick={handleSkip}
-                >
-                  Skip authentication
-                </Button>
             <Box
               sx={{
                 display: 'flex',

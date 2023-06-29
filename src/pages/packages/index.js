@@ -13,14 +13,14 @@ import {
   SvgIcon,
   Typography
 } from '@mui/material';
-import { equipmentsApi } from 'src/api/equipments';
+import { packagesApi } from 'src/api/packages';
 import { BreadcrumbsSeparator } from 'src/components/breadcrumbs-separator';
 import { useMounted } from 'src/hooks/use-mounted';
 import { usePageView } from 'src/hooks/use-page-view';
 import { Layout as DashboardLayout } from 'src/layouts/dashboard/layout';
 import { paths } from 'src/paths';
-import { EquipmentListSearch } from 'src/sections/equipment/equip-list-search';
-import { EquipmentListTable } from 'src/sections/equipment/equip-list-table';
+import { PackageListSearch } from 'src/sections/package/package-list-search';
+import { PackageListTable } from 'src/sections/package/package-list-table';
 
 const useSearch = () => {
   const [search, setSearch] = useState({
@@ -40,21 +40,21 @@ const useSearch = () => {
   };
 };
 
-const useEquipments = (search) => {
+const usePackages = (search) => {
   const isMounted = useMounted();
   const [state, setState] = useState({
-    equipments: [],
-    equipmentsCount: 0
+    packages: [],
+    packagesCount: 0
   });
 
-  const getEquipments = useCallback(async () => {
+  const getPackages = useCallback(async () => {
     try {
-      const response = await equipmentsApi.getEquipments(search);
+      const response = await packagesApi.getPackages(search);
 
       if (isMounted()) {
         setState({
-          equipments: response.data,
-          equipmentsCount: response.count
+          packages: response.data,
+          packagesCount: response.count
         });
       }
     } catch (err) {
@@ -63,7 +63,7 @@ const useEquipments = (search) => {
   }, [search, isMounted]);
 
   useEffect(() => {
-      getEquipments();
+      getPackages();
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [search]);
@@ -71,9 +71,9 @@ const useEquipments = (search) => {
   return state;
 };
 
-const EquipmentList = () => {
+const PackageList = () => {
   const { search, updateSearch } = useSearch();
-  const { equipments, equipmentsCount } = useEquipments(search);
+  const { packages, packagesCount } = usePackages(search);
 
   usePageView();
 
@@ -102,7 +102,7 @@ const EquipmentList = () => {
     <>
       <Head>
         <title>
-          Dashboard: Equipment List | Devias Kit PRO
+          Dashboard: Package List | Devias Kit PRO
         </title>
       </Head>
       <Box
@@ -121,7 +121,7 @@ const EquipmentList = () => {
             >
               <Stack spacing={1}>
                 <Typography variant="h4">
-                  Equipments
+                  Packages
                 </Typography>
                 <Breadcrumbs separator={<BreadcrumbsSeparator />}>
                   <Link
@@ -135,10 +135,10 @@ const EquipmentList = () => {
                   <Link
                     color="text.primary"
                     component={NextLink}
-                    href={paths.gyms.index}
+                    href={paths.packages.index}
                     variant="subtitle2"
                   >
-                    Equipments
+                    Packages
                   </Link>
                   <Typography
                     color="text.secondary"
@@ -155,7 +155,7 @@ const EquipmentList = () => {
               >
                 <Button
                   component={NextLink}
-                  href={paths.gyms.create}
+                  href={paths.packages.create}
                   startIcon={(
                     <SvgIcon>
                       <PlusIcon />
@@ -168,13 +168,13 @@ const EquipmentList = () => {
               </Stack>
             </Stack>
             <Card>
-              <EquipmentListSearch onFiltersChange={handleFiltersChange} />
-              <EquipmentListTable
+              <PackageListSearch onFiltersChange={handleFiltersChange} />
+              <PackageListTable
                 onPageChange={handlePageChange}
                 onRowsPerPageChange={handleRowsPerPageChange}
                 page={search.page}
-                equipments={equipments}
-                equipmentsCount={equipmentsCount}
+                packages={packages}
+                packagesCount={packagesCount}
                 rowsPerPage={search.rowsPerPage}
               />
             </Card>
@@ -185,10 +185,10 @@ const EquipmentList = () => {
   );
 };
 
-EquipmentList.getLayout = (page) => (
+PackageList.getLayout = (page) => (
   <DashboardLayout>
     {page}
   </DashboardLayout>
 );
 
-export default EquipmentList;
+export default PackageList;

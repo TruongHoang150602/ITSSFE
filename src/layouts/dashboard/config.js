@@ -8,6 +8,8 @@ import ShoppingBagIcon from '@heroicons/react/24/solid/ShoppingBagIcon';
 import UserIcon from '@heroicons/react/24/solid/UserIcon';
 import UserPlusIcon from '@heroicons/react/24/solid/UserPlusIcon';
 import UsersIcon from '@heroicons/react/24/solid/UsersIcon';
+import CardTravelIcon from '@mui/icons-material/CardTravel';
+import FeedIcon from '@mui/icons-material/Feed';
 import XCircleIcon from '@heroicons/react/24/solid/XCircleIcon';
 import { SvgIcon } from '@mui/material';
 
@@ -41,8 +43,8 @@ export const items = {
     )
   },
   {
-    title: 'Gym',
-    path: '/Gym',
+    title: 'Gyms',
+    path: '/gyms',
     icon: (
       <SvgIcon fontSize="small">
         <FitnessCenterRoundedIcon />
@@ -50,14 +52,34 @@ export const items = {
     )
   },
   {
-    title: 'Members',
-    path: '/customers',
+    title: 'Users',
+    path: '/users',
     icon: (
       <SvgIcon fontSize="small">
         <UsersIcon />
       </SvgIcon>
     )
-  }],
+  },
+  {
+    title: 'Feedback',
+    path: '/feedback',
+    icon: (
+      <SvgIcon fontSize="small">
+        <FeedIcon />
+      </SvgIcon>
+    )
+  },
+  {
+    title: 'Packages',
+    path: '/packages',
+    icon: (
+      <SvgIcon fontSize="small">
+        <CardTravelIcon />
+      </SvgIcon>
+    )
+  },
+
+],
 
   employee:  [
     {
@@ -83,7 +105,7 @@ export const items = {
       path: '/customers',
       icon: (
         <SvgIcon fontSize="small">
-          <ShoppingBagIcon />
+          <CardTravelIcon />
         </SvgIcon>
       )
     }],

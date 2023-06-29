@@ -10,15 +10,23 @@ export const paths = {
     details: '/employees/:employeeId',
     edit: '/employees/:employeeId/edit'
   },
-  members: {
-    index: 'members',
-    details: '/members/:memberId',
-    edit: '/members/:memberId/edit'
+  users: {
+    index: 'users',
+    details: '/users/:memberId',
+    edit: '/users/:memberId/edit'
   },
   gyms: {
     index: 'gyms',
-    details: '/gyms/:memberId',
-    edit: '/gyms/:memberId/edit'
+    details: '/gyms/:gymId',
+    create: '/gyms/:gymId/create'
+  },
+
+  feedback: {
+    index: '/feedback',
+  },
+  packages: {
+    index: 'packages',
+    create: '/packages/create',
   },
   
   401: '/401',

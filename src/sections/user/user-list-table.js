@@ -25,29 +25,29 @@ import { Scrollbar } from 'src/components/scrollbar';
 import { paths } from 'src/paths';
 import { getInitials } from 'src/utils/get-initials';
 
-const useSelectionModel = (customers) => {
-  const customerIds = useMemo(() => {
-    return customers.map((customer) => customer.id);
-  }, [customers]);
+const useSelectionModel = (users) => {
+  const userIds = useMemo(() => {
+    return users.map((user) => user.id);
+  }, [users]);
   const [selected, setSelected] = useState([]);
 
   useEffect(() => {
     setSelected([]);
-  }, [customerIds]);
+  }, [userIds]);
 
-  const selectOne = useCallback((customerId) => {
-    setSelected((prevState) => [...prevState, customerId]);
+  const selectOne = useCallback((userId) => {
+    setSelected((prevState) => [...prevState, userId]);
   }, []);
 
-  const deselectOne = useCallback((customerId) => {
+  const deselectOne = useCallback((userId) => {
     setSelected((prevState) => {
-      return prevState.filter((id) => id !== customerId);
+      return prevState.filter((id) => id !== userId);
     });
   }, []);
 
   const selectAll = useCallback(() => {
-    setSelected([...customerIds]);
-  }, [customerIds]);
+    setSelected([...userIds]);
+  }, [userIds]);
 
   const deselectAll = useCallback(() => {
     setSelected([]);
@@ -62,17 +62,17 @@ const useSelectionModel = (customers) => {
   };
 };
 
-export const CustomerListTable = (props) => {
+export const UserListTable = (props) => {
   const {
-    customers,
-    customersCount,
+    users,
+    usersCount,
     onPageChange,
     onRowsPerPageChange,
     page,
     rowsPerPage,
     ...other
   } = props;
-  const { deselectAll, selectAll, deselectOne, selectOne, selected } = useSelectionModel(customers);
+  const { deselectAll, selectAll, deselectOne, selectOne, selected } = useSelectionModel(users);
 
   const handleToggleAll = useCallback((event) => {
     const { checked } = event.target;
@@ -84,8 +84,8 @@ export const CustomerListTable = (props) => {
     }
   }, [selectAll, deselectAll]);
 
-  const selectedAll = selected.length === customers.length;
-  const selectedSome = selected.length > 0 && selected.length < customers.length;
+  const selectedAll = selected.length === users.length;
+  const selectedSome = selected.length > 0 && selected.length < users.length;
   const enableBulkActions = selected.length > 0;
 
   return (
@@ -159,15 +159,15 @@ export const CustomerListTable = (props) => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {customers.map((customer) => {
-              const isSelected = selected.includes(customer.id);
-              const location = `${customer.city}, ${customer.state}, ${customer.country}`;
-              const totalSpent = numeral(customer.totalSpent).format(`${customer.currency}0,0.00`);
+            {users.map((user) => {
+              const isSelected = selected.includes(user.id);
+              const location = `${user.city}, ${user.state}, ${user.country}`;
+              const totalSpent = numeral(user.totalSpent).format(`${user.currency}0,0.00`);
 
               return (
                 <TableRow
                   hover
-                  key={customer.id}
+                  key={user.id}
                   selected={isSelected}
                 >
                   <TableCell padding="checkbox">
@@ -177,9 +177,9 @@ export const CustomerListTable = (props) => {
                         const { checked } = event.target;
 
                         if (checked) {
-                          selectOne(customer.id);
+                          selectOne(user.id);
                         } else {
-                          deselectOne(customer.id);
+                          deselectOne(user.id);
                         }
                       }}
                       value={isSelected}
@@ -192,28 +192,28 @@ export const CustomerListTable = (props) => {
                       spacing={1}
                     >
                       <Avatar
-                        src={customer.avatar}
+                        src={user.avatar}
                         sx={{
                           height: 42,
                           width: 42
                         }}
                       >
-                        {getInitials(customer.name)}
+                        {getInitials(user.name)}
                       </Avatar>
                       <div>
                         <Link
                           color="inherit"
                           component={NextLink}
-                          href={paths.employees.details}
+                          href={paths.users.details}
                           variant="subtitle2"
                         >
-                          {customer.name}
+                          {user.name}
                         </Link>
                         <Typography
                           color="text.secondary"
                           variant="body2"
                         >
-                          {customer.email}
+                          {user.email}
                         </Typography>
                       </div>
                     </Stack>
@@ -222,7 +222,7 @@ export const CustomerListTable = (props) => {
                     {location}
                   </TableCell>
                   <TableCell>
-                    {customer.totalOrders}
+                    {user.totalOrders}
                   </TableCell>
                   <TableCell>
                     <Typography variant="subtitle2">
@@ -232,7 +232,7 @@ export const CustomerListTable = (props) => {
                   <TableCell align="right">
                     <IconButton
                       component={NextLink}
-                      href={paths.employees.edit}
+                      href={paths.users.edit}
                     >
                       <SvgIcon>
                         <Edit02Icon />
@@ -240,7 +240,7 @@ export const CustomerListTable = (props) => {
                     </IconButton>
                     <IconButton
                       component={NextLink}
-                      href={paths.employees.details}
+                      href={paths.users.details}
                     >
                       <SvgIcon>
                         <ArrowRightIcon />
@@ -255,7 +255,7 @@ export const CustomerListTable = (props) => {
       </Scrollbar>
       <TablePagination
         component="div"
-        count={customersCount}
+        count={usersCount}
         onPageChange={onPageChange}
         onRowsPerPageChange={onRowsPerPageChange}
         page={page}
@@ -266,9 +266,9 @@ export const CustomerListTable = (props) => {
   );
 };
 
-CustomerListTable.propTypes = {
-  customers: PropTypes.array.isRequired,
-  customersCount: PropTypes.number.isRequired,
+UserListTable.propTypes = {
+  users: PropTypes.array.isRequired,
+  usersCount: PropTypes.number.isRequired,
   onPageChange: PropTypes.func.isRequired,
   onRowsPerPageChange: PropTypes.func,
   page: PropTypes.number.isRequired,

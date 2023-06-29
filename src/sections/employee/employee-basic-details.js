@@ -1,54 +1,47 @@
 import PropTypes from 'prop-types';
-import { Button, Card, CardActions, CardHeader } from '@mui/material';
+import { Card, CardHeader, useMediaQuery } from '@mui/material';
 import { PropertyList } from 'src/components/property-list';
 import { PropertyListItem } from 'src/components/property-list-item';
 
 export const EmployeeBasicDetails = (props) => {
   const { address1, address2, country, email, isVerified, phone, state, ...other } = props;
-
+  const mdUp = useMediaQuery((theme) => theme.breakpoints.up('md'));
+  const align = mdUp ? 'horizontal' : 'vertical';
   return (
     <Card {...other}>
-      <CardHeader title="Basic Details" />
+      <CardHeader title="Employee Details" />
       <PropertyList>
         <PropertyListItem
+            align={align}
+            divider
+            label="Gender"
+            value={state}
+          />
+        <PropertyListItem
+            align={align}
+            divider
+            label="Birthday"
+            value={state}
+          />
+        <PropertyListItem
+          align={align}
           divider
           label="Email"
           value={email}
         />
         <PropertyListItem
+          align={align}
           divider
           label="Phone"
           value={phone}
         />
         <PropertyListItem
+          align={align}
           divider
-          label="Country"
+          label="Role"
           value={country}
         />
-        <PropertyListItem
-          divider
-          label="State/Region"
-          value={state}
-        />
-        <PropertyListItem
-          divider
-          label="Address 1"
-          value={state}
-        />
-        <PropertyListItem
-          divider
-          label="Address 2"
-          value={address2}
-        />
       </PropertyList>
-      <CardActions>
-        <Button
-          color="inherit"
-          size="small"
-        >
-          Reset Password
-        </Button>
-      </CardActions>
     </Card>
   );
 };

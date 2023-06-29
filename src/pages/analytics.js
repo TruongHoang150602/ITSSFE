@@ -10,7 +10,6 @@ import {
   Unstable_Grid2 as Grid
 } from '@mui/material';
 import { usePageView } from 'src/hooks/use-page-view';
-import { useSettings } from 'src/hooks/use-settings';
 import { Layout as DashboardLayout } from 'src/layouts/dashboard/layout';
 import { AnalyticsStats } from 'src/sections/analytics/analytics-stats';
 import { AnalyticsMostVisited } from 'src/sections/analytics/analytics-most-visited';
@@ -20,7 +19,6 @@ import { AnalyticsVisitsByCountry } from 'src/sections/analytics/analytics-visit
 import ArrowRightIcon from '@untitled-ui/icons-react/build/esm/ArrowRight';
 
 const Page = () => {
-  const settings = useSettings();
 
   usePageView();
 
@@ -38,7 +36,7 @@ const Page = () => {
           py: 8
         }}
       >
-        <Container maxWidth={settings.stretch ? false : 'xl'}>
+        <Container>
           <Grid
             container
             spacing={{

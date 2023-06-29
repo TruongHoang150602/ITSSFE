@@ -1,10 +1,10 @@
 import { Box, Button, Card, CardContent, CardHeader, Typography, Stack } from '@mui/material';
 
-export const EmployeeDataManagement = (props) => (
+export const UserDataManagement = (props) => (
   <Card {...props}>
-    <CardHeader title="Employee Management" />
+    <CardHeader title="Data Management" />
     <CardContent sx={{ pt: 0 }}>
-      <Stack 
+    <Stack 
         direction="row" 
         spacing={2}
       >
@@ -21,6 +21,16 @@ export const EmployeeDataManagement = (props) => (
           Delete Account
         </Button>
         </Stack>
+      <Box sx={{ mt: 1 }}>
+        <Typography
+          color="text.secondary"
+          variant="body2"
+        >
+          Remove this user’s chart if he requested that, if not
+          please be aware that what has been deleted can never brought
+          back
+        </Typography>
+      </Box>
     </CardContent>
   </Card>
 );
