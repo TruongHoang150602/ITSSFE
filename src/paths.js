@@ -7,18 +7,18 @@ export const paths = {
   },
   employees: {
     index: '/employees',
-    details: '/employees/:employeeId',
-    edit: '/employees/:employeeId/edit'
+    details: (id) => `/employees/${id}`,
+    edit: (id) => `/employees/${id}/edit`,
   },
   users: {
     index: 'users',
-    details: '/users/:memberId',
-    edit: '/users/:memberId/edit'
+    details: (id) => `/users/${id}`,
+    edit: (id) => `/users/${id}/edit`,
   },
   gyms: {
     index: 'gyms',
-    details: '/gyms/:gymId',
-    create: '/gyms/:gymId/create'
+    details: (id) => `/gyms/${id}`,
+    create: (id) => `/gyms/${id}/create`,
   },
 
   feedback: {

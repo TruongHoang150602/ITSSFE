@@ -44,28 +44,22 @@ const ROLE = [{
 
 const initialValues = (employee) => {
   if(employee) return {
-    address1: employee.address1 || '',
-    address2: employee.address2 || '',
-    country: employee.country || '',
+    address: employee.address || '',
+    gender: employee.gender || 'Male',
+    birthday: employee.birthday || new Date().toISOString().slice(0, 10),
     email: employee.email || '',
-    hasDiscount: employee.hasDiscount || false,
-    isVerified: employee.isVerified || false,
     name: employee.name || '',
     phone: employee.phone || '',
-    state: employee.state || '',
     role: 1,
     submit: null
   }
   return {
-    address1: '',
-    address2: '',
-    country: '',
+    address: '',
+    gender: 'Male',
+    birthday: new Date().toISOString().slice(0, 10),
     email: '',
-    hasDiscount: false,
-    isVerified: false,
     name: '',
     phone: '',
-    state: '',
     role: 1,
     submit: null
   }
@@ -76,22 +70,19 @@ export const EmployeeEditForm = (props) => {
   const formik = useFormik({
     initialValues:initialValues(employee),
     validationSchema: Yup.object({
-      address1: Yup.string().max(255),
-      address2: Yup.string().max(255),
-      country: Yup.string().max(255),
+      address: Yup.string().max(255),
+      gender: Yup.string(),
+      birthday: Yup.string(),
       email: Yup
         .string()
         .email('Must be a valid email')
         .max(255)
         .required('Email is required'),
-      hasDiscount: Yup.bool(),
-      isVerified: Yup.bool(),
       name: Yup
         .string()
         .max(255)
         .required('Name is required'),
       phone: Yup.string().max(15),
-      state: Yup.string().max(255),
       role: Yup.number().required('Role is required'),
     }),
     onSubmit: async (values, helpers) => {
@@ -143,6 +134,21 @@ export const EmployeeEditForm = (props) => {
               md={6}
             >
               <TextField
+                error={!!(formik.touched.address && formik.errors.address)}
+                fullWidth
+                helperText={formik.touched.address && formik.errors.address}
+                label="Address"
+                name="address"
+                onBlur={formik.handleBlur}
+                onChange={formik.handleChange}
+                value={formik.values.address}
+              />
+            </Grid>
+            <Grid
+              xs={12}
+              md={6}
+            >
+              <TextField
                 error={!!(formik.touched.email && formik.errors.email)}
                 fullWidth
                 helperText={formik.touched.email && formik.errors.email}
@@ -154,67 +160,7 @@ export const EmployeeEditForm = (props) => {
                 value={formik.values.email}
               />
             </Grid>
-            <Grid
-              xs={12}
-              md={6}
-            >
-              <TextField
-                error={!!(formik.touched.country && formik.errors.country)}
-                fullWidth
-                helperText={formik.touched.country && formik.errors.country}
-                label="Country"
-                name="country"
-                onBlur={formik.handleBlur}
-                onChange={formik.handleChange}
-                value={formik.values.country}
-              />
-            </Grid>
-            <Grid
-              xs={12}
-              md={6}
-            >
-              <TextField
-                error={!!(formik.touched.state && formik.errors.state)}
-                fullWidth
-                helperText={formik.touched.state && formik.errors.state}
-                label="State/Region"
-                name="state"
-                onBlur={formik.handleBlur}
-                onChange={formik.handleChange}
-                value={formik.values.state}
-              />
-             
-            </Grid>
-            <Grid
-              xs={12}
-              md={6}
-            >
-              <TextField
-                error={!!(formik.touched.address1 && formik.errors.address1)}
-                fullWidth
-                helperText={formik.touched.address1 && formik.errors.address1}
-                label="Address 1"
-                name="address1"
-                onBlur={formik.handleBlur}
-                onChange={formik.handleChange}
-                value={formik.values.address1}
-              />
-            </Grid>
-            <Grid
-              xs={12}
-              md={6}
-            >
-              <TextField
-                error={!!(formik.touched.address2 && formik.errors.address2)}
-                fullWidth
-                helperText={formik.touched.address2 && formik.errors.address2}
-                label="Address 2"
-                name="address2"
-                onBlur={formik.handleBlur}
-                onChange={formik.handleChange}
-                value={formik.values.address2}
-              />
-            </Grid>
+           
             <Grid
               xs={12}
               md={6}
@@ -230,6 +176,47 @@ export const EmployeeEditForm = (props) => {
                 value={formik.values.phone}
               />
             </Grid>
+            <Grid
+              xs={12}
+              md={6}
+            >
+              <TextField
+                select
+                error={!!(formik.touched.gender && formik.errors.gender)}
+                fullWidth
+                helperText={formik.touched.gender && formik.errors.gender}
+                label="Gender"
+                name="gender"
+                onBlur={formik.handleBlur}
+                onChange={formik.handleChange}
+                value={formik.values.gender}
+              >
+                <MenuItem key={'Male'} 
+                  value={'Male'}>
+                  Nam</MenuItem>
+                <MenuItem key={'Female'} 
+                  value={'Female'}>
+                  Nữ</MenuItem>
+              </TextField>
+             
+            </Grid>
+            <Grid
+              xs={12}
+              md={6}
+            >
+              <TextField
+                error={!!(formik.touched.birthday && formik.errors.birthday)}
+                fullWidth
+                helperText={formik.touched.birthday && formik.errors.birthday}
+                label="Birthday"
+                name="birthday"
+                type='date'
+                onBlur={formik.handleBlur}
+                onChange={formik.handleChange}
+                value={formik.values.birthday}
+              />
+            </Grid>
+          
             <Grid
               xs={12}
               md={6}
@@ -277,7 +264,7 @@ export const EmployeeEditForm = (props) => {
             color="inherit"
             component={NextLink}
             disabled={formik.isSubmitting}
-            href={paths.employees.details}
+            href={paths.employees.details(employee.id)}
           >
             Cancel
           </Button>

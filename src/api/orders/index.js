@@ -1,21 +1,21 @@
-import { order, orders } from './data';
-import { deepCopy } from '../../utils/deep-copy';
-import { applyPagination } from '../../utils/apply-pagination';
-import { applySort } from '../../utils/apply-sort';
+import { register, registers } from './data';
+import { deepCopy } from 'src/utils/deep-copy';
+import { applyPagination } from 'src/utils/apply-pagination';
+import { applySort } from 'src/utils/apply-sort';
 
-class OrdersApi {
-  getOrders(request = {}) {
+class RegistersApi {
+  getRegisters(request = {}) {
     const { filters, page, rowsPerPage, sortBy, sortDir } = request;
 
-    let data = deepCopy(orders);
+    let data = deepCopy(registers);
     let count = data.length;
 
     if (typeof filters !== 'undefined') {
-      data = data.filter((order) => {
+      data = data.filter((register) => {
         if (typeof filters.query !== 'undefined' && filters.query !== '') {
-          // Checks only the order number, but can be extended to support other fields, such as customer
+          // Checks only the register number, but can be extended to support other fields, such as customer
           // name, email, etc.
-          const containsQuery = (order.number || '')
+          const containsQuery = (register.number || '')
             .toLowerCase()
             .includes(filters.query.toLowerCase());
 
@@ -25,7 +25,7 @@ class OrdersApi {
         }
 
         if (typeof filters.status !== 'undefined') {
-          const statusMatched = order.status === filters.status;
+          const statusMatched = register.status === filters.status;
 
           if (!statusMatched) {
             return false;
@@ -51,9 +51,9 @@ class OrdersApi {
     });
   }
 
-  getOrder(request = {}) {
-    return Promise.resolve(deepCopy(order));
+  getRegister(request = {}) {
+    return Promise.resolve(deepCopy(register));
   }
 }
 
-export const ordersApi = new OrdersApi();
+export const registersApi = new RegistersApi();

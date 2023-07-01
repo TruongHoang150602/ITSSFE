@@ -26,24 +26,9 @@ export const SocialPostCard = (props) => {
     authorName,
     comments,
     createdAt,
-    isLiked: isLikedProp,
-    likes: likesProp,
-    media,
     message,
     ...other
   } = props;
-  const [isLiked, setIsLiked] = useState(isLikedProp);
-  const [likes, setLikes] = useState(likesProp);
-
-  const handleLike = useCallback(() => {
-    setIsLiked(true);
-    setLikes((prevLikes) => prevLikes + 1);
-  }, []);
-
-  const handleUnlike = useCallback(() => {
-    setIsLiked(false);
-    setLikes((prevLikes) => prevLikes - 1);
-  }, []);
 
   return (
     <Card {...other}>
@@ -104,19 +89,7 @@ export const SocialPostCard = (props) => {
         <Typography variant="body1">
           {message}
         </Typography>
-        {media && (
-          <Box sx={{ mt: 3 }}>
-            <CardActionArea>
-              <CardMedia
-                image={media}
-                sx={{
-                  backgroundPosition: 'top',
-                  height: 500
-                }}
-              />
-            </CardActionArea>
-          </Box>
-        )}
+
         <Stack
           alignItems="center"
           direction="row"
@@ -151,6 +124,5 @@ SocialPostCard.propTypes = {
   createdAt: PropTypes.number.isRequired,
   isLiked: PropTypes.bool.isRequired,
   likes: PropTypes.number.isRequired,
-  media: PropTypes.string,
   message: PropTypes.string.isRequired
 };

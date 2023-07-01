@@ -1,3 +1,4 @@
+import Head from 'next/head';
 import NextLink from 'next/link';
 import PropTypes from 'prop-types';
 import { Box, Container, Stack } from '@mui/material';
@@ -23,6 +24,11 @@ export const Layout = (props) => {
 
   return (
     <LayoutRoot>
+      <Head>
+      <title>
+        Login | GymCenter
+      </title>
+    </Head>
       <Box
         component="header"
         sx={{

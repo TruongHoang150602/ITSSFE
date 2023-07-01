@@ -18,11 +18,12 @@ const useEmployee = () => {
   const getEmployee = useCallback(async () => {
     try {
       const response = await employeesApi.getEmployee();
+
       if (isMounted()) {
         setEmployee(response);
       }
     } catch (err) {
-      console.error(err + 'ne');
+      console.error(err);
     }
   }, [isMounted]);
 
@@ -113,7 +114,7 @@ const Page = () => {
                       spacing={1}
                     >
                       <Typography variant="subtitle2">
-                        user_id:
+                        employee_id:
                       </Typography>
                       <Chip
                         label={employee.id}

@@ -2,7 +2,7 @@ import { subDays, subHours } from 'date-fns';
 
 const now = new Date();
 
-export const orders = [
+export const registers = [
   {
     id: '5ecb8a6d9f53bfae09e16115',
     createdAt: subDays(subHours(now, 4), 1).getTime(),
@@ -355,7 +355,7 @@ export const orders = [
   }
 ];
 
-export const order = {
+export const register = {
   id: '5ecb8a6879877087d4aa2690',
   coupon: null,
   createdAt: subDays(subHours(now, 4), 1).getTime(),

@@ -1,4 +1,3 @@
-import NextLink from 'next/link';
 import PropTypes from 'prop-types';
 import toast from 'react-hot-toast';
 import * as Yup from 'yup';
@@ -14,27 +13,37 @@ import {
   Typography,
   Unstable_Grid2 as Grid
 } from '@mui/material';
-import { paths } from 'src/paths';
 import { wait } from 'src/utils/wait';
 
-const initialValues = {
-  name: '',
-  address: '',
-  square: 0,
-  submit: null
+const initialValues = (room) => {
+  if(room) return {
+    name: room.name || '',
+    address: room.address || '',
+    acreage: room.acreage || 0,
+    submit: null
+  }
+  return {
+    name: '',
+    address: '',
+    acreage: 0,
+    submit: null
+  }
+  
 };
 
 export const RoomAddForm = (props) => {
-  const { employee, ...other } = props;
+  const { room, onClose, ...other } = props;
+
+  console.log(room)
   const formik = useFormik({
-    initialValues: initialValues,
+    initialValues: initialValues(room),
     validationSchema: Yup.object({
       address: Yup.string().max(255),
       name: Yup
         .string()
         .max(255)
         .required('Name is required'),
-      square: Yup.number().max(15),
+      acreage: Yup.number().max(15),
     }),
     onSubmit: async (values, helpers) => {
       try {
@@ -70,6 +79,7 @@ export const RoomAddForm = (props) => {
                 helperText={formik.touched.name && formik.errors.name}
                 label="Room name"
                 name="name"
+                value={formik.values.name}
                 onBlur={formik.handleBlur}
                 onChange={formik.handleChange}
                 required
@@ -80,16 +90,17 @@ export const RoomAddForm = (props) => {
                 helperText={formik.touched.address && formik.errors.address}
                 label="Address"
                 name="address"
+                value={formik.values.address}
                 onBlur={formik.handleBlur}
                 onChange={formik.handleChange}
-                required
               />
               <TextField
-                error={!!(formik.touched.square && formik.errors.square)}
+                error={!!(formik.touched.acreage && formik.errors.acreage)}
                 fullWidth
-                helperText={formik.touched.square && formik.errors.square}
-                label="Square"
-                name="square"
+                helperText={formik.touched.acreage && formik.errors.acreage}
+                label="Acreage"
+                name="acreage"
+                value={formik.values.acreage}
                 type="number"
                 onBlur={formik.handleBlur}
                 onChange={formik.handleChange}
@@ -114,9 +125,8 @@ export const RoomAddForm = (props) => {
           </Button>
           <Button
             color="inherit"
-            component={NextLink}
             disabled={formik.isSubmitting}
-            href={paths.employees.details}
+            onClick={onClose}
           >
             Cancel
           </Button>
@@ -127,5 +137,6 @@ export const RoomAddForm = (props) => {
 };
 
 RoomAddForm.propTypes = {
-  employee: PropTypes.object.isRequired
+  room: PropTypes.object.isRequired,
+  onClose: PropTypes.func
 };

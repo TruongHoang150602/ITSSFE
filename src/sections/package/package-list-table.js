@@ -107,7 +107,7 @@ export const PackageListTable = (props) => {
                 Price
               </TableCell>
               <TableCell>
-                Status
+                Description
               </TableCell>
             </TableRow>
           </TableHead>
@@ -115,10 +115,7 @@ export const PackageListTable = (props) => {
             {packages.map((pack) => {
               const isCurrent = pack.id === currentPackage;
               const price = numeral(pack.price).format(`${pack.currency}0,0.00`);
-              const quantityColor = pack.quantity >= 10 ? 'success' : 'error';
-              const statusColor = pack.status === 'published' ? 'success' : 'info';
-              const hasManyVariants = pack.variants > 1;
-
+        
               return (
                 <Fragment key={pack.id}>
                   <TableRow
@@ -165,12 +162,12 @@ export const PackageListTable = (props) => {
                           <Typography variant="subtitle2">
                             {pack.name}
                           </Typography>
-                          <Typography
+                          {/* <Typography
                             color="text.secondary"
                             variant="body2"
                           >
                             in {pack.category}
-                          </Typography>
+                          </Typography> */}
                         </Box>
                       </Box>
                     </TableCell>
@@ -178,9 +175,7 @@ export const PackageListTable = (props) => {
                       {price}
                     </TableCell>
                     <TableCell>
-                      <SeverityPill color={statusColor}>
-                        {pack.status}
-                      </SeverityPill>
+                      {pack.description}
                     </TableCell>
                   </TableRow>
                   {isCurrent && (
@@ -206,103 +201,38 @@ export const PackageListTable = (props) => {
                             container
                             spacing={3}
                           >
-                            <Grid
+                             <Grid
                               item
-                              md={6}
+                              md={12}
                               xs={12}
                             >
-                              <Typography variant="h6">
+                               <Typography variant="h6">
                                 Basic details
                               </Typography>
                               <Divider sx={{ my: 2 }} />
-                              <Grid
-                                container
-                                spacing={3}
-                              >
-                                <Grid
-                                  item
-                                  md={6}
-                                  xs={12}
-                                >
-                                  <TextField
-                                    defaultValue={pack.name}
-                                    fullWidth
-                                    label="Package name"
-                                    name="name"
-                                  />
-                                </Grid>
-                                <Grid
-                                  item
-                                  md={6}
-                                  xs={12}
-                                >
-                                  <TextField
-                                    defaultValue={pack.sku}
-                                    disabled
-                                    fullWidth
-                                    label="SKU"
-                                    name="sku"
-                                  />
-                                </Grid>
-                                <Grid
-                                  item
-                                  md={6}
-                                  xs={12}
-                                >
-                                  <TextField
-                                    defaultValue={pack.category}
-                                    fullWidth
-                                    label="Category"
-                                    select
-                                  >
-                                    {categoryOptions.map((option) => (
-                                      <MenuItem
-                                        key={option.value}
-                                        value={option.value}
-                                      >
-                                        {option.label}
-                                      </MenuItem>
-                                    ))}
-                                  </TextField>
-                                </Grid>
-                                <Grid
-                                  item
-                                  md={6}
-                                  xs={12}
-                                >
-                                  <TextField
-                                    defaultValue={pack.id}
-                                    disabled
-                                    fullWidth
-                                    label="Barcode"
-                                    name="barcode"
-                                  />
-                                </Grid>
-                              </Grid>
                             </Grid>
                             <Grid
                               item
                               md={6}
                               xs={12}
                             >
-                              <Typography variant="h6">
-                                Pricing and stocks
-                              </Typography>
-                              <Divider sx={{ my: 2 }} />
-                              <Grid
+                             
+                              <Stack
                                 container
                                 spacing={3}
                               >
-                                <Grid
-                                  item
-                                  md={6}
-                                  xs={12}
-                                >
+                              
+                                  <TextField
+                                    defaultValue={pack.name}
+                                    fullWidth
+                                    label="Package name"
+                                    name="name"
+                                  />
                                   <TextField
                                     defaultValue={pack.price}
                                     fullWidth
-                                    label="Old price"
-                                    name="old-price"
+                                    label="Price"
+                                    name="price"
                                     InputProps={{
                                       startAdornment: (
                                         <InputAdornment position="start">
@@ -312,43 +242,26 @@ export const PackageListTable = (props) => {
                                     }}
                                     type="number"
                                   />
-                                </Grid>
-                                <Grid
-                                  item
-                                  md={6}
-                                  xs={12}
-                                >
+                                
+                              </Stack>
+                            </Grid>
+                            <Grid
+                              item
+                              md={6}
+                              xs={12}
+                            >
                                   <TextField
-                                    defaultValue={pack.price}
+                                    defaultValue={pack.description}
                                     fullWidth
-                                    label="New price"
-                                    name="new-price"
-                                    InputProps={{
-                                      startAdornment: (
-                                        <InputAdornment position="start">
-                                          $
-                                        </InputAdornment>
-                                      )
-                                    }}
-                                    type="number"
+                                    label="Description"
+                                    name="description"
+                                    multiline
+                                    rows={4}
                                   />
                                 </Grid>
-                                <Grid
-                                  item
-                                  md={6}
-                                  xs={12}
-                                  sx={{
-                                    alignItems: 'center',
-                                    display: 'flex'
-                                  }}
-                                >
-                                  <Switch />
-                                  <Typography variant="subtitle2">
-                                    Keep selling when stock is empty
-                                  </Typography>
-                                </Grid>
-                              </Grid>
-                            </Grid>
+                               
+                               
+                            
                           </Grid>
                         </CardContent>
                         <Divider />

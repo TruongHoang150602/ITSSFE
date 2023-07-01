@@ -12,14 +12,16 @@ import {
 import { paths } from 'src/paths';
 
 export const RoomCard = (props) => {
-  const { room } = props;
+  const { room, onClickEdit, onClickDelete } = props;
+
+
 
   return (
     <Card variant="outlined">
       <CardMedia
         image={room.media}
         component={NextLink} 
-        href={paths.gyms.details}
+        href={paths.gyms.details(room.id)}
         sx={{ height: 180 }}
       />
       <CardContent >
@@ -28,16 +30,23 @@ export const RoomCard = (props) => {
           underline="none"
           variant="subtitle1"
           component={NextLink} 
-          href={paths.gyms.details}
+          href={paths.gyms.details(room.id)}
         >
-          {room.title}
+          {room.name}
         </Link>
         <Typography
           color="text.secondary"
           sx={{ mt: 1 }}
           variant="body2"
         >
-          {room.description}
+          {room.address}
+        </Typography>
+        <Typography
+          color="text.secondary"
+          sx={{ mt: 1 }}
+          variant="body2"
+        >
+          {`Acreage: ${room.acreage} m²`}
         </Typography>
       </CardContent>
       <Stack
@@ -51,12 +60,14 @@ export const RoomCard = (props) => {
         >
           <Button
             variant="contained"
+            onClick={() => {onClickEdit(room)}}
           >
             Edit
           </Button>
           <Button
             color="error"
             variant="contained"
+            onClick={() => {onClickDelete(room.id)}}
           >
             Delete
           </Button>
@@ -66,5 +77,7 @@ export const RoomCard = (props) => {
 };
 
 RoomCard.propTypes = {
-  room: PropTypes.object.isRequired
+  room: PropTypes.object.isRequired,
+  onClickEdit: PropTypes.func,
+  onClickDelete: PropTypes.func,
 };

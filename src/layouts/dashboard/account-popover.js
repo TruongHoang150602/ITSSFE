@@ -26,7 +26,7 @@ export const AccountPopover = (props) => {
   const { anchorEl, onClose, open, ...other } = props;
   const router = useRouter();
   const auth = useAuth();
-
+  const user = auth.user;
   const handleLogout = useCallback(
     () => {
       onClose?.();
@@ -50,13 +50,13 @@ export const AccountPopover = (props) => {
       {...other}>
       <Box sx={{ p: 2 }}>
         <Typography variant="body1">
-          Hoàng Vân Trường
+         {user.name}
         </Typography>
         <Typography
           color="text.secondary"
           variant="body2"
         >
-          truonghoang@gmail.com
+          {user.gmail}
         </Typography>
       </Box>
       <Divider />

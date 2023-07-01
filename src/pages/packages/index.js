@@ -102,7 +102,7 @@ const PackageList = () => {
     <>
       <Head>
         <title>
-          Dashboard: Package List | Devias Kit PRO
+          Package List
         </title>
       </Head>
       <Box
@@ -123,30 +123,7 @@ const PackageList = () => {
                 <Typography variant="h4">
                   Packages
                 </Typography>
-                <Breadcrumbs separator={<BreadcrumbsSeparator />}>
-                  <Link
-                    color="text.primary"
-                    component={NextLink}
-                    href={paths.dashboard.admin}
-                    variant="subtitle2"
-                  >
-                    Dashboard
-                  </Link>
-                  <Link
-                    color="text.primary"
-                    component={NextLink}
-                    href={paths.packages.index}
-                    variant="subtitle2"
-                  >
-                    Packages
-                  </Link>
-                  <Typography
-                    color="text.secondary"
-                    variant="subtitle2"
-                  >
-                    List
-                  </Typography>
-                </Breadcrumbs>
+               
               </Stack>
               <Stack
                 alignItems="center"

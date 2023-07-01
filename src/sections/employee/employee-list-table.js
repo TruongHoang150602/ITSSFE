@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import NextLink from 'next/link';
 import numeral from 'numeral';
 import PropTypes from 'prop-types';
-import ArrowRightIcon from '@untitled-ui/icons-react/build/esm/ArrowRight';
+import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
 import Edit02Icon from '@untitled-ui/icons-react/build/esm/Edit02';
 import {
   Avatar,
@@ -145,13 +145,10 @@ export const EmployeeListTable = (props) => {
                 Name
               </TableCell>
               <TableCell>
-                Location
+                Address
               </TableCell>
               <TableCell>
-                Orders
-              </TableCell>
-              <TableCell>
-                Spent
+                Phone
               </TableCell>
               <TableCell align="right">
                 Actions
@@ -161,9 +158,6 @@ export const EmployeeListTable = (props) => {
           <TableBody>
             {employees.map((employee) => {
               const isSelected = selected.includes(employee.id);
-              const location = `${employee.city}, ${employee.state}, ${employee.country}`;
-              const totalSpent = numeral(employee.totalSpent).format(`${employee.currency}0,0.00`);
-
               return (
                 <TableRow
                   hover
@@ -204,7 +198,7 @@ export const EmployeeListTable = (props) => {
                         <Link
                           color="inherit"
                           component={NextLink}
-                          href={paths.employees.details}
+                          href={paths.employees.details(employee.id)}
                           variant="subtitle2"
                         >
                           {employee.name}
@@ -219,31 +213,24 @@ export const EmployeeListTable = (props) => {
                     </Stack>
                   </TableCell>
                   <TableCell>
-                    {location}
+                    {employee.address}
                   </TableCell>
                   <TableCell>
-                    {employee.totalOrders}
-                  </TableCell>
-                  <TableCell>
-                    <Typography variant="subtitle2">
-                      {totalSpent}
-                    </Typography>
+                    {employee.phone}
                   </TableCell>
                   <TableCell align="right">
                     <IconButton
                       component={NextLink}
-                      href={paths.employees.edit}
+                      href={paths.employees.edit(employee.id)}
                     >
                       <SvgIcon>
                         <Edit02Icon />
                       </SvgIcon>
                     </IconButton>
                     <IconButton
-                      component={NextLink}
-                      href={paths.employees.details}
                     >
                       <SvgIcon>
-                        <ArrowRightIcon />
+                        <DeleteOutlineOutlinedIcon />
                       </SvgIcon>
                     </IconButton>
                   </TableCell>

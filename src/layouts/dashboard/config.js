@@ -10,6 +10,7 @@ import UserPlusIcon from '@heroicons/react/24/solid/UserPlusIcon';
 import UsersIcon from '@heroicons/react/24/solid/UsersIcon';
 import CardTravelIcon from '@mui/icons-material/CardTravel';
 import FeedIcon from '@mui/icons-material/Feed';
+import ReceiptLongIcon from '@mui/icons-material/ReceiptLong';
 import XCircleIcon from '@heroicons/react/24/solid/XCircleIcon';
 import { SvgIcon } from '@mui/material';
 
@@ -21,15 +22,6 @@ export const items = {
     icon: (
       <SvgIcon fontSize="small">
         <SpaceDashboardRoundedIcon />
-      </SvgIcon>
-    )
-  },
-  {
-    title: 'Analytics',
-    path: '/analytics',
-    icon: (
-      <SvgIcon fontSize="small">
-        <ChartBarIcon />
       </SvgIcon>
     )
   },
@@ -57,6 +49,15 @@ export const items = {
     icon: (
       <SvgIcon fontSize="small">
         <UsersIcon />
+      </SvgIcon>
+    )
+  },
+  {
+    title: 'Registers',
+    path: '/registers',
+    icon: (
+      <SvgIcon fontSize="small">
+        <ReceiptLongIcon />
       </SvgIcon>
     )
   },

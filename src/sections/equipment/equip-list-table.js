@@ -100,23 +100,17 @@ export const EquipmentListTable = (props) => {
           <TableHead>
             <TableRow>
               <TableCell />
-              <TableCell width="25%">
+              <TableCell >
                 Name
               </TableCell>
-              <TableCell width="25%">
-                Stock
-              </TableCell>
-              <TableCell>
+              <TableCell >
                 Price
               </TableCell>
               <TableCell>
-                sku
+               Purchase Date
               </TableCell>
               <TableCell>
-                Status
-              </TableCell>
-              <TableCell align="right">
-                Actions
+               Warranty Period
               </TableCell>
             </TableRow>
           </TableHead>
@@ -124,10 +118,6 @@ export const EquipmentListTable = (props) => {
             {equipments.map((equipment) => {
               const isCurrent = equipment.id === currentEquipment;
               const price = numeral(equipment.price).format(`${equipment.currency}0,0.00`);
-              const quantityColor = equipment.quantity >= 10 ? 'success' : 'error';
-              const statusColor = equipment.status === 'published' ? 'success' : 'info';
-              const hasManyVariants = equipment.variants > 1;
-
               return (
                 <Fragment key={equipment.id}>
                   <TableRow
@@ -150,7 +140,7 @@ export const EquipmentListTable = (props) => {
                           }
                         })
                       }}
-                      width="25%"
+                      
                     >
                       <IconButton onClick={() => handleEquipmentToggle(equipment.id)}>
                         <SvgIcon>
@@ -158,7 +148,7 @@ export const EquipmentListTable = (props) => {
                         </SvgIcon>
                       </IconButton>
                     </TableCell>
-                    <TableCell width="25%">
+                    <TableCell >
                       <Box
                         sx={{
                           alignItems: 'center',
@@ -218,44 +208,16 @@ export const EquipmentListTable = (props) => {
                         </Box>
                       </Box>
                     </TableCell>
-                    <TableCell width="25%">
-                      <LinearProgress
-                        value={equipment.quantity}
-                        variant="determinate"
-                        color={quantityColor}
-                        sx={{
-                          height: 8,
-                          width: 36
-                        }}
-                      />
-                      <Typography
-                        color="text.secondary"
-                        variant="body2"
-                      >
-                        {equipment.quantity}
-                        {' '}
-                        in stock
-                        {hasManyVariants && ` in ${equipment.variants} variants`}
-                      </Typography>
-                    </TableCell>
                     <TableCell>
                       {price}
                     </TableCell>
                     <TableCell>
-                      {equipment.sku}
+                      {new Date().toISOString().slice(0, 10)}
                     </TableCell>
                     <TableCell>
-                      <SeverityPill color={statusColor}>
-                        {equipment.status}
-                      </SeverityPill>
+                     {` ${equipment.warrantyPeriod} year`}
                     </TableCell>
-                    <TableCell align="right">
-                      <IconButton>
-                        <SvgIcon>
-                          <DotsHorizontalIcon />
-                        </SvgIcon>
-                      </IconButton>
-                    </TableCell>
+                   
                   </TableRow>
                   {isCurrent && (
                     <TableRow>
@@ -275,10 +237,13 @@ export const EquipmentListTable = (props) => {
                           }
                         }}
                       >
-                        <CardContent>
+                        <CardContent >
                           <Grid
                             container
                             spacing={3}
+                            sx={{
+                              width: "98%"
+                            }}
                           >
                             <Grid
                               item
@@ -305,19 +270,7 @@ export const EquipmentListTable = (props) => {
                                     name="name"
                                   />
                                 </Grid>
-                                <Grid
-                                  item
-                                  md={6}
-                                  xs={12}
-                                >
-                                  <TextField
-                                    defaultValue={equipment.sku}
-                                    disabled
-                                    fullWidth
-                                    label="SKU"
-                                    name="sku"
-                                  />
-                                </Grid>
+                    
                                 <Grid
                                   item
                                   md={6}
@@ -339,19 +292,7 @@ export const EquipmentListTable = (props) => {
                                     ))}
                                   </TextField>
                                 </Grid>
-                                <Grid
-                                  item
-                                  md={6}
-                                  xs={12}
-                                >
-                                  <TextField
-                                    defaultValue={equipment.id}
-                                    disabled
-                                    fullWidth
-                                    label="Barcode"
-                                    name="barcode"
-                                  />
-                                </Grid>
+                               
                               </Grid>
                             </Grid>
                             <Grid
@@ -360,7 +301,7 @@ export const EquipmentListTable = (props) => {
                               xs={12}
                             >
                               <Typography variant="h6">
-                                Pricing and stocks
+                                Pricing
                               </Typography>
                               <Divider sx={{ my: 2 }} />
                               <Grid
@@ -373,10 +314,10 @@ export const EquipmentListTable = (props) => {
                                   xs={12}
                                 >
                                   <TextField
-                                    defaultValue={equipment.price}
+                                    defaultValue={equipment.price || new Date().toISOString().slice(0, 10)}
                                     fullWidth
-                                    label="Old price"
-                                    name="old-price"
+                                    label="Price"
+                                    name="price"
                                     InputProps={{
                                       startAdornment: (
                                         <InputAdornment position="start">
@@ -393,18 +334,11 @@ export const EquipmentListTable = (props) => {
                                   xs={12}
                                 >
                                   <TextField
-                                    defaultValue={equipment.price}
+                                    defaultValue={equipment.purchaseDate}
                                     fullWidth
-                                    label="New price"
-                                    name="new-price"
-                                    InputProps={{
-                                      startAdornment: (
-                                        <InputAdornment position="start">
-                                          $
-                                        </InputAdornment>
-                                      )
-                                    }}
-                                    type="number"
+                                    label="Purchase Date"
+                                    name="purchaseDate"
+                                    type="date"
                                   />
                                 </Grid>
                                 <Grid
@@ -416,10 +350,20 @@ export const EquipmentListTable = (props) => {
                                     display: 'flex'
                                   }}
                                 >
-                                  <Switch />
-                                  <Typography variant="subtitle2">
-                                    Keep selling when stock is empty
-                                  </Typography>
+                                <TextField
+                                    defaultValue={equipment.warrantyPeriod}
+                                    fullWidth
+                                    label="warranty Period"
+                                    name="warrantyPeriod"
+                                    InputProps={{
+                                      startAdornment: (
+                                        <InputAdornment position="start">
+                                           year
+                                        </InputAdornment>
+                                      )
+                                    }}
+                                    type="number"
+                                  />
                                 </Grid>
                               </Grid>
                             </Grid>
@@ -430,7 +374,7 @@ export const EquipmentListTable = (props) => {
                           alignItems="center"
                           direction="row"
                           justifyContent="space-between"
-                          sx={{ p: 2 }}
+                          sx={{ p: 2 , width: '95%'}}
                         >
                           <Stack
                             alignItems="center"

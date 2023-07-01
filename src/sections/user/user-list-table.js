@@ -204,7 +204,7 @@ export const UserListTable = (props) => {
                         <Link
                           color="inherit"
                           component={NextLink}
-                          href={paths.users.details}
+                          href={paths.users.details(user.id)}
                           variant="subtitle2"
                         >
                           {user.name}
@@ -232,7 +232,7 @@ export const UserListTable = (props) => {
                   <TableCell align="right">
                     <IconButton
                       component={NextLink}
-                      href={paths.users.edit}
+                      href={paths.users.edit(user.id)}
                     >
                       <SvgIcon>
                         <Edit02Icon />
@@ -240,7 +240,7 @@ export const UserListTable = (props) => {
                     </IconButton>
                     <IconButton
                       component={NextLink}
-                      href={paths.users.details}
+                      href={paths.users.details(user.id)}
                     >
                       <SvgIcon>
                         <ArrowRightIcon />

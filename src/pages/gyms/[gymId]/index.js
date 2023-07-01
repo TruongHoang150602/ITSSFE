@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import Head from 'next/head';
 import NextLink from 'next/link';
+import { useRouter } from 'next/router';
 import PlusIcon from '@untitled-ui/icons-react/build/esm/Plus';
 import {
   Box,
@@ -72,6 +73,7 @@ const useEquipments = (search) => {
 };
 
 const EquipmentList = () => {
+  const { gymId } = useRouter().query;
   const { search, updateSearch } = useSearch();
   const { equipments, equipmentsCount } = useEquipments(search);
 
@@ -138,13 +140,13 @@ const EquipmentList = () => {
                     href={paths.gyms.index}
                     variant="subtitle2"
                   >
-                    Equipments
+                    Gyms
                   </Link>
                   <Typography
                     color="text.secondary"
                     variant="subtitle2"
                   >
-                    List
+                    Equipment
                   </Typography>
                 </Breadcrumbs>
               </Stack>
@@ -155,7 +157,7 @@ const EquipmentList = () => {
               >
                 <Button
                   component={NextLink}
-                  href={paths.gyms.create}
+                  href={paths.gyms.create(gymId)}
                   startIcon={(
                     <SvgIcon>
                       <PlusIcon />

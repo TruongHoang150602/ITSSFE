@@ -71,7 +71,7 @@ const Page = () => {
     <>
       <Head>
         <title>
-          Dashboard: Employee Details | GymCenter
+          Dashboard: Employee Details
         </title>
       </Head>
       <Box
@@ -148,12 +148,12 @@ const Page = () => {
                   <Button
                     color="inherit"
                     component={NextLink}
+                    href={paths.employees.edit(employee.id)}
                     endIcon={(
                       <SvgIcon>
                         <Edit02Icon />
                       </SvgIcon>
                     )}
-                    href={paths.employees.edit}
                   >
                     Edit
                   </Button>

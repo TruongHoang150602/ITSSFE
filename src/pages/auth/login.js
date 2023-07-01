@@ -22,8 +22,8 @@ import { Layout as AuthLayout } from 'src/layouts/auth/layout';
 import { paths } from 'src/paths';
 
 const initialValues = {
-  email: 'demo@devias.io',
-  password: 'Password123!',
+  email: 'admin@gmail.com',
+  password: 'admin123',
   submit: null
 };
 
@@ -51,7 +51,13 @@ const Page = () => {
     onSubmit: async (values, helpers) => {
       try {
         await auth.signIn(values.email, values.password);
-        router.push('/');
+        const user = auth.user;
+        if(user.role === 1)
+          router.push('/dashboard/admin');
+        else if(user.role === 2 || user.role === 3 || user.role === 4)
+          router.push('/dashboard/employee');
+        else 
+          router.push('/dashboard/user');
       } catch (err) {
         helpers.setStatus({ success: false });
         helpers.setErrors({ submit: err.message });
@@ -59,19 +65,6 @@ const Page = () => {
       }
     }
   });
-
-  const handleSkip = useCallback(
-    () => {
-      auth.skip();
-      router.push('/dashboard/admin');
-    },
-    [auth, router]
-  );
-
-  const handleSubmit = 
-    (e) => {
-      console.log("Submit")
-    };
 
   return (
       <Card elevation={16}>

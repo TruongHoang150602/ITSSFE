@@ -76,8 +76,6 @@ const SocialFeed = () => {
                 authorName={post.author.name}
                 comments={post.comments}
                 createdAt={post.createdAt}
-                isLiked={post.isLiked}
-                likes={post.likes}
                 media={post.media}
                 message={post.message}
               />

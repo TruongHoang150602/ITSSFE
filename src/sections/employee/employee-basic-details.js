@@ -4,7 +4,7 @@ import { PropertyList } from 'src/components/property-list';
 import { PropertyListItem } from 'src/components/property-list-item';
 
 export const EmployeeBasicDetails = (props) => {
-  const { address1, address2, country, email, isVerified, phone, state, ...other } = props;
+  const { address, email, phone, gender, birthday, role, ...other } = props;
   const mdUp = useMediaQuery((theme) => theme.breakpoints.up('md'));
   const align = mdUp ? 'horizontal' : 'vertical';
   return (
@@ -15,13 +15,13 @@ export const EmployeeBasicDetails = (props) => {
             align={align}
             divider
             label="Gender"
-            value={state}
+            value={gender}
           />
         <PropertyListItem
             align={align}
             divider
             label="Birthday"
-            value={state}
+            value={birthday}
           />
         <PropertyListItem
           align={align}
@@ -35,11 +35,17 @@ export const EmployeeBasicDetails = (props) => {
           label="Phone"
           value={phone}
         />
+          <PropertyListItem
+          align={align}
+          divider
+          label="Address"
+          value={address}
+        />
         <PropertyListItem
           align={align}
           divider
           label="Role"
-          value={country}
+          value={role}
         />
       </PropertyList>
     </Card>
@@ -47,11 +53,12 @@ export const EmployeeBasicDetails = (props) => {
 };
 
 EmployeeBasicDetails.propTypes = {
-  address1: PropTypes.string,
-  address2: PropTypes.string,
-  country: PropTypes.string,
+  address: PropTypes.string,
   email: PropTypes.string.isRequired,
   isVerified: PropTypes.bool.isRequired,
   phone: PropTypes.string,
-  state: PropTypes.string
+  gender: PropTypes.string,
+  birthday: PropTypes.string,
+  role: PropTypes.number,
+  gender: PropTypes.string
 };

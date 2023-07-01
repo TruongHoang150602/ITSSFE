@@ -1,15 +1,16 @@
 import NextLink from 'next/link';
 import Head from 'next/head';
+import { useRouter } from 'next/router';
 import { Box, Breadcrumbs, Container, Link, Stack, Typography } from '@mui/material';
 import { BreadcrumbsSeparator } from 'src/components/breadcrumbs-separator';
 import { usePageView } from 'src/hooks/use-page-view';
 import { Layout as DashboardLayout } from 'src/layouts/dashboard/layout';
 import { paths } from 'src/paths';
-import { EquipmentCreateForm } from 'src/sections/equipment/equipment-create-form';
+import { EquipmentCreateForm } from 'src/sections/equipment/equip-create-form';
 
 const EquipmentCreate = () => {
   usePageView();
-
+  const { gymId } = useRouter().query;
   return (
     <>
       <Head>
@@ -34,7 +35,7 @@ const EquipmentCreate = () => {
                 <Link
                   color="text.primary"
                   component={NextLink}
-                  href={paths.dashboard.index}
+                  href={paths.dashboard.admin}
                   variant="subtitle2"
                 >
                   Dashboard
@@ -42,7 +43,7 @@ const EquipmentCreate = () => {
                 <Link
                   color="text.primary"
                   component={NextLink}
-                  href={paths.dashboard.equipments.index}
+                  href={paths.gyms.details(gymId)}
                   variant="subtitle2"
                 >
                   Equipments

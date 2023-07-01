@@ -15,7 +15,7 @@ const Page = () => {
     <>
       <Head>
         <title>
-          Error: Authorization Required | Devias Kit PRO
+          Error: Authorization Required
         </title>
       </Head>
       <Box
