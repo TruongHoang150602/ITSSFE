@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import NextLink from 'next/link';
-import numeral from 'numeral';
 import PropTypes from 'prop-types';
 import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
 import Edit02Icon from '@untitled-ui/icons-react/build/esm/Edit02';
@@ -11,6 +10,11 @@ import {
   Checkbox,
   IconButton,
   Link,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  DialogContentText,
   Stack,
   SvgIcon,
   Table,
@@ -24,6 +28,7 @@ import {
 import { Scrollbar } from 'src/components/scrollbar';
 import { paths } from 'src/paths';
 import { getInitials } from 'src/utils/get-initials';
+import { employeesApi } from 'src/api/employees';
 
 const useSelectionModel = (employees) => {
   const employeeIds = useMemo(() => {
@@ -88,6 +93,22 @@ export const EmployeeListTable = (props) => {
   const selectedSome = selected.length > 0 && selected.length < employees.length;
   const enableBulkActions = selected.length > 0;
 
+  const [open, setOpen] = useState(false);
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const handleConfirmDelete = () => {
+    console.log(selected);
+    console.log(employees)
+    selected.forEach((index) => employeesApi.deleteEmployeeById(index));
+    setOpen(false);
+  };
+
   return (
     <Box
       sx={{ position: 'relative' }}
@@ -117,6 +138,7 @@ export const EmployeeListTable = (props) => {
             onChange={handleToggleAll}
           />
           <Button
+            onClick={handleClickOpen}
             color="inherit"
             size="small"
           >
@@ -145,13 +167,16 @@ export const EmployeeListTable = (props) => {
                 Name
               </TableCell>
               <TableCell>
+                Role
+              </TableCell>
+              <TableCell>
                 Address
               </TableCell>
               <TableCell>
                 Phone
               </TableCell>
-              <TableCell align="right">
-                Actions
+              <TableCell align='right'>
+                Action
               </TableCell>
             </TableRow>
           </TableHead>
@@ -213,6 +238,9 @@ export const EmployeeListTable = (props) => {
                     </Stack>
                   </TableCell>
                   <TableCell>
+                    {employee.role}
+                  </TableCell>
+                  <TableCell>
                     {employee.address}
                   </TableCell>
                   <TableCell>
@@ -225,12 +253,6 @@ export const EmployeeListTable = (props) => {
                     >
                       <SvgIcon>
                         <Edit02Icon />
-                      </SvgIcon>
-                    </IconButton>
-                    <IconButton
-                    >
-                      <SvgIcon>
-                        <DeleteOutlineOutlinedIcon />
                       </SvgIcon>
                     </IconButton>
                   </TableCell>
@@ -249,6 +271,26 @@ export const EmployeeListTable = (props) => {
         rowsPerPage={rowsPerPage}
         rowsPerPageOptions={[5, 10, 25]}
       />
+       <Dialog
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="draggable-dialog-title"
+      >
+        <DialogTitle style={{ cursor: 'move', color: 'red' }} id="draggable-dialog-title">
+          Delete
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Are you sure you want to delete this employee?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button autoFocus onClick={handleClose}>
+            Cancel
+          </Button>
+          <Button onClick={handleConfirmDelete} color="error">Delete</Button>
+        </DialogActions>
+      </Dialog>
     </Box>
   );
 };

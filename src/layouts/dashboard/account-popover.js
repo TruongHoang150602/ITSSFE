@@ -1,4 +1,3 @@
-import { useCallback } from 'react';
 import NextLink from 'next/link';
 import { useRouter } from 'next/navigation';
 import PropTypes from 'prop-types';
@@ -26,16 +25,12 @@ export const AccountPopover = (props) => {
   const { anchorEl, onClose, open, ...other } = props;
   const router = useRouter();
   const auth = useAuth();
-  const user = auth.user;
-  const handleLogout = useCallback(
-    () => {
+  const handleLogout = () => {
       onClose?.();
       auth.signOut();
       router.push('/auth/login');
-    },
-    [onClose, auth, router]
-  );
-
+    };
+  const user  = auth.user;
   return (
     <Popover
       anchorEl={anchorEl}
@@ -50,13 +45,13 @@ export const AccountPopover = (props) => {
       {...other}>
       <Box sx={{ p: 2 }}>
         <Typography variant="body1">
-         {user.name}
+         {user ? user.name : ' '}
         </Typography>
         <Typography
           color="text.secondary"
           variant="body2"
         >
-          {user.gmail}
+          {user ? user.gmail : ' '}
         </Typography>
       </Box>
       <Divider />

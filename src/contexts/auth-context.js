@@ -2,8 +2,8 @@ import { createContext, useContext, useEffect, useReducer, useRef } from 'react'
 import PropTypes from 'prop-types';
 import { authApi } from 'src/api/auth';
 
+
 const HANDLERS = {
-  INITIALIZE: 'INITIALIZE',
   SIGN_IN: 'SIGN_IN',
   SIGN_OUT: 'SIGN_OUT'
 };
@@ -46,7 +46,7 @@ const handlers = {
   [HANDLERS.SIGN_OUT]: (state) => {
     return {
       ...state,
-      isAuthenticated: false,
+      isAuthenticated: true,
       user: null
     };
   }
@@ -70,52 +70,34 @@ export const AuthProvider = (props) => {
     if (initialized.current) {
       return;
     }
-
+  
     initialized.current = true;
-
+  
     let isAuthenticated = false;
-
+  
     try {
       isAuthenticated = window.sessionStorage.getItem('authenticated') === 'true';
     } catch (err) {
       console.error(err);
     }
-
-    if (isAuthenticated) {
-      const user = {
-        id: '5e86809283e28b96d2d38537',
-        avatar: '/assets/avatars/avatar-anika-visser.png',
-        name: 'Anika Visser',
-        email: 'anika.visser@devias.io',
-        role: 'admin'
-      };
-
-      dispatch({
-        type: HANDLERS.INITIALIZE,
-        payload: user
-      });
-    } else {
-      dispatch({
-        type: HANDLERS.INITIALIZE
-      });
-    }
+  
+    dispatch({
+      type: HANDLERS.INITIALIZE
+    });
   };
-
-  useEffect(
-    () => {
-      initialize();
-    },
+  
+  useEffect(() => {
+    initialize();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    []
-  );
+  }, []);
 
   const signIn = async (email, password) => {
     
      try {
-      const response = await authApi.signIn({ email, password });
-      const user = response;
+      const user = await authApi.signIn({ email, password });
+      console.log(user)
       window.sessionStorage.setItem('authenticated', 'true');
-
+      
       dispatch({
         type: HANDLERS.SIGN_IN,
         payload: user

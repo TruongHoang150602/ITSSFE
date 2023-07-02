@@ -85,7 +85,7 @@ export const items = {
   employee:  [
     {
       title: 'Overview',
-      path: '/dashboard/admin',
+      path: '/dashboard/employee',
       icon: (
         <SvgIcon fontSize="small">
           <ChartBarIcon />
@@ -93,23 +93,33 @@ export const items = {
       )
     },
     {
-      title: 'Employees',
-      path: '/employees',
+      title: 'Registers',
+      path: '/registers',
       icon: (
         <SvgIcon fontSize="small">
-          <UsersIcon />
+          <ReceiptLongIcon />
         </SvgIcon>
       )
     },
     {
-      title: 'Member',
-      path: '/customers',
+      title: 'Feedback',
+      path: '/feedback',
+      icon: (
+        <SvgIcon fontSize="small">
+          <FeedIcon />
+        </SvgIcon>
+      )
+    },
+    {
+      title: 'Packages',
+      path: '/packages',
       icon: (
         <SvgIcon fontSize="small">
           <CardTravelIcon />
         </SvgIcon>
       )
-    }],
+    },
+  ],
 
     user:  [
       {

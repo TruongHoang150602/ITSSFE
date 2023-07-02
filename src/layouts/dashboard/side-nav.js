@@ -17,10 +17,20 @@ import { Logo } from 'src/components/logo';
 import { Scrollbar } from 'src/components/scrollbar';
 import { items } from './config';
 import { SideNavItem } from './side-nav-item';
+import { useAuth } from 'src/hooks/use-auth';
 
 export const SideNav = (props) => {
 
-  const userItems = items.admin;
+  const auth = useAuth();
+  let userItems = items.user;
+  if(auth.isAuthenticated){
+    const user = auth.user;
+    if(user.role === 1)
+      userItems = items.admin;
+    else if (user.role === 2 || user.role === 3 || user.role === 4)
+      userItems = items.employee;
+  }
+   
   const { open, onClose } = props;
   const pathname = usePathname();
   const lgUp = useMediaQuery((theme) => theme.breakpoints.up('lg'));

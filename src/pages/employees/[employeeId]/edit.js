@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import NextLink from 'next/link';
 import Head from 'next/head';
+import { useRouter } from 'next/router';
 import ArrowLeftIcon from '@untitled-ui/icons-react/build/esm/ArrowLeft';
 import { Avatar, Box, Chip, Container, Link, Stack, SvgIcon, Typography } from '@mui/material';
 import { employeesApi } from 'src/api/employees';
@@ -12,12 +13,15 @@ import { EmployeeEditForm } from 'src/sections/employee/employee-edit-form';
 import { getInitials } from 'src/utils/get-initials';
 
 const useEmployee = () => {
+  const route = useRouter()
   const isMounted = useMounted();
   const [employee, setEmployee] = useState(null);
 
   const getEmployee = useCallback(async () => {
     try {
-      const response = await employeesApi.getEmployee();
+      
+      const {employeeId} = route.query;
+      const response = await employeesApi.getEmployeeById({id: employeeId});
 
       if (isMounted()) {
         setEmployee(response);

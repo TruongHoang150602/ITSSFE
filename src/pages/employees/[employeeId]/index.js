@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import NextLink from 'next/link';
 import Head from 'next/head';
+import { useRouter } from 'next/router';
 import ArrowLeftIcon from '@untitled-ui/icons-react/build/esm/ArrowLeft';
 import ChevronDownIcon from '@untitled-ui/icons-react/build/esm/ChevronDown';
 import Edit02Icon from '@untitled-ui/icons-react/build/esm/Edit02';
@@ -29,12 +30,14 @@ import { EmployeeDataManagement } from 'src/sections/employee/employee-data-mana
 import { getInitials } from 'src/utils/get-initials';
 
 const useEmployee = () => {
+  const route = useRouter();
   const isMounted = useMounted();
   const [employee, setEmployee] = useState(null);
 
   const getEmployee = useCallback(async () => {
     try {
-      const response = await employeesApi.getEmployee();
+      const {employeeId} = route.query;
+      const response = await employeesApi.getEmployeeById({id: employeeId});
         
       if (isMounted()) {
         setEmployee(response);
@@ -160,15 +163,14 @@ const Page = () => {
               </Stack>
             </Stack>
                     <EmployeeBasicDetails
-                      address1={employee.address1}
-                      address2={employee.address2}
-                      country={employee.country}
+                      address={employee.address}
+                      gender={employee.gender}
+                      birthday={employee.birthday}
                       email={employee.email}
-                      isVerified={!!employee.isVerified}
                       phone={employee.phone}
-                      state={employee.state}
+                      role={employee.role}
                     />
-                    <EmployeeDataManagement />
+                    <EmployeeDataManagement id={employee.id}/>
           </Stack>
         </Container>
       </Box>

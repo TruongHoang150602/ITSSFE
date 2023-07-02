@@ -21,34 +21,34 @@ const tabs = [
   },
   {
     label: 'Caring',
-    value: 'hasAcceptedMarketing'
+    value: 'caring'
   },
   {
     label: 'Coach',
-    value: 'isProspect'
+    value: 'coach'
   },
   {
     label: 'Sale',
-    value: 'isReturning'
+    value: 'sale'
   }
 ];
 
 const sortOptions = [
   {
-    label: 'Last update (newest)',
-    value: 'updatedAt|desc'
+    label: 'Name (a - z)',
+    value: 'name|desc'
   },
   {
-    label: 'Last update (oldest)',
-    value: 'updatedAt|asc'
+    label: 'Name (z - a)',
+    value: 'name|asc'
   },
   {
-    label: 'Total orders (highest)',
-    value: 'totalOrders|desc'
+    label: 'Role (highest)',
+    value: 'role|desc'
   },
   {
-    label: 'Total orders (lowest)',
-    value: 'totalOrders|asc'
+    label: 'Role (lowest)',
+    value: 'role|asc'
   }
 ];
 
@@ -71,13 +71,11 @@ export const EmployeeListSearch = (props) => {
     setFilters((prevState) => {
       const updatedFilters = {
         ...prevState,
-        hasAcceptedMarketing: undefined,
-        isProspect: undefined,
-        isReturning: undefined
+        role: undefined,
       };
 
       if (value !== 'all') {
-        updatedFilters[value] = true;
+        updatedFilters.role = value;
       }
 
       return updatedFilters;

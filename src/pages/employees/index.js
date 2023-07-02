@@ -16,9 +16,7 @@ const useSearch = () => {
   const [search, setSearch] = useState({
     filters: {
       query: undefined,
-      hasAcceptedMarketing: undefined,
-      isProspect: undefined,
-      isReturning: undefined
+      role: undefined,
     },
     page: 0,
     rowsPerPage: 5,

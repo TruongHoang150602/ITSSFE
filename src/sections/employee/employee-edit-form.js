@@ -45,7 +45,7 @@ const ROLE = [{
 const initialValues = (employee) => {
   if(employee) return {
     address: employee.address || '',
-    gender: employee.gender || 'Male',
+    gender: employee.gender || 'male',
     birthday: employee.birthday || new Date().toISOString().slice(0, 10),
     email: employee.email || '',
     name: employee.name || '',
@@ -55,7 +55,7 @@ const initialValues = (employee) => {
   }
   return {
     address: '',
-    gender: 'Male',
+    gender: 'male',
     birthday: new Date().toISOString().slice(0, 10),
     email: '',
     name: '',
@@ -87,7 +87,9 @@ export const EmployeeEditForm = (props) => {
     }),
     onSubmit: async (values, helpers) => {
       try {
-        // NOTE: Make API request
+        
+        
+        
         await wait(500);
         helpers.setStatus({ success: true });
         helpers.setSubmitting(false);
@@ -191,12 +193,12 @@ export const EmployeeEditForm = (props) => {
                 onChange={formik.handleChange}
                 value={formik.values.gender}
               >
-                <MenuItem key={'Male'} 
-                  value={'Male'}>
-                  Nam</MenuItem>
-                <MenuItem key={'Female'} 
-                  value={'Female'}>
-                  Nữ</MenuItem>
+                <MenuItem key={'male'} 
+                  value={'male'}>
+                  male</MenuItem>
+                <MenuItem key={'female'} 
+                  value={'female'}>
+                  female</MenuItem>
               </TextField>
              
             </Grid>

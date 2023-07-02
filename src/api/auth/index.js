@@ -5,13 +5,11 @@ import { users } from './data';
 class AuthApi {
   async signIn(request) {
     const { email, password } = request;
-    await wait(500);
-    console.log("SignIn")
+    
     return new Promise((resolve, reject) => {
       try {
         // Find the user
         const user = users.find((user) => user.email === email);
-        console.log(user)
         
         if (!user || (user.password !== password)) {
           reject(new Error('Please check your email and password'));
@@ -29,8 +27,6 @@ class AuthApi {
 
   async signUp(request) {
     const { email, name, password } = request;
-
-    await wait(1000);
 
     return new Promise((resolve, reject) => {
       try {

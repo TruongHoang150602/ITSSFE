@@ -1,13 +1,27 @@
-import { applyPagination } from '../../utils/apply-pagination';
-import { applySort } from '../../utils/apply-sort';
-import { deepCopy } from '../../utils/deep-copy';
+import { applyPagination } from 'src/utils/apply-pagination';
+import { applySort } from 'src/utils/apply-sort';
+import { deepCopy } from 'src/utils/deep-copy';
 import { user, users, emails, invoices, logs } from './data';
 
 class UsersApi {
-  getUsers(request = {}) {
+  async getUsers(request = {}) {
     const { filters, page, rowsPerPage, sortBy, sortDir } = request;
+    let data = null;
+    try {
+      const response = await fetch('/user/user', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+      data = await response.json();
+    } catch (error) {
+      console.error('Lỗi khi lấy danh sách người dùng:', error);
+      throw error;
+    }
 
-    let data = deepCopy(users);
+    
+    data = deepCopy(data);
     let count = data.length;
 
     if (typeof filters !== 'undefined') {
@@ -27,24 +41,12 @@ class UsersApi {
           }
         }
 
-        if (typeof filters.hasAcceptedMarketing !== 'undefined') {
-          if (user.hasAcceptedMarketing !== filters.hasAcceptedMarketing) {
+        if (typeof filters.member !== 'undefined') {
+          if (user.role !== filters.member) {
             return false;
           }
         }
-
-        if (typeof filters.isProspect !== 'undefined') {
-          if (user.isProspect !== filters.isProspect) {
-            return false;
-          }
-        }
-
-        if (typeof filters.isReturning !== 'undefined') {
-          if (user.isReturning !== filters.isReturning) {
-            return false;
-          }
-        }
-
+        
         return true;
       });
       count = data.length;

@@ -1,13 +1,17 @@
-import { applyPagination } from '../../utils/apply-pagination';
-import { applySort } from '../../utils/apply-sort';
-import { deepCopy } from '../../utils/deep-copy';
+import { applyPagination } from 'src/utils/apply-pagination';
+import { applySort } from 'src/utils/apply-sort';
+import { deepCopy } from 'src/utils/deep-copy';
 import { employee, employees, emails, invoices, logs } from './data';
 
 class EmployeesApi {
+  constructor() {
+    this.data = deepCopy(employees);
+  }
+
   getEmployees(request = {}) {
     const { filters, page, rowsPerPage, sortBy, sortDir } = request;
 
-    let data = deepCopy(employees);
+    let data = this.data.slice();
     let count = data.length;
 
     if (typeof filters !== 'undefined') {
@@ -17,7 +21,7 @@ class EmployeesApi {
           const properties = ['email', 'name'];
 
           properties.forEach((property) => {
-            if ((employee[property]).toLowerCase().includes(filters.query.toLowerCase())) {
+            if (employee[property].toLowerCase().includes(filters.query.toLowerCase())) {
               queryMatched = true;
             }
           });
@@ -27,26 +31,15 @@ class EmployeesApi {
           }
         }
 
-        if (typeof filters.hasAcceptedMarketing !== 'undefined') {
-          if (employee.hasAcceptedMarketing !== filters.hasAcceptedMarketing) {
-            return false;
-          }
-        }
-
-        if (typeof filters.isProspect !== 'undefined') {
-          if (employee.isProspect !== filters.isProspect) {
-            return false;
-          }
-        }
-
-        if (typeof filters.isReturning !== 'undefined') {
-          if (employee.isReturning !== filters.isReturning) {
+        if (typeof filters.role !== 'undefined') {
+          if (employee.role !== filters.role) {
             return false;
           }
         }
 
         return true;
       });
+
       count = data.length;
     }
 
@@ -64,21 +57,31 @@ class EmployeesApi {
     });
   }
 
-  getEmployee(request) {
-    return Promise.resolve(deepCopy(employee));
+  getEmployeeById(request) {
+    const { id } = request;
+    console.log(this.data)
+    const employee = this.data.find((emp) => emp.id == id);
+    return Promise.resolve(employee);
   }
 
-  getEmails(request) {
-    return Promise.resolve(deepCopy(emails));
+  deleteEmployeeById(id) {
+    const index = this.data.findIndex((emp) => emp.id === id);
+    if (index !== -1) {
+      this.data.splice(index, 1);
+      return Promise.resolve(true);
+    }
+    return Promise.resolve(false);
   }
 
-  getInvoices(request) {
-    return Promise.resolve(deepCopy(invoices));
+  updateEmployeeById(id, newData) {
+    const index = this.data.findIndex((emp) => emp.id === id);
+    if (index !== -1) {
+      this.data[index] = { ...this.data[index], ...newData };
+      return Promise.resolve(true);
+    }
+    return Promise.resolve(false);
   }
 
-  getLogs(request) {
-    return Promise.resolve(deepCopy(logs));
-  }
 }
 
 export const employeesApi = new EmployeesApi();

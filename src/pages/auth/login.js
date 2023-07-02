@@ -4,6 +4,7 @@ import NextLink from 'next/link';
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
 import { useRouter } from 'next/navigation';
+import { wait } from 'src/utils/wait';
 import ArrowLeftIcon from '@untitled-ui/icons-react/build/esm/ArrowLeft';
 import {
   Box,
@@ -51,18 +52,22 @@ const Page = () => {
     onSubmit: async (values, helpers) => {
       try {
         await auth.signIn(values.email, values.password);
-        const user = auth.user;
-        if(user.role === 1)
-          router.push('/dashboard/admin');
-        else if(user.role === 2 || user.role === 3 || user.role === 4)
-          router.push('/dashboard/employee');
-        else 
-          router.push('/dashboard/user');
+        if(auth.isAuthenticated)
+        {    
+          const {user} = auth;
+          if(user.role === 1)
+            router.push('/dashboard/admin');
+          else if(user.role === 2 || user.role === 3 || user.role === 4)
+            router.push('/dashboard/employee');
+          else 
+            router.push('/dashboard/user');
+        }
       } catch (err) {
         helpers.setStatus({ success: false });
         helpers.setErrors({ submit: err.message });
         helpers.setSubmitting(false);
       }
+      
     }
   });
 
