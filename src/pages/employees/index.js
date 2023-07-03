@@ -4,7 +4,7 @@ import Download01Icon from '@untitled-ui/icons-react/build/esm/Download01';
 import PlusIcon from '@untitled-ui/icons-react/build/esm/Plus';
 import Upload01Icon from '@untitled-ui/icons-react/build/esm/Upload01';
 import { Box, Button, Card, Container, Dialog, Stack, SvgIcon, Typography } from '@mui/material';
-import { employeesApi } from 'src/api/employees';
+import employeesApi from 'src/api/employees';
 import { useMounted } from 'src/hooks/use-mounted';
 import { usePageView } from 'src/hooks/use-page-view';
 import { Layout as DashboardLayout } from 'src/layouts/dashboard/layout';
@@ -40,6 +40,7 @@ const useEmployees = (search) => {
   const getEmployees = useCallback(async () => {
     try {
       const response = await employeesApi.getEmployees(search);
+      console.log(response);
 
       if (isMounted()) {
         setState({
@@ -50,23 +51,34 @@ const useEmployees = (search) => {
     } catch (err) {
       console.error(err);
     }
-  }, [search, isMounted]);
+  }, [isMounted]);
+
+  const deleteEmployee = useCallback(async (employeeId) => {
+    try {
+      await employeesApi.deleteEmployeeById(employeeId);
+      // Refresh the employee list
+      getEmployees();
+    } catch (err) {
+      console.error(err);
+    }
+  }, [getEmployees]);
 
   useEffect(() => {
-      getEmployees();
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [search]);
+    getEmployees();
+  }, [search]);
 
-  return state;
+  return {
+    state,
+    deleteEmployee
+  };
 };
 
 const Page = () => {
 
   const [openModal, setOpenModal] = useState(false)
   const { search, updateSearch } = useSearch();
-  const { employees, employeesCount } = useEmployees(search);
-
+  const { state, deleteEmployee } = useEmployees(search);
+  
   usePageView();
 
   const handleFiltersChange = useCallback((filters) => {
@@ -98,9 +110,15 @@ const Page = () => {
     }));
   }, [updateSearch]);
 
+  const handleDeleteEmployee = (employeeId) => {
+    deleteEmployee(employeeId);
+  } 
+
   const onCloseModel = () => {
       setOpenModal(false);
   }
+
+
 
   return (
     <>
@@ -182,12 +200,13 @@ const Page = () => {
                 sortDir={search.sortDir}
               />
               <EmployeeListTable
-                employees={employees}
-                employeesCount={employeesCount}
+                employees={state.employees}
+                employeesCount={state.employeesCount}
                 onPageChange={handlePageChange}
                 onRowsPerPageChange={handleRowsPerPageChange}
                 rowsPerPage={search.rowsPerPage}
                 page={search.page}
+                handleDeleteEmployee={handleDeleteEmployee}
               />
             </Card>
           </Stack>

@@ -28,7 +28,7 @@ import {
 import { Scrollbar } from 'src/components/scrollbar';
 import { paths } from 'src/paths';
 import { getInitials } from 'src/utils/get-initials';
-import { employeesApi } from 'src/api/employees';
+import employeesApi from 'src/api/employees';
 
 const useSelectionModel = (employees) => {
   const employeeIds = useMemo(() => {
@@ -74,6 +74,7 @@ export const EmployeeListTable = (props) => {
     onPageChange,
     onRowsPerPageChange,
     page,
+    handleDeleteEmployee,
     rowsPerPage,
     ...other
   } = props;
@@ -103,9 +104,7 @@ export const EmployeeListTable = (props) => {
   };
 
   const handleConfirmDelete = () => {
-    console.log(selected);
-    console.log(employees)
-    selected.forEach((index) => employeesApi.deleteEmployeeById(index));
+    selected.forEach((index) => handleDeleteEmployee(index));
     setOpen(false);
   };
 

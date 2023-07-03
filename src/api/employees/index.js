@@ -1,27 +1,33 @@
+import axios from 'axios';
 import { applyPagination } from 'src/utils/apply-pagination';
 import { applySort } from 'src/utils/apply-sort';
 import { deepCopy } from 'src/utils/deep-copy';
-import { employee, employees, emails, invoices, logs } from './data';
-
 class EmployeesApi {
-  constructor() {
-    this.data = deepCopy(employees);
+  constructor(baseUrl) {
+    this.baseUrl = baseUrl;
   }
 
-  getEmployees(request = {}) {
+  async getEmployees(request = {}) {
     const { filters, page, rowsPerPage, sortBy, sortDir } = request;
-
-    let data = this.data.slice();
+    let data = null;
+    try {
+      const response = await axios.get(`${this.baseUrl}/employee`);
+      data =  response.data;
+    } catch (error) {
+      console.error('Error while fetching employees:', error);
+      return [];
+    }
+    data = deepCopy(data);
     let count = data.length;
 
     if (typeof filters !== 'undefined') {
-      data = data.filter((employee) => {
+      data = data.filter((user) => {
         if (typeof filters.query !== 'undefined' && filters.query !== '') {
           let queryMatched = false;
           const properties = ['email', 'name'];
 
           properties.forEach((property) => {
-            if (employee[property].toLowerCase().includes(filters.query.toLowerCase())) {
+            if ((user[property]).toLowerCase().includes(filters.query.toLowerCase())) {
               queryMatched = true;
             }
           });
@@ -31,15 +37,14 @@ class EmployeesApi {
           }
         }
 
-        if (typeof filters.role !== 'undefined') {
-          if (employee.role !== filters.role) {
+        if (typeof filters.member !== 'undefined') {
+          if (user.role !== filters.member) {
             return false;
           }
         }
-
+        
         return true;
       });
-
       count = data.length;
     }
 
@@ -57,31 +62,47 @@ class EmployeesApi {
     });
   }
 
-  getEmployeeById(request) {
-    const { id } = request;
-    console.log(this.data)
-    const employee = this.data.find((emp) => emp.id == id);
-    return Promise.resolve(employee);
-  }
-
-  deleteEmployeeById(id) {
-    const index = this.data.findIndex((emp) => emp.id === id);
-    if (index !== -1) {
-      this.data.splice(index, 1);
-      return Promise.resolve(true);
+  async getEmployeeById(id) {
+    try {
+      const response = await axios.get(`${this.baseUrl}/employee/${id}`);
+      return response.data;
+    } catch (error) {
+      console.error(`Error while fetching employee with ID ${id}:`, error);
+      return null;
     }
-    return Promise.resolve(false);
   }
 
-  updateEmployeeById(id, newData) {
-    const index = this.data.findIndex((emp) => emp.id === id);
-    if (index !== -1) {
-      this.data[index] = { ...this.data[index], ...newData };
-      return Promise.resolve(true);
+  async createEmployee(newEmployee) {
+    try {
+      const response = await axios.post(`${this.baseUrl}/employee`, newEmployee);
+      return response.data;
+    } catch (error) {
+      console.error('Error while creating employee:', error);
+      return null;
     }
-    return Promise.resolve(false);
   }
 
+  async updateEmployeeById(id, updatedEmployee) {
+    try {
+      const response = await axios.put(`${this.baseUrl}/employee/${id}`, updatedEmployee);
+      return response.data;
+    } catch (error) {
+      console.error(`Error while updating employee with ID ${id}:`, error);
+      return null;
+    }
+  }
+
+  async deleteEmployeeById(id) {
+    try {
+      const response = await axios.delete(`${this.baseUrl}/employee/${id}`);
+      return response.data;
+    } catch (error) {
+      console.error(`Error while deleting employee with ID ${id}:`, error);
+      return false;
+    }
+  }
 }
 
-export const employeesApi = new EmployeesApi();
+const employeesApi = new EmployeesApi('https://64a180530079ce56e2db23e8.mockapi.io/user');
+
+export default employeesApi;

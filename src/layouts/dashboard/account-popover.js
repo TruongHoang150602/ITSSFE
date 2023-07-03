@@ -20,6 +20,7 @@ import {
 import { useAuth } from '../../hooks/use-auth';
 import { paths } from '../../paths';
 import { Issuer } from '../../utils/auth';
+import { useEffect } from 'react';
 
 export const AccountPopover = (props) => {
   const { anchorEl, onClose, open, ...other } = props;
@@ -30,7 +31,13 @@ export const AccountPopover = (props) => {
       auth.signOut();
       router.push('/auth/login');
     };
-  const user  = auth.user;
+  
+  let user  = null;
+  useEffect(() => {
+    user = auth.user;
+  }, []);
+
+  
   return (
     <Popover
       anchorEl={anchorEl}

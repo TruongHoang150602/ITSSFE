@@ -46,7 +46,7 @@ const handlers = {
   [HANDLERS.SIGN_OUT]: (state) => {
     return {
       ...state,
-      isAuthenticated: true,
+      isAuthenticated: false,
       user: null
     };
   }

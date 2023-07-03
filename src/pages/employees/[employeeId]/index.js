@@ -20,7 +20,7 @@ import {
   Typography,
   Unstable_Grid2 as Grid
 } from '@mui/material';
-import { employeesApi } from 'src/api/employees';
+import employeesApi from 'src/api/employees';
 import { useMounted } from 'src/hooks/use-mounted';
 import { usePageView } from 'src/hooks/use-page-view';
 import { Layout as DashboardLayout } from 'src/layouts/dashboard/layout';
@@ -37,8 +37,8 @@ const useEmployee = () => {
   const getEmployee = useCallback(async () => {
     try {
       const {employeeId} = route.query;
-      const response = await employeesApi.getEmployeeById({id: employeeId});
-        
+      const response = await employeesApi.getEmployeeById(employeeId);
+      console.log(response)
       if (isMounted()) {
         setEmployee(response);
       }
@@ -59,7 +59,7 @@ const useEmployee = () => {
 const Page = () => {
   const [currentTab, setCurrentTab] = useState('details');
   const employee = useEmployee();
-
+  
   usePageView();
 
   const handleTabsChange = useCallback((event, value) => {

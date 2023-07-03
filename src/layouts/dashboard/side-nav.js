@@ -18,18 +18,23 @@ import { Scrollbar } from 'src/components/scrollbar';
 import { items } from './config';
 import { SideNavItem } from './side-nav-item';
 import { useAuth } from 'src/hooks/use-auth';
+import { useEffect } from 'react';
 
 export const SideNav = (props) => {
 
+  let userItems = items.admin;
   const auth = useAuth();
-  let userItems = items.user;
-  if(auth.isAuthenticated){
-    const user = auth.user;
-    if(user.role === 1)
-      userItems = items.admin;
-    else if (user.role === 2 || user.role === 3 || user.role === 4)
-      userItems = items.employee;
-  }
+  useEffect(() => {
+    
+    if (auth.isAuthenticated) {
+      const user = auth.user;
+      if (user.role === 1)
+        userItems = items.admin;
+      else if (user.role === 2 || user.role === 3 || user.role === 4)
+        userItems = items.employee;
+    }
+  }, []);
+  
    
   const { open, onClose } = props;
   const pathname = usePathname();

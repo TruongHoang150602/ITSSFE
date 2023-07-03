@@ -9,12 +9,11 @@ import {
   Card, 
   CardContent, 
   CardHeader, 
-  Typography, 
   Stack 
 } from '@mui/material';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { employeesApi } from 'src/api/employees';
+import employeesApi from 'src/api/employees';
 import { paths } from 'src/paths';
 
 export const EmployeeDataManagement = (props) => {

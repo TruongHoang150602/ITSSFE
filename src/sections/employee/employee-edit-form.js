@@ -2,6 +2,7 @@ import NextLink from 'next/link';
 import PropTypes from 'prop-types';
 import toast from 'react-hot-toast';
 import * as Yup from 'yup';
+import { useRouter } from 'next/navigation';
 import { useFormik } from 'formik';
 import {
   Button,
@@ -17,7 +18,7 @@ import {
 } from '@mui/material';
 import { paths } from 'src/paths';
 import { wait } from 'src/utils/wait';
-import { employee } from 'src/api/employees/data';
+import employeesApi from 'src/api/employees';
 
 const ROLE = [{
     label: "Admin",
@@ -67,6 +68,7 @@ const initialValues = (employee) => {
 
 export const EmployeeEditForm = (props) => {
   const { employee, ...other } = props;
+  const router = useRouter();
   const formik = useFormik({
     initialValues:initialValues(employee),
     validationSchema: Yup.object({
@@ -88,12 +90,13 @@ export const EmployeeEditForm = (props) => {
     onSubmit: async (values, helpers) => {
       try {
         
-        
+        employeesApi.updateEmployeeById(employee.id, formik.values);
         
         await wait(500);
         helpers.setStatus({ success: true });
         helpers.setSubmitting(false);
         toast.success('Employee updated');
+        router.push(paths.employees.index);
       } catch (err) {
         console.error(err);
         toast.error('Something went wrong!');

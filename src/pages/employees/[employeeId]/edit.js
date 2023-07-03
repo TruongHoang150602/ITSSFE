@@ -4,7 +4,7 @@ import Head from 'next/head';
 import { useRouter } from 'next/router';
 import ArrowLeftIcon from '@untitled-ui/icons-react/build/esm/ArrowLeft';
 import { Avatar, Box, Chip, Container, Link, Stack, SvgIcon, Typography } from '@mui/material';
-import { employeesApi } from 'src/api/employees';
+import employeesApi  from 'src/api/employees';
 import { useMounted } from 'src/hooks/use-mounted';
 import { usePageView } from 'src/hooks/use-page-view';
 import { Layout as DashboardLayout } from 'src/layouts/dashboard/layout';
@@ -21,7 +21,7 @@ const useEmployee = () => {
     try {
       
       const {employeeId} = route.query;
-      const response = await employeesApi.getEmployeeById({id: employeeId});
+      const response = await employeesApi.getEmployeeById(employeeId);
 
       if (isMounted()) {
         setEmployee(response);
