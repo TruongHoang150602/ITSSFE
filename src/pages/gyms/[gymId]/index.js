@@ -14,7 +14,6 @@ import {
   SvgIcon,
   Typography
 } from '@mui/material';
-import { equipmentsApi } from 'src/api/equipments';
 import { BreadcrumbsSeparator } from 'src/components/breadcrumbs-separator';
 import { useMounted } from 'src/hooks/use-mounted';
 import { usePageView } from 'src/hooks/use-page-view';
@@ -22,6 +21,7 @@ import { Layout as DashboardLayout } from 'src/layouts/dashboard/layout';
 import { paths } from 'src/paths';
 import { EquipmentListSearch } from 'src/sections/equipment/equip-list-search';
 import { EquipmentListTable } from 'src/sections/equipment/equip-list-table';
+import roomsApi from 'src/api/rooms';
 
 const useSearch = () => {
   const [search, setSearch] = useState({
@@ -42,6 +42,7 @@ const useSearch = () => {
 };
 
 const useEquipments = (search) => {
+  const route = useRouter();
   const isMounted = useMounted();
   const [state, setState] = useState({
     equipments: [],
@@ -50,11 +51,12 @@ const useEquipments = (search) => {
 
   const getEquipments = useCallback(async () => {
     try {
-      const response = await equipmentsApi.getEquipments(search);
-
+      const { gymId } = route.query;
+      const response = await roomsApi.getRoomById(gymId);
+      console.log(response);
       if (isMounted()) {
         setState({
-          equipments: response.data,
+          equipments: response.equipment,
           equipmentsCount: response.count
         });
       }
@@ -68,6 +70,8 @@ const useEquipments = (search) => {
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [search]);
+  
+
 
   return state;
 };

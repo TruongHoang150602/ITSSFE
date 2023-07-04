@@ -11,7 +11,7 @@ export const paths = {
     edit: (id) => `/employees/${id}/edit`,
   },
   users: {
-    index: 'users',
+    index: '/users',
     details: (id) => `/users/${id}`,
     edit: (id) => `/users/${id}/edit`,
   },

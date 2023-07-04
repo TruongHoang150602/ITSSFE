@@ -67,7 +67,7 @@ const initialValues = (employee) => {
 }
 
 export const EmployeeEditForm = (props) => {
-  const { employee, ...other } = props;
+  const { employee, onClose, ...other } = props;
   const router = useRouter();
   const formik = useFormik({
     initialValues:initialValues(employee),
@@ -89,14 +89,24 @@ export const EmployeeEditForm = (props) => {
     }),
     onSubmit: async (values, helpers) => {
       try {
+        if (employee){
+          employeesApi.updateEmployeeById(employee.id, formik.values);
+          await wait(500);
+          helpers.setStatus({ success: true });
+          helpers.setSubmitting(false);
+          toast.success('Employee updated');
+          router.push(paths.employees.index);
+        }
+        else{
+          employeesApi.createEmployee(formik.values);
+          await wait(500);
+          helpers.setStatus({ success: true });
+          helpers.setSubmitting(false);
+          toast.success('Employee created');
+          onClose();
+        }
         
-        employeesApi.updateEmployeeById(employee.id, formik.values);
         
-        await wait(500);
-        helpers.setStatus({ success: true });
-        helpers.setSubmitting(false);
-        toast.success('Employee updated');
-        router.push(paths.employees.index);
       } catch (err) {
         console.error(err);
         toast.error('Something went wrong!');
@@ -263,16 +273,23 @@ export const EmployeeEditForm = (props) => {
             type="submit"
             variant="contained"
           >
-            Update
+            Save Changes
           </Button>
-          <Button
+          { employee ? ( <Button
             color="inherit"
             component={NextLink}
             disabled={formik.isSubmitting}
             href={paths.employees.details(employee.id)}
           >
             Cancel
-          </Button>
+          </Button>) :  ( <Button
+            color="inherit"
+            disabled={formik.isSubmitting}
+            onClick={onClose}
+          >
+            Cancel
+          </Button>)}
+         
         </Stack>
       </Card>
     </form>
@@ -280,5 +297,6 @@ export const EmployeeEditForm = (props) => {
 };
 
 EmployeeEditForm.propTypes = {
-  employee: PropTypes.object.isRequired
+  employee: PropTypes.object,
+  onClose:  PropTypes.func
 };

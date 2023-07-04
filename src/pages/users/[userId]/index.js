@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import NextLink from 'next/link';
 import Head from 'next/head';
+import { useRouter } from 'next/router';
 import ArrowLeftIcon from '@untitled-ui/icons-react/build/esm/ArrowLeft';
 import ChevronDownIcon from '@untitled-ui/icons-react/build/esm/ChevronDown';
 import Edit02Icon from '@untitled-ui/icons-react/build/esm/Edit02';
@@ -19,7 +20,7 @@ import {
   Typography,
   Unstable_Grid2 as Grid
 } from '@mui/material';
-import { usersApi } from 'src/api/users';
+import usersApi  from 'src/api/users';
 import { useMounted } from 'src/hooks/use-mounted';
 import { usePageView } from 'src/hooks/use-page-view';
 import { Layout as DashboardLayout } from 'src/layouts/dashboard/layout';
@@ -28,23 +29,24 @@ import { UserBasicDetails } from 'src/sections/user/user-basic-details';
 import { UserDataManagement } from 'src/sections/user/user-data-management';
 import { UserCalendar } from 'src/sections/user/user-calendar-activity';
 import { UserInvoices } from 'src/sections/user/user-invoices';
-import { UserPayment } from 'src/sections/user/user-payment';
+import { UserMember } from 'src/sections/user/user-member';
 import { UserLogs } from 'src/sections/user/user-logs';
 import { getInitials } from 'src/utils/get-initials';
 
 const tabs = [
   { label: 'Details', value: 'details' },
   { label: 'Activity', value: 'logs' },
-  { label: 'Invoices', value: 'invoices' }
 ];
 
 const useUser = () => {
+  const route = useRouter();
   const isMounted = useMounted();
   const [user, setUser] = useState(null);
 
   const getUser = useCallback(async () => {
     try {
-      const response = await usersApi.getUser();
+      const {userId} = route.query;
+      const response = await usersApi.getUserById(userId);
 
       if (isMounted()) {
         setUser(response);
@@ -63,39 +65,16 @@ const useUser = () => {
   return user;
 };
 
-const useInvoices = () => {
-  const isMounted = useMounted();
-  const [invoices, setInvoices] = useState([]);
-
-  const getInvoices = useCallback(async () => {
-    try {
-      const response = await usersApi.getInvoices();
-
-      if (isMounted()) {
-        setInvoices(response);
-      }
-    } catch (err) {
-      console.error(err);
-    }
-  }, [isMounted]);
-
-  useEffect(() => {
-      getInvoices();
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    []);
-
-  return invoices;
-};
-
 const useLogs = () => {
+  const route = useRouter();
   const isMounted = useMounted();
   const [logs, setLogs] = useState([]);
 
   const getLogs = useCallback(async () => {
     try {
-      const response = await usersApi.getLogs();
-
+      const {userId} = route.query;
+      const response = await usersApi.getProcessById(userId);
+      console.log(response);
       if (isMounted()) {
         setLogs(response);
       }
@@ -116,7 +95,6 @@ const useLogs = () => {
 const Page = () => {
   const [currentTab, setCurrentTab] = useState('details');
   const user = useUser();
-  const invoices = useInvoices();
   const logs = useLogs();
 
   usePageView();
@@ -150,7 +128,7 @@ const Page = () => {
                 <Link
                   color="text.primary"
                   component={NextLink}
-                  href={paths.employees.index}
+                  href={paths.users.index}
                   sx={{
                     alignItems: 'center',
                     display: 'inline-flex'
@@ -220,7 +198,7 @@ const Page = () => {
                         <Edit02Icon />
                       </SvgIcon>
                     )}
-                    href={paths.employees.edit}
+                    href={paths.users.edit(user.id)}
                   >
                     Edit
                   </Button>
@@ -263,16 +241,15 @@ const Page = () => {
                     container 
                     spacing={4} >
                     <UserBasicDetails
-                      address1={user.address1}
-                      address2={user.address2}
-                      country={user.country}
-                      email={user.email}
-                      isVerified={!!user.isVerified}
-                      phone={user.phone}
-                      state={user.state}
+                       address={user.address}
+                       gender={user.gender}
+                       birthday={user.birthday}
+                       email={user.email}
+                       phone={user.phone}
+                       role={user.role}
                     />
-                      <UserPayment />
-                      <UserDataManagement />
+                      <UserMember />
+                      <UserDataManagement id={user.id}/>
                     </Stack>
               </div>
             )}
@@ -280,10 +257,9 @@ const Page = () => {
               <Stack 
                 container 
                 spacing={4} >
-                  <UserCalendar />
+                  <UserCalendar activity = {logs} />
                 <UserLogs logs={logs} />
               </Stack>}
-            {currentTab === 'invoices' && <UserInvoices invoices={invoices} />}
           </Stack>
         </Container>
       </Box>
@@ -298,4 +274,3 @@ Page.getLayout = (page) => (
 );
 
 export default Page;
-

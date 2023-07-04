@@ -14,28 +14,6 @@ import {
 } from '@mui/material';
 import { useUpdateEffect } from 'src/hooks/use-update-effect';
 
-const tabOptions = [
-  {
-    label: 'All',
-    value: 'all'
-  },
-  {
-    label: 'Canceled',
-    value: 'canceled'
-  },
-  {
-    label: 'Completed',
-    value: 'complete'
-  },
-  {
-    label: 'Pending',
-    value: 'pending'
-  },
-  {
-    label: 'Rejected',
-    value: 'rejected'
-  }
-];
 
 const sortOptions = [
   {
@@ -51,7 +29,6 @@ const sortOptions = [
 export const RegisListSearch = (props) => {
   const { onFiltersChange, onSortChange, sortBy = 'createdAt', sortDir = 'asc' } = props;
   const queryRef = useRef(null);
-  const [currentTab, setCurrentTab] = useState('all');
   const [filters, setFilters] = useState({
     query: undefined,
     status: undefined
@@ -64,16 +41,6 @@ export const RegisListSearch = (props) => {
   useUpdateEffect(() => {
     handleFiltersUpdate();
   }, [filters, handleFiltersUpdate]);
-
-  const handleTabsChange = useCallback((event, tab) => {
-    setCurrentTab(tab);
-    const status = tab === 'all' ? undefined : tab;
-
-    setFilters((prevState) => ({
-      ...prevState,
-      status
-    }));
-  }, []);
 
   const handleQueryChange = useCallback((event) => {
     event.preventDefault();
@@ -91,23 +58,7 @@ export const RegisListSearch = (props) => {
 
   return (
     <div>
-      <Tabs
-        indicatorColor="primary"
-        onChange={handleTabsChange}
-        scrollButtons="auto"
-        sx={{ px: 3 }}
-        textColor="primary"
-        value={currentTab}
-        variant="scrollable"
-      >
-        {tabOptions.map((tab) => (
-          <Tab
-            key={tab.value}
-            label={tab.label}
-            value={tab.value}
-          />
-        ))}
-      </Tabs>
+     
       <Divider />
       <Stack
         alignItems="center"
@@ -126,7 +77,7 @@ export const RegisListSearch = (props) => {
             fullWidth
             inputProps={{ ref: queryRef }}
             name="regisNumber"
-            placeholder="Search by regis number"
+            placeholder="Search by register number"
             startAdornment={(
               <InputAdornment position="start">
                 <SvgIcon>

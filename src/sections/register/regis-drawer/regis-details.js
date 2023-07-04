@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { format } from 'date-fns';
+import { parseISO, format } from 'date-fns';
 import numeral from 'numeral';
 import Edit02Icon from '@untitled-ui/icons-react/build/esm/Edit02';
 import {
@@ -31,9 +31,8 @@ export const RegisDetails = (props) => {
   const lgUp = useMediaQuery((theme) => theme.breakpoints.up('lg'));
 
   const align = lgUp ? 'horizontal' : 'vertical';
-  const items = regis.items || [];
-  const createdAt = format(regis.createdAt, 'dd/MM/yyyy HH:mm');
-  const statusColor = statusMap[regis.status];
+  const created = parseISO(regis.createdAt);
+  const createdAt = format(created, 'dd/MM/yyyy HH:mm');
   const totalAmount = numeral(regis.totalAmount).format(`${regis.currency}0,0.00`);
 
   return (
@@ -92,20 +91,9 @@ export const RegisDetails = (props) => {
               color="text.secondary"
               variant="body2"
             >
-              {regis.customer.address1}
+              {regis.customer.email}
             </Typography>
-            <Typography
-              color="text.secondary"
-              variant="body2"
-            >
-              {regis.customer.city}
-            </Typography>
-            <Typography
-              color="text.secondary"
-              variant="body2"
-            >
-              {regis.customer.country}
-            </Typography>
+            
           </PropertyListItem>
           <PropertyListItem
             align={align}
@@ -118,8 +106,8 @@ export const RegisDetails = (props) => {
             align={align}
             disableGutters
             divider
-            label="Promotion Code"
-            value={regis.promotionCode}
+            label="Package"
+            value={regis.package}
           />
           <PropertyListItem
             align={align}
@@ -128,86 +116,18 @@ export const RegisDetails = (props) => {
             label="Total Amount"
             value={totalAmount}
           />
-          <PropertyListItem
+           <PropertyListItem
             align={align}
             disableGutters
             divider
-            label="Status"
-          >
-            <SeverityPill color={statusColor}>
-              {regis.status}
-            </SeverityPill>
-          </PropertyListItem>
+            label="Total Amount"
+            value={regis.paymentMethod}
+          />
+         
         </PropertyList>
-        <Stack
-          alignItems="center"
-          direction="row"
-          flexWrap="wrap"
-          justifyContent="flex-end"
-          spacing={2}
-        >
-          <Button
-            onClick={onApprove}
-            size="small"
-            variant="contained"
-          >
-            Approve
-          </Button>
-          <Button
-            color="error"
-            onClick={onReject}
-            size="small"
-            variant="outlined"
-          >
-            Reject
-          </Button>
-        </Stack>
-      </Stack>
-      <Stack spacing={3}>
-        <Typography variant="h6">
-          Line items
-        </Typography>
-        <Scrollbar>
-          <Table sx={{ minWidth: 400 }}>
-            <TableHead>
-              <TableRow>
-                <TableCell>
-                  Description
-                </TableCell>
-                <TableCell>
-                  Billing Cycle
-                </TableCell>
-                <TableCell>
-                  Amount
-                </TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {items.map((item) => {
-                const unitAmount = numeral(item.unitAmount).format(`${item.currency}0,0.00`);
 
-                return (
-                  <TableRow key={item.id}>
-                    <TableCell>
-                      {item.name}
-                      {' '}
-                      x
-                      {' '}
-                      {item.quantity}
-                    </TableCell>
-                    <TableCell>
-                      {item.billingCycle}
-                    </TableCell>
-                    <TableCell>
-                      {unitAmount}
-                    </TableCell>
-                  </TableRow>
-                );
-              })}
-            </TableBody>
-          </Table>
-        </Scrollbar>
       </Stack>
+      
     </Stack>
   );
 };

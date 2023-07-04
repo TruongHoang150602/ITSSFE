@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import Head from 'next/head';
 import { Box, Container, Stack, Typography } from '@mui/material';
-import { socialApi } from 'src/api/social';
+import feedbacksApi from 'src/api/feedback';
 import { useMounted } from 'src/hooks/use-mounted';
 import { usePageView } from 'src/hooks/use-page-view';
 import { Layout as DashboardLayout } from 'src/layouts/dashboard/layout';
@@ -14,8 +14,8 @@ const usePosts = () => {
 
   const getPosts = useCallback(async () => {
     try {
-      const response = await socialApi.getFeed();
-
+      const response = await feedbacksApi.getFeedbacks();
+      console.log(response);
       if (isMounted()) {
         setPosts(response);
       }

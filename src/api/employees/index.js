@@ -11,11 +11,12 @@ class EmployeesApi {
     const { filters, page, rowsPerPage, sortBy, sortDir } = request;
     let data = null;
     try {
-      const response = await axios.get(`${this.baseUrl}/employee`);
+      const response = await axios.get(`${this.baseUrl}/employees`);
       data =  response.data;
     } catch (error) {
       console.error('Error while fetching employees:', error);
-      return [];
+      window.location.href = '/500';
+      return null;
     }
     data = deepCopy(data);
     let count = data.length;
@@ -64,7 +65,7 @@ class EmployeesApi {
 
   async getEmployeeById(id) {
     try {
-      const response = await axios.get(`${this.baseUrl}/employee/${id}`);
+      const response = await axios.get(`${this.baseUrl}/employees/${id}`);
       return response.data;
     } catch (error) {
       console.error(`Error while fetching employee with ID ${id}:`, error);
@@ -74,7 +75,7 @@ class EmployeesApi {
 
   async createEmployee(newEmployee) {
     try {
-      const response = await axios.post(`${this.baseUrl}/employee`, newEmployee);
+      const response = await axios.post(`${this.baseUrl}/employees`, newEmployee);
       return response.data;
     } catch (error) {
       console.error('Error while creating employee:', error);
@@ -84,7 +85,7 @@ class EmployeesApi {
 
   async updateEmployeeById(id, updatedEmployee) {
     try {
-      const response = await axios.put(`${this.baseUrl}/employee/${id}`, updatedEmployee);
+      const response = await axios.put(`${this.baseUrl}/employees/${id}`, updatedEmployee);
       return response.data;
     } catch (error) {
       console.error(`Error while updating employee with ID ${id}:`, error);
@@ -94,7 +95,7 @@ class EmployeesApi {
 
   async deleteEmployeeById(id) {
     try {
-      const response = await axios.delete(`${this.baseUrl}/employee/${id}`);
+      const response = await axios.delete(`${this.baseUrl}/employees/${id}`);
       return response.data;
     } catch (error) {
       console.error(`Error while deleting employee with ID ${id}:`, error);
@@ -103,6 +104,6 @@ class EmployeesApi {
   }
 }
 
-const employeesApi = new EmployeesApi('https://64a180530079ce56e2db23e8.mockapi.io/user');
+const employeesApi = new EmployeesApi('http://localhost:3001/user');
 
 export default employeesApi;

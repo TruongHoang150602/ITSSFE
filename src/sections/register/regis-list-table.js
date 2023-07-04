@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { format } from 'date-fns';
+import { parseISO, format } from 'date-fns';
 import numeral from 'numeral';
 import {
   Box,
@@ -36,8 +36,12 @@ export const RegisListTable = (props) => {
       <Table>
         <TableBody>
           {regiss.map((regis) => {
-            const createdAtMonth = format(regis.createdAt, 'LLL').toUpperCase();
-            const createdAtDay = format(regis.createdAt, 'd');
+            
+            const createdAt = parseISO(regis.createdAt);
+            
+            const createdAtMonth = format(createdAt, 'LLL').toUpperCase();
+            const createdAtDay = format(createdAt, 'd');
+
             const totalAmount = numeral(regis.totalAmount).format(`${regis.currency}0,0.00`);
             const statusColor = statusMap[regis.status] || 'warning';
 
@@ -86,9 +90,7 @@ export const RegisListTable = (props) => {
                       color="text.secondary"
                       variant="body2"
                     >
-                      Total of
-                      {' '}
-                      {totalAmount}
+                      {regis.package}
                     </Typography>
                   </Box>
                 </TableCell>

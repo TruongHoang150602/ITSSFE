@@ -1,26 +1,23 @@
+import axios from 'axios';
 import { applyPagination } from 'src/utils/apply-pagination';
 import { applySort } from 'src/utils/apply-sort';
 import { deepCopy } from 'src/utils/deep-copy';
-import { user, users, emails, invoices, logs } from './data';
-
 class UsersApi {
+  constructor(baseUrl) {
+    this.baseUrl = baseUrl;
+  }
+
   async getUsers(request = {}) {
     const { filters, page, rowsPerPage, sortBy, sortDir } = request;
     let data = null;
     try {
-      const response = await fetch('/user/user', {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      });
-      data = await response.json();
+      const response = await axios.get(`${this.baseUrl}/users`);
+      data =  response.data;
     } catch (error) {
-      console.error('Lỗi khi lấy danh sách người dùng:', error);
-      throw error;
+      console.error('Error while fetching users:', error);
+      window.location.href = '/500';
+      return null;
     }
-
-    
     data = deepCopy(data);
     let count = data.length;
 
@@ -66,21 +63,57 @@ class UsersApi {
     });
   }
 
-  getUser(request) {
-    return Promise.resolve(deepCopy(user));
+  async getUserById(id) {
+    try {
+      const response = await axios.get(`${this.baseUrl}/users/${id}`);
+      return response.data;
+    } catch (error) {
+      console.error(`Error while fetching user with ID ${id}:`, error);
+      return null;
+    }
   }
 
-  getEmails(request) {
-    return Promise.resolve(deepCopy(emails));
+  async getProcessById(id) {
+    try {
+      const response = await axios.get(`${this.baseUrl}/process/${id}`);
+      return response.data;
+    } catch (error) {
+      console.error(`Error while fetching user with ID ${id}:`, error);
+      return null;
+    }
   }
 
-  getInvoices(request) {
-    return Promise.resolve(deepCopy(invoices));
+  async createUser(newUser) {
+    try {
+      const response = await axios.post(`${this.baseUrl}/users`, newUser);
+      return response.data;
+    } catch (error) {
+      console.error('Error while creating user:', error);
+      return null;
+    }
   }
 
-  getLogs(request) {
-    return Promise.resolve(deepCopy(logs));
+  async updateUserById(id, updatedUser) {
+    try {
+      const response = await axios.put(`${this.baseUrl}/users/${id}`, updatedUser);
+      return response.data;
+    } catch (error) {
+      console.error(`Error while updating user with ID ${id}:`, error);
+      return null;
+    }
+  }
+
+  async deleteUserById(id) {
+    try {
+      const response = await axios.delete(`${this.baseUrl}/users/${id}`);
+      return response.data;
+    } catch (error) {
+      console.error(`Error while deleting user with ID ${id}:`, error);
+      return false;
+    }
   }
 }
 
-export const usersApi = new UsersApi();
+const usersApi = new UsersApi('http://localhost:3001/user');
+
+export default usersApi;

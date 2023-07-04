@@ -94,6 +94,7 @@ export const AuthProvider = (props) => {
   const signIn = async (email, password) => {
     
      try {
+      
       const user = await authApi.signIn({ email, password });
       console.log(user)
       window.sessionStorage.setItem('authenticated', 'true');

@@ -1,8 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import NextLink from 'next/link';
-import numeral from 'numeral';
 import PropTypes from 'prop-types';
-import ArrowRightIcon from '@untitled-ui/icons-react/build/esm/ArrowRight';
+import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
 import Edit02Icon from '@untitled-ui/icons-react/build/esm/Edit02';
 import {
   Avatar,
@@ -11,6 +10,11 @@ import {
   Checkbox,
   IconButton,
   Link,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  DialogContentText,
   Stack,
   SvgIcon,
   Table,
@@ -24,6 +28,7 @@ import {
 import { Scrollbar } from 'src/components/scrollbar';
 import { paths } from 'src/paths';
 import { getInitials } from 'src/utils/get-initials';
+import usersApi from 'src/api/users';
 
 const useSelectionModel = (users) => {
   const userIds = useMemo(() => {
@@ -69,6 +74,7 @@ export const UserListTable = (props) => {
     onPageChange,
     onRowsPerPageChange,
     page,
+    handleDeleteUser,
     rowsPerPage,
     ...other
   } = props;
@@ -87,6 +93,20 @@ export const UserListTable = (props) => {
   const selectedAll = selected.length === users.length;
   const selectedSome = selected.length > 0 && selected.length < users.length;
   const enableBulkActions = selected.length > 0;
+
+  const [open, setOpen] = useState(false);
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const handleConfirmDelete = () => {
+    selected.forEach((index) => handleDeleteUser(index));
+    setOpen(false);
+  };
 
   return (
     <Box
@@ -117,6 +137,7 @@ export const UserListTable = (props) => {
             onChange={handleToggleAll}
           />
           <Button
+            onClick={handleClickOpen}
             color="inherit"
             size="small"
           >
@@ -145,25 +166,19 @@ export const UserListTable = (props) => {
                 Name
               </TableCell>
               <TableCell>
-                Location
+                Address
               </TableCell>
               <TableCell>
-                Orders
+                Phone
               </TableCell>
-              <TableCell>
-                Spent
-              </TableCell>
-              <TableCell align="right">
-                Actions
+              <TableCell align='right'>
+                Action
               </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {users.map((user) => {
               const isSelected = selected.includes(user.id);
-              const location = `${user.city}, ${user.state}, ${user.country}`;
-              const totalSpent = numeral(user.totalSpent).format(`${user.currency}0,0.00`);
-
               return (
                 <TableRow
                   hover
@@ -219,15 +234,10 @@ export const UserListTable = (props) => {
                     </Stack>
                   </TableCell>
                   <TableCell>
-                    {location}
+                    {user.address}
                   </TableCell>
                   <TableCell>
-                    {user.totalOrders}
-                  </TableCell>
-                  <TableCell>
-                    <Typography variant="subtitle2">
-                      {totalSpent}
-                    </Typography>
+                    {user.phone}
                   </TableCell>
                   <TableCell align="right">
                     <IconButton
@@ -236,14 +246,6 @@ export const UserListTable = (props) => {
                     >
                       <SvgIcon>
                         <Edit02Icon />
-                      </SvgIcon>
-                    </IconButton>
-                    <IconButton
-                      component={NextLink}
-                      href={paths.users.details(user.id)}
-                    >
-                      <SvgIcon>
-                        <ArrowRightIcon />
                       </SvgIcon>
                     </IconButton>
                   </TableCell>
@@ -262,6 +264,26 @@ export const UserListTable = (props) => {
         rowsPerPage={rowsPerPage}
         rowsPerPageOptions={[5, 10, 25]}
       />
+       <Dialog
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="draggable-dialog-title"
+      >
+        <DialogTitle style={{ cursor: 'move', color: 'red' }} id="draggable-dialog-title">
+          Delete
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Are you sure you want to delete this user?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button autoFocus onClick={handleClose}>
+            Cancel
+          </Button>
+          <Button onClick={handleConfirmDelete} color="error">Delete</Button>
+        </DialogActions>
+      </Dialog>
     </Box>
   );
 };

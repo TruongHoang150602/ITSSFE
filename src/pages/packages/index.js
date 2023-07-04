@@ -4,17 +4,14 @@ import NextLink from 'next/link';
 import PlusIcon from '@untitled-ui/icons-react/build/esm/Plus';
 import {
   Box,
-  Breadcrumbs,
   Button,
   Card,
   Container,
-  Link,
   Stack,
   SvgIcon,
   Typography
 } from '@mui/material';
-import { packagesApi } from 'src/api/packages';
-import { BreadcrumbsSeparator } from 'src/components/breadcrumbs-separator';
+import  packagesApi  from 'src/api/packages';
 import { useMounted } from 'src/hooks/use-mounted';
 import { usePageView } from 'src/hooks/use-page-view';
 import { Layout as DashboardLayout } from 'src/layouts/dashboard/layout';
@@ -49,7 +46,7 @@ const usePackages = (search) => {
 
   const getPackages = useCallback(async () => {
     try {
-      const response = await packagesApi.getPackages(search);
+      const response = await packagesApi.getPackages();
 
       if (isMounted()) {
         setState({

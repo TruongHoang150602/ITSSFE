@@ -1,5 +1,5 @@
 import Head from "next/head";
-import { useState } from "react";
+import { useState, useCallback, useEffect } from "react";
 import {
   Box,
   Button,
@@ -10,6 +10,8 @@ import {
   Typography,
   Unstable_Grid2 as Grid,
 } from "@mui/material";
+import { useMounted } from 'src/hooks/use-mounted';
+
 import Download01Icon from "@untitled-ui/icons-react/build/esm/Download01";
 import PlusIcon from "@untitled-ui/icons-react/build/esm/Plus";
 import Upload01Icon from "@untitled-ui/icons-react/build/esm/Upload01";
@@ -17,35 +19,38 @@ import { usePageView } from "src/hooks/use-page-view";
 import { Layout as DashboardLayout } from "src/layouts/dashboard/layout";
 import { RoomCard } from "src/sections/gym/room-card";
 import { RoomAddForm } from "src/sections/gym/room-add-form";
+import roomsApi from "src/api/rooms";
+
 
 const useRooms = () => {
-  return [
-    {
-      id: "c3a2b7331eef8329e2a87c79",
-      address: "Introductory room for design and framework basics",
-      media: "/assets/rooms/room-1.png",
-      name: "React and Redux Tutorial",
-      acreage: 50,
+  const isMounted = useMounted();
+  const [rooms, setRooms] = useState([]);
+
+  const getRooms = useCallback(async () => {
+    try {
+      const response = await roomsApi.getRooms();
+      console.log(response);
+      if (isMounted()) {
+        setRooms(response);
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  }, [isMounted]);
+
+  useEffect(() => {
+      getRooms();
     },
-    {
-      id: "3f02f696f869ecd1c68e95a3",
-      address: "Introductory room for design and framework basics",
-      media: "/assets/rooms/room-2.png",
-      name: "React and Express Tutorial",
-      acreage: 100,
-    },
-    {
-      id: "f6e76a6474038384cd9e032b",
-      address: "Introductory room for design and framework basics",
-      media: "/assets/rooms/room-3.png",
-      name: "React Crash Room: Beginner",
-      acreage: 60,
-    },
-  ];
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    []);
+
+  return rooms;
 };
+
 
 const Page = () => {
   const rooms = useRooms();
+  console.log(rooms);
   const [openModal, setOpenModal] = useState(false);
   const [selectedRoom, setSelectedRoom] = useState(null);
 
@@ -123,6 +128,7 @@ const Page = () => {
                 </Button>
               </Stack>
             </Stack>
+
             <Grid
               container
               spacing={{

@@ -21,7 +21,7 @@ const tabs = [
   },
   {
     label: 'Member',
-    value: 'hasAcceptedMarketing'
+    value: '1'
   },
 ];
 

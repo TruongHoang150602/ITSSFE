@@ -2,13 +2,14 @@ import NextLink from 'next/link';
 import PropTypes from 'prop-types';
 import toast from 'react-hot-toast';
 import * as Yup from 'yup';
+import { useRouter } from 'next/navigation';
 import { useFormik } from 'formik';
 import {
   Button,
   Card,
   CardContent,
   CardHeader,
-  Divider,
+  MenuItem,
   Stack,
   Switch,
   TextField,
@@ -17,65 +18,95 @@ import {
 } from '@mui/material';
 import { paths } from 'src/paths';
 import { wait } from 'src/utils/wait';
-import { user } from 'src/api/users/data';
+import usersApi from 'src/api/users';
 
+const ROLE = [{
+    label: "Admin",
+    value: 1
+},
+{
+  label: "Caring staff",
+  value: 2
+},
+{
+  label: "Coach",
+  value: 3
+},
+{
+  label: "Sale",
+  value: 4
+},
+{
+  label: "Member",
+  value: 5
+},
+
+]
 
 const initialValues = (user) => {
   if(user) return {
-    address1: user.address1 || '',
-    address2: user.address2 || '',
-    country: user.country || '',
+    address: user.address || '',
+    gender: user.gender || 'male',
+    birthday: user.birthday || new Date().toISOString().slice(0, 10),
     email: user.email || '',
-    hasDiscount: user.hasDiscount || false,
-    isVerified: user.isVerified || false,
     name: user.name || '',
     phone: user.phone || '',
-    state: user.state || '',
+    role: 1,
     submit: null
   }
   return {
-    address1: '',
-    address2: '',
-    country: '',
+    address: '',
+    gender: 'male',
+    birthday: new Date().toISOString().slice(0, 10),
     email: '',
-    hasDiscount: false,
-    isVerified: false,
     name: '',
     phone: '',
-    state: '',
+    role: 1,
     submit: null
   }
 }
 
 export const UserEditForm = (props) => {
-  const { user, ...other } = props;
+  const { user, onClose, ...other } = props;
+  const router = useRouter();
   const formik = useFormik({
     initialValues:initialValues(user),
     validationSchema: Yup.object({
-      address1: Yup.string().max(255),
-      address2: Yup.string().max(255),
-      country: Yup.string().max(255),
+      address: Yup.string().max(255),
+      gender: Yup.string(),
+      birthday: Yup.string(),
       email: Yup
         .string()
         .email('Must be a valid email')
         .max(255)
         .required('Email is required'),
-      hasDiscount: Yup.bool(),
-      isVerified: Yup.bool(),
       name: Yup
         .string()
         .max(255)
         .required('Name is required'),
       phone: Yup.string().max(15),
-      state: Yup.string().max(255)
+      role: Yup.number().required('Role is required'),
     }),
     onSubmit: async (values, helpers) => {
       try {
-        // NOTE: Make API request
-        await wait(500);
-        helpers.setStatus({ success: true });
-        helpers.setSubmitting(false);
-        toast.success('user updated');
+        if (user){
+          usersApi.updateUserById(user.id, formik.values);
+          await wait(500);
+          helpers.setStatus({ success: true });
+          helpers.setSubmitting(false);
+          toast.success('User updated');
+          router.push(paths.users.index);
+        }
+        else{
+          usersApi.createUser(formik.values);
+          await wait(500);
+          helpers.setStatus({ success: true });
+          helpers.setSubmitting(false);
+          toast.success('User created');
+          onClose();
+        }
+        
+        
       } catch (err) {
         console.error(err);
         toast.error('Something went wrong!');
@@ -91,7 +122,7 @@ export const UserEditForm = (props) => {
       onSubmit={formik.handleSubmit}
       {...other}>
       <Card>
-        <CardHeader title="Edit user" />
+        <CardHeader title="Edit User" />
         <CardContent sx={{ pt: 0 }}>
           <Grid
             container
@@ -118,6 +149,21 @@ export const UserEditForm = (props) => {
               md={6}
             >
               <TextField
+                error={!!(formik.touched.address && formik.errors.address)}
+                fullWidth
+                helperText={formik.touched.address && formik.errors.address}
+                label="Address"
+                name="address"
+                onBlur={formik.handleBlur}
+                onChange={formik.handleChange}
+                value={formik.values.address}
+              />
+            </Grid>
+            <Grid
+              xs={12}
+              md={6}
+            >
+              <TextField
                 error={!!(formik.touched.email && formik.errors.email)}
                 fullWidth
                 helperText={formik.touched.email && formik.errors.email}
@@ -129,66 +175,7 @@ export const UserEditForm = (props) => {
                 value={formik.values.email}
               />
             </Grid>
-            <Grid
-              xs={12}
-              md={6}
-            >
-              <TextField
-                error={!!(formik.touched.country && formik.errors.country)}
-                fullWidth
-                helperText={formik.touched.country && formik.errors.country}
-                label="Country"
-                name="country"
-                onBlur={formik.handleBlur}
-                onChange={formik.handleChange}
-                value={formik.values.country}
-              />
-            </Grid>
-            <Grid
-              xs={12}
-              md={6}
-            >
-              <TextField
-                error={!!(formik.touched.state && formik.errors.state)}
-                fullWidth
-                helperText={formik.touched.state && formik.errors.state}
-                label="State/Region"
-                name="state"
-                onBlur={formik.handleBlur}
-                onChange={formik.handleChange}
-                value={formik.values.state}
-              />
-            </Grid>
-            <Grid
-              xs={12}
-              md={6}
-            >
-              <TextField
-                error={!!(formik.touched.address1 && formik.errors.address1)}
-                fullWidth
-                helperText={formik.touched.address1 && formik.errors.address1}
-                label="Address 1"
-                name="address1"
-                onBlur={formik.handleBlur}
-                onChange={formik.handleChange}
-                value={formik.values.address1}
-              />
-            </Grid>
-            <Grid
-              xs={12}
-              md={6}
-            >
-              <TextField
-                error={!!(formik.touched.address2 && formik.errors.address2)}
-                fullWidth
-                helperText={formik.touched.address2 && formik.errors.address2}
-                label="Address 2"
-                name="address2"
-                onBlur={formik.handleBlur}
-                onChange={formik.handleChange}
-                value={formik.values.address2}
-              />
-            </Grid>
+           
             <Grid
               xs={12}
               md={6}
@@ -203,6 +190,72 @@ export const UserEditForm = (props) => {
                 onChange={formik.handleChange}
                 value={formik.values.phone}
               />
+            </Grid>
+            <Grid
+              xs={12}
+              md={6}
+            >
+              <TextField
+                select
+                error={!!(formik.touched.gender && formik.errors.gender)}
+                fullWidth
+                helperText={formik.touched.gender && formik.errors.gender}
+                label="Gender"
+                name="gender"
+                onBlur={formik.handleBlur}
+                onChange={formik.handleChange}
+                value={formik.values.gender}
+              >
+                <MenuItem key={'male'} 
+                  value={'male'}>
+                  male</MenuItem>
+                <MenuItem key={'female'} 
+                  value={'female'}>
+                  female</MenuItem>
+              </TextField>
+             
+            </Grid>
+            <Grid
+              xs={12}
+              md={6}
+            >
+              <TextField
+                error={!!(formik.touched.birthday && formik.errors.birthday)}
+                fullWidth
+                helperText={formik.touched.birthday && formik.errors.birthday}
+                label="Birthday"
+                name="birthday"
+                type='date'
+                onBlur={formik.handleBlur}
+                onChange={formik.handleChange}
+                value={formik.values.birthday}
+              />
+            </Grid>
+          
+            <Grid
+              xs={12}
+              md={6}
+            >
+              <TextField
+                fullWidth
+                select
+                id="role"
+                name="role"
+                label="Role"
+                value={formik.values.role}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                error={formik.touched.role && Boolean(formik.errors.role)}
+                helperText={formik.touched.role && formik.errors.role}  
+              >
+               {ROLE.map((option) => (
+              <MenuItem 
+                key={option.value} 
+                value={option.value}>
+              {option.label}
+              </MenuItem>
+              ))}
+              </TextField>
             </Grid>
           </Grid>
         </CardContent>
@@ -220,16 +273,23 @@ export const UserEditForm = (props) => {
             type="submit"
             variant="contained"
           >
-            Update
+            Save Changes
           </Button>
-          <Button
+          { user ? ( <Button
             color="inherit"
             component={NextLink}
             disabled={formik.isSubmitting}
-            href={paths.users.details}
+            href={paths.users.details(user.id)}
           >
             Cancel
-          </Button>
+          </Button>) :  ( <Button
+            color="inherit"
+            disabled={formik.isSubmitting}
+            onClick={onClose}
+          >
+            Cancel
+          </Button>)}
+         
         </Stack>
       </Card>
     </form>
@@ -237,5 +297,6 @@ export const UserEditForm = (props) => {
 };
 
 UserEditForm.propTypes = {
-  user: PropTypes.object.isRequired
+  user: PropTypes.object,
+  onClose:  PropTypes.func
 };

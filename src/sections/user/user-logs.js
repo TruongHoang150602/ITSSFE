@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { format } from 'date-fns';
+import { parseISO, format } from 'date-fns';
 import {
   Card,
   CardHeader,
@@ -13,11 +13,10 @@ import {
 } from '@mui/material';
 import { MoreMenu } from 'src/components/more-menu';
 import { Scrollbar } from 'src/components/scrollbar';
-import { SeverityPill } from 'src/components/severity-pill';
 
 export const UserLogs = (props) => {
   const { logs = [], ...other } = props;
-
+  process = logs.process;
   return (
     <Card {...other}>
       <CardHeader
@@ -40,24 +39,24 @@ export const UserLogs = (props) => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {logs.map((log) => {
-              const statusColor = log.status >= 200 && log.status < 300 ? 'success' : 'error';
-              const createdAt = format(log.createdAt, 'yyyy/MM/dd HH:mm:ss');
+            {process.map((option) => {
+              const tmp = parseISO(option.createdAt);
+              const createdAt = format(tmp, 'yyyy/MM/dd HH:mm:ss');
 
               return (
-                <TableRow key={log.id}>
+                <TableRow key={option.id}>
                   <TableCell >
                     <Typography
-                      color="text.secondary"
-                      variant="caption"
+                     
                     >
-                      {log.method}
+                      {logs.coach.name}
                     </Typography>
                   </TableCell>
                   <TableCell >
-                    <SeverityPill color={statusColor}>
-                      {log.status}
-                    </SeverityPill>
+                  <Typography
+                    >
+                      {option.content}
+                    </Typography>
                   </TableCell>
                   <TableCell>
                     {createdAt}
@@ -70,7 +69,7 @@ export const UserLogs = (props) => {
       </Scrollbar>
       <TablePagination
         component="div"
-        count={logs.length}
+        count={process.length}
         onPageChange={() => { }}
         onRowsPerPageChange={() => { }}
         page={0}

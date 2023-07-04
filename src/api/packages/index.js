@@ -1,54 +1,55 @@
+import axios from 'axios';
 import { applyPagination } from 'src/utils/apply-pagination';
+import { applySort } from 'src/utils/apply-sort';
 import { deepCopy } from 'src/utils/deep-copy';
-import { packages } from './data';
-
 class PackagesApi {
-  getPackages(request = {}) {
-    const { filters, page, rowsPerPage } = request;
+  constructor(baseUrl) {
+    this.baseUrl = baseUrl;
+  }
 
-    let data = deepCopy(packages);
+  async getPackages(request = {}) {
+    const { filters, page, rowsPerPage, sortBy, sortDir } = request;
+    let data = null;
+    try {
+      const response = await axios.get(`${this.baseUrl}/packages`);
+      data =  response.data;
+    } catch (error) {
+      console.error('Error while fetching packages:', error);
+      return [];
+    }
+    data = deepCopy(data);
     let count = data.length;
 
     if (typeof filters !== 'undefined') {
-      data = data.filter( (pack) => {
-        if (typeof filters.name !== 'undefined' && filters.name !== '') {
-          const nameMatched = pack.name.toLowerCase().includes(filters.name.toLowerCase());
+      data = data.filter((user) => {
+        if (typeof filters.query !== 'undefined' && filters.query !== '') {
+          let queryMatched = false;
+          const properties = ['email', 'name'];
 
-          if (!nameMatched) {
+          properties.forEach((property) => {
+            if ((user[property]).toLowerCase().includes(filters.query.toLowerCase())) {
+              queryMatched = true;
+            }
+          });
+
+          if (!queryMatched) {
             return false;
           }
         }
 
-        // It is possible to select multiple category options
-        if (typeof filters.category !== 'undefined' && filters.category.length > 0) {
-          const categoryMatched = filters.category.includes(pack.category);
-
-          if (!categoryMatched) {
+        if (typeof filters.member !== 'undefined') {
+          if (user.role !== filters.member) {
             return false;
           }
         }
-
-        // It is possible to select multiple status options
-        if (typeof filters.status !== 'undefined' && filters.status.length > 0) {
-          const statusMatched = filters.status.includes(pack.status);
-
-          if (!statusMatched) {
-            return false;
-          }
-        }
-
-        // Present only if filter required
-        if (typeof filters.inStock !== 'undefined') {
-          const stockMatched = pack.inStock === filters.inStock;
-
-          if (!stockMatched) {
-            return false;
-          }
-        }
-
+        
         return true;
       });
       count = data.length;
+    }
+
+    if (typeof sortBy !== 'undefined' && typeof sortDir !== 'undefined') {
+      data = applySort(data, sortBy, sortDir);
     }
 
     if (typeof page !== 'undefined' && typeof rowsPerPage !== 'undefined') {
@@ -60,6 +61,48 @@ class PackagesApi {
       count
     });
   }
+
+  async getPackageById(id) {
+    try {
+      const response = await axios.get(`${this.baseUrl}/packages/${id}`);
+      return response.data;
+    } catch (error) {
+      console.error(`Error while fetching package with ID ${id}:`, error);
+      return null;
+    }
+  }
+
+  async createPackage(newPackage) {
+    try {
+      const response = await axios.post(`${this.baseUrl}/packages`, newPackage);
+      return response.data;
+    } catch (error) {
+      console.error('Error while creating package:', error);
+      return null;
+    }
+  }
+
+  async updatePackageById(id, updatedPackage) {
+    try {
+      const response = await axios.put(`${this.baseUrl}/packages/${id}`, updatedPackage);
+      return response.data;
+    } catch (error) {
+      console.error(`Error while updating package with ID ${id}:`, error);
+      return null;
+    }
+  }
+
+  async deletePackageById(id) {
+    try {
+      const response = await axios.delete(`${this.baseUrl}/packages/${id}`);
+      return response.data;
+    } catch (error) {
+      console.error(`Error while deleting package with ID ${id}:`, error);
+      return false;
+    }
+  }
 }
 
-export const packagesApi = new PackagesApi();
+const packagesApi = new PackagesApi('http://localhost:3001');
+
+export default packagesApi;

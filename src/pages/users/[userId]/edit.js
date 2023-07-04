@@ -1,9 +1,10 @@
 import { useCallback, useEffect, useState } from 'react';
 import NextLink from 'next/link';
 import Head from 'next/head';
+import { useRouter } from 'next/router';
 import ArrowLeftIcon from '@untitled-ui/icons-react/build/esm/ArrowLeft';
 import { Avatar, Box, Chip, Container, Link, Stack, SvgIcon, Typography } from '@mui/material';
-import { usersApi } from 'src/api/users';
+import usersApi  from 'src/api/users';
 import { useMounted } from 'src/hooks/use-mounted';
 import { usePageView } from 'src/hooks/use-page-view';
 import { Layout as DashboardLayout } from 'src/layouts/dashboard/layout';
@@ -12,12 +13,15 @@ import { UserEditForm } from 'src/sections/user/user-edit-form';
 import { getInitials } from 'src/utils/get-initials';
 
 const useUser = () => {
+  const route = useRouter()
   const isMounted = useMounted();
   const [user, setUser] = useState(null);
 
   const getUser = useCallback(async () => {
     try {
-      const response = await usersApi.getUser();
+      
+      const {userId} = route.query;
+      const response = await usersApi.getUserById(userId);
 
       if (isMounted()) {
         setUser(response);
@@ -66,7 +70,7 @@ const Page = () => {
                 <Link
                   color="text.primary"
                   component={NextLink}
-                  href={paths.employees.index}
+                  href={paths.users.index}
                   sx={{
                     alignItems: 'center',
                     display: 'inline-flex'

@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import Head from 'next/head';
 import PlusIcon from '@untitled-ui/icons-react/build/esm/Plus';
 import { Box, Button, Divider, Stack, SvgIcon, Typography } from '@mui/material';
-import { registersApi } from 'src/api/orders';
+import  registersApi  from 'src/api/registers';
 import { useMounted } from 'src/hooks/use-mounted';
 import { usePageView } from 'src/hooks/use-page-view';
 import { Layout as DashboardLayout } from 'src/layouts/dashboard/layout';
@@ -39,7 +39,7 @@ const useRegiss = (search) => {
   const getRegiss = useCallback(async () => {
     try {
       const response = await registersApi.getRegisters(search);
-
+      console.log(response)
       if (isMounted()) {
         setState({
           regiss: response.data,

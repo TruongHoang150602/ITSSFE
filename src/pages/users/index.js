@@ -4,7 +4,7 @@ import Download01Icon from '@untitled-ui/icons-react/build/esm/Download01';
 import PlusIcon from '@untitled-ui/icons-react/build/esm/Plus';
 import Upload01Icon from '@untitled-ui/icons-react/build/esm/Upload01';
 import { Box, Button, Card, Container, Dialog, Stack, SvgIcon, Typography } from '@mui/material';
-import { usersApi } from 'src/api/users';
+import usersApi from 'src/api/users';
 import { useMounted } from 'src/hooks/use-mounted';
 import { usePageView } from 'src/hooks/use-page-view';
 import { Layout as DashboardLayout } from 'src/layouts/dashboard/layout';
@@ -16,9 +16,7 @@ const useSearch = () => {
   const [search, setSearch] = useState({
     filters: {
       query: undefined,
-      hasAcceptedMarketing: undefined,
-      isProspect: undefined,
-      isReturning: undefined
+      role: undefined,
     },
     page: 0,
     rowsPerPage: 5,
@@ -42,6 +40,7 @@ const useUsers = (search) => {
   const getUsers = useCallback(async () => {
     try {
       const response = await usersApi.getUsers(search);
+      console.log(response);
 
       if (isMounted()) {
         setState({
@@ -52,23 +51,34 @@ const useUsers = (search) => {
     } catch (err) {
       console.error(err);
     }
-  }, [search, isMounted]);
+  }, [isMounted]);
+
+  const deleteUser = useCallback(async (userId) => {
+    try {
+      await usersApi.deleteUserById(userId);
+      // Refresh the user list
+      getUsers();
+    } catch (err) {
+      console.error(err);
+    }
+  }, [getUsers]);
 
   useEffect(() => {
-      getUsers();
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [search]);
+    getUsers();
+  }, [search]);
 
-  return state;
+  return {
+    state,
+    deleteUser
+  };
 };
 
 const Page = () => {
 
   const [openModal, setOpenModal] = useState(false)
   const { search, updateSearch } = useSearch();
-  const { users, usersCount } = useUsers(search);
-
+  const { state, deleteUser } = useUsers(search);
+  
   usePageView();
 
   const handleFiltersChange = useCallback((filters) => {
@@ -100,9 +110,15 @@ const Page = () => {
     }));
   }, [updateSearch]);
 
+  const handleDeleteUser = (userId) => {
+    deleteUser(userId);
+  } 
+
   const onCloseModel = () => {
       setOpenModal(false);
   }
+
+
 
   return (
     <>
@@ -184,12 +200,13 @@ const Page = () => {
                 sortDir={search.sortDir}
               />
               <UserListTable
-                users={users}
-                usersCount={usersCount}
+                users={state.users}
+                usersCount={state.usersCount}
                 onPageChange={handlePageChange}
                 onRowsPerPageChange={handleRowsPerPageChange}
                 rowsPerPage={search.rowsPerPage}
                 page={search.page}
+                handleDeleteUser={handleDeleteUser}
               />
             </Card>
           </Stack>
@@ -198,7 +215,7 @@ const Page = () => {
               open={openModal} 
               onClose={(onCloseModel)} 
           >
-            <UserEditForm></UserEditForm>
+            <UserEditForm onClose={onCloseModel}  ></UserEditForm>
           </Dialog>
         </Container>
       </Box>

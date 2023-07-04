@@ -51,7 +51,7 @@ const useEmployees = (search) => {
     } catch (err) {
       console.error(err);
     }
-  }, [isMounted]);
+  }, [search,isMounted]);
 
   const deleteEmployee = useCallback(async (employeeId) => {
     try {
@@ -78,6 +78,7 @@ const Page = () => {
   const [openModal, setOpenModal] = useState(false)
   const { search, updateSearch } = useSearch();
   const { state, deleteEmployee } = useEmployees(search);
+  
   
   usePageView();
 
@@ -199,6 +200,7 @@ const Page = () => {
                 sortBy={search.sortBy}
                 sortDir={search.sortDir}
               />
+              {state.employees && (
               <EmployeeListTable
                 employees={state.employees}
                 employeesCount={state.employeesCount}
@@ -208,6 +210,7 @@ const Page = () => {
                 page={search.page}
                 handleDeleteEmployee={handleDeleteEmployee}
               />
+              )}
             </Card>
           </Stack>
 
@@ -215,7 +218,7 @@ const Page = () => {
               open={openModal} 
               onClose={(onCloseModel)} 
           >
-            <EmployeeEditForm></EmployeeEditForm>
+            <EmployeeEditForm onClose={onCloseModel}  ></EmployeeEditForm>
           </Dialog>
         </Container>
       </Box>
