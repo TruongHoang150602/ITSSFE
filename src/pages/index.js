@@ -7,9 +7,9 @@ const Page = () => {
   if(auth.isAuthenticated)
         {    
           const {user} = auth;
-          if(user.role === 1)
+          if(user.role === "admin")
             router.push('/dashboard/admin');
-          else if(user.role === 2 || user.role === 3 || user.role === 4)
+          else if(user.role === "sale" || user.role === "caring" || user.role === "coach")
             router.push('/dashboard/employee');
           else 
             router.push('/dashboard/user');

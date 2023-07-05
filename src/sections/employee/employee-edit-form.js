@@ -22,24 +22,20 @@ import employeesApi from 'src/api/employees';
 
 const ROLE = [{
     label: "Admin",
-    value: 1
+    value: "admin"
 },
 {
   label: "Caring staff",
-  value: 2
+  value: "caring"
 },
 {
   label: "Coach",
-  value: 3
+  value: "coach"
 },
 {
   label: "Sale",
-  value: 4
-},
-{
-  label: "Member",
-  value: 5
-},
+  value: "sale"
+}
 
 ]
 
@@ -51,7 +47,7 @@ const initialValues = (employee) => {
     email: employee.email || '',
     name: employee.name || '',
     phone: employee.phone || '',
-    role: 1,
+    role: "admin",
     submit: null
   }
   return {
@@ -61,7 +57,7 @@ const initialValues = (employee) => {
     email: '',
     name: '',
     phone: '',
-    role: 1,
+    role: "admin",
     submit: null
   }
 }
@@ -85,7 +81,7 @@ export const EmployeeEditForm = (props) => {
         .max(255)
         .required('Name is required'),
       phone: Yup.string().max(15),
-      role: Yup.number().required('Role is required'),
+      role: Yup.string().required('Role is required'),
     }),
     onSubmit: async (values, helpers) => {
       try {

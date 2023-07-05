@@ -4,6 +4,8 @@ import { authApi } from 'src/api/auth';
 
 
 const HANDLERS = {
+  INITIALIZE: 'INITIALIZE',
+  SIGN_UP: 'SIGN_UP',
   SIGN_IN: 'SIGN_IN',
   SIGN_OUT: 'SIGN_OUT'
 };
@@ -37,6 +39,14 @@ const handlers = {
   [HANDLERS.SIGN_IN]: (state, action) => {
     const user = action.payload;
 
+    return {
+      ...state,
+      isAuthenticated: true,
+      user
+    };
+  },
+  [HANDLERS.SIGN_UP]: (state, action) => {
+    const { user } = action.payload;
     return {
       ...state,
       isAuthenticated: true,
@@ -112,7 +122,10 @@ export const AuthProvider = (props) => {
   const signUp = async (email, name, password) => {
     try {
       await authApi.signUp({ email, name, password });
-      throw new Error('Sign up is not implemented');
+      dispatch({
+        type: HANDLERS.SIGN_UP,
+        payload: user
+      });
     } catch (error) {
       console.error('[Auth Api - Sign Up]:', error);
       throw new Error('Sign up is not implemented');

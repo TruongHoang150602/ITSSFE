@@ -48,6 +48,19 @@ class RoomsApi {
     }
   }
 
+  async addEquipToRoomById(id, equipment) {
+    try {
+      let updatedRoom = await this.getRoomById(id);
+      console.log(updatedRoom);
+      updatedRoom.equipment.push(equipment);
+      const response = await axios.put(`${this.baseUrl}/rooms/${id}`, updatedRoom);
+      return response.data;
+    } catch (error) {
+      console.error(`Error while updating room with ID ${id}:`, error);
+      return null;
+    }
+  }
+
   async deleteRoomById(id) {
     try {
       const response = await axios.delete(`${this.baseUrl}/rooms/${id}`);

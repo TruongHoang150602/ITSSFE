@@ -15,8 +15,8 @@ import {
   Unstable_Grid2 as Grid,
   CardActions
 } from '@mui/material';
-import { QuillEditor } from 'src/components/quill-editor';
 import { paths } from 'src/paths';
+import packagesApi from 'src/api/packages';
 
 const initialValues = {
   description: '',
@@ -38,7 +38,7 @@ export const PackageCreateForm = (props) => {
     validationSchema,
     onSubmit: async (values, helpers) => {
       try {
-        // NOTE: Make API request
+        packagesApi.createPackage(formik.values);
         toast.success('Package created');
         router.push(paths.packages.index);
       } catch (err) {
@@ -94,30 +94,18 @@ export const PackageCreateForm = (props) => {
                     type="number"
                     value={formik.values.price}
                   />
-                  <div>
-                    <Typography
-                      color="text.secondary"
-                      sx={{ mb: 2 }}
-                      variant="subtitle2"
-                    >
-                      Description
-                    </Typography>
-                    <QuillEditor
-                      onChange={(value) => {
-                        formik.setFieldValue('description', value);
-                      }}
-                      placeholder="Write something"
-                      sx={{ height: 300 }}
-                      value={formik.values.description}
-                    />
-                    {!!(formik.touched.description && formik.errors.description) && (
-                      <Box sx={{ mt: 2 }}>
-                        <FormHelperText error>
-                          {formik.errors.description}
-                        </FormHelperText>
-                      </Box>
-                    )}
-                  </div>
+                   <TextField
+                    error={!!(formik.touched.description && formik.errors.description)}
+                    fullWidth
+                    helperText={formik.touched.description && formik.errors.description}
+                    label="Description"
+                    name="description"
+                    multiline
+                    rows={4}
+                    onBlur={formik.handleBlur}
+                    onChange={formik.handleChange}
+                    value={formik.values.description}
+                  />
                 </Stack>
               </Grid>
             </Grid>

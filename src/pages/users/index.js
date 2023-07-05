@@ -40,7 +40,6 @@ const useUsers = (search) => {
   const getUsers = useCallback(async () => {
     try {
       const response = await usersApi.getUsers(search);
-      console.log(response);
 
       if (isMounted()) {
         setState({
@@ -51,12 +50,11 @@ const useUsers = (search) => {
     } catch (err) {
       console.error(err);
     }
-  }, [isMounted]);
+  }, [search, isMounted]);
 
   const deleteUser = useCallback(async (userId) => {
     try {
       await usersApi.deleteUserById(userId);
-      // Refresh the user list
       getUsers();
     } catch (err) {
       console.error(err);
@@ -65,7 +63,7 @@ const useUsers = (search) => {
 
   useEffect(() => {
     getUsers();
-  }, [search]);
+  }, [search, getUsers]);
 
   return {
     state,

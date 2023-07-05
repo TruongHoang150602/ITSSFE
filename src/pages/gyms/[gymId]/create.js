@@ -56,7 +56,7 @@ const EquipmentCreate = () => {
                 </Typography>
               </Breadcrumbs>
             </Stack>
-            <EquipmentCreateForm />
+            <EquipmentCreateForm gymId = {gymId} />
           </Stack>
         </Container>
       </Box>

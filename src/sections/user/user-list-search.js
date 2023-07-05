@@ -21,7 +21,7 @@ const tabs = [
   },
   {
     label: 'Member',
-    value: '1'
+    value: 'member'
   },
 ];
 
@@ -55,13 +55,11 @@ export const UserListSearch = (props) => {
     setFilters((prevState) => {
       const updatedFilters = {
         ...prevState,
-        hasAcceptedMarketing: undefined,
-        isProspect: undefined,
-        isReturning: undefined
+        role: undefined,
       };
 
       if (value !== 'all') {
-        updatedFilters[value] = true;
+        updatedFilters[role] = value;
       }
 
       return updatedFilters;

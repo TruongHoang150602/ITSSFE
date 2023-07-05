@@ -16,16 +16,19 @@ export const paths = {
     edit: (id) => `/users/${id}/edit`,
   },
   gyms: {
-    index: 'gyms',
+    index: '/gyms',
     details: (id) => `/gyms/${id}`,
     create: (id) => `/gyms/${id}/create`,
+  },
+  registers: {
+    index: '/registers',
   },
 
   feedback: {
     index: '/feedback',
   },
   packages: {
-    index: 'packages',
+    index: '/packages',
     create: '/packages/create',
   },
   
