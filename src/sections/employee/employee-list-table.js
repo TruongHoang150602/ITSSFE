@@ -28,7 +28,6 @@ import {
 import { Scrollbar } from 'src/components/scrollbar';
 import { paths } from 'src/paths';
 import { getInitials } from 'src/utils/get-initials';
-import employeesApi from 'src/api/employees';
 
 const useSelectionModel = (employees) => {
   const employeeIds = useMemo(() => {

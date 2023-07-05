@@ -4,15 +4,11 @@ import toast from 'react-hot-toast';
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
 import {
-  Box,
   Button,
   Card,
   CardContent,
-  FormControlLabel,
-  FormHelperText,
   MenuItem,
   Stack,
-  Switch,
   TextField,
   Typography,
   Unstable_Grid2 as Grid
@@ -20,31 +16,16 @@ import {
 // import { FileDropzone } from 'src/components/file-dropzone';
 import { QuillEditor } from 'src/components/quill-editor';
 import { paths } from 'src/paths';
+import roomsApi from 'src/api/rooms';
 
 const categoryOptions = [
   {
-    label: 'Healthcare',
-    value: 'healthcare'
+    label: 'Strength',
+    value: 'Strength'
   },
   {
-    label: 'Makeup',
-    value: 'makeup'
-  },
-  {
-    label: 'Dress',
-    value: 'dress'
-  },
-  {
-    label: 'Skincare',
-    value: 'skincare'
-  },
-  {
-    label: 'Jewelry',
-    value: 'jewelry'
-  },
-  {
-    label: 'Blouse',
-    value: 'blouse'
+    label: 'Cardio',
+    value: 'Cardio'
   }
 ];
 
@@ -52,7 +33,7 @@ const initialValues = {
   name: '',
   category: '',
   description: '',
-  images: [],
+  images: '',
   price: 0,
   purchaseDate: new Date().toISOString().slice(0, 10),
   warrantyPeriod: 0,
@@ -62,7 +43,7 @@ const initialValues = {
 const validationSchema = Yup.object({
   name: Yup.string().max(255).required(),
   description: Yup.string().max(5000),
-  images: Yup.array(),
+  images: Yup.string(),
   price: Yup.number().min(0),
   purchaseDate: Yup.string(),
   warrantyPeriod: Yup.number().min(0),
@@ -70,6 +51,7 @@ const validationSchema = Yup.object({
 });
 
 export const EquipmentCreateForm = (props) => {
+  const {gymId, ... other} = props;
   const router = useRouter();
   const [files, setFiles] = useState([]);
   const formik = useFormik({
@@ -77,9 +59,9 @@ export const EquipmentCreateForm = (props) => {
     validationSchema,
     onSubmit: async (values, helpers) => {
       try {
-        // NOTE: Make API request
+        roomsApi.addEquipToRoomById(gymId, formik.values);
         toast.success('Equipment created');
-        // router.push(paths.dashboard.equipments.index);
+        router.push(paths.gyms.details(gymId));
       } catch (err) {
         console.error(err);
         toast.error('Something went wrong!');

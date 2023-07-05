@@ -19,6 +19,7 @@ class EmployeesApi {
       return null;
     }
     data = deepCopy(data);
+    data = data.filter((option) => option.role !== 'user' && option.role !== 'member' );
     let count = data.length;
 
     if (typeof filters !== 'undefined') {
@@ -38,8 +39,8 @@ class EmployeesApi {
           }
         }
 
-        if (typeof filters.member !== 'undefined') {
-          if (user.role !== filters.member) {
+        if (typeof filters.role !== 'undefined') {
+          if (user.role !== filters.role) {
             return false;
           }
         }

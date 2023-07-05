@@ -11,37 +11,13 @@ import {
   CardHeader,
   MenuItem,
   Stack,
-  Switch,
   TextField,
-  Typography,
   Unstable_Grid2 as Grid
 } from '@mui/material';
 import { paths } from 'src/paths';
 import { wait } from 'src/utils/wait';
 import usersApi from 'src/api/users';
 
-const ROLE = [{
-    label: "Admin",
-    value: 1
-},
-{
-  label: "Caring staff",
-  value: 2
-},
-{
-  label: "Coach",
-  value: 3
-},
-{
-  label: "Sale",
-  value: 4
-},
-{
-  label: "Member",
-  value: 5
-},
-
-]
 
 const initialValues = (user) => {
   if(user) return {
@@ -51,7 +27,6 @@ const initialValues = (user) => {
     email: user.email || '',
     name: user.name || '',
     phone: user.phone || '',
-    role: 1,
     submit: null
   }
   return {
@@ -61,7 +36,6 @@ const initialValues = (user) => {
     email: '',
     name: '',
     phone: '',
-    role: 1,
     submit: null
   }
 }
@@ -85,7 +59,6 @@ export const UserEditForm = (props) => {
         .max(255)
         .required('Name is required'),
       phone: Yup.string().max(15),
-      role: Yup.number().required('Role is required'),
     }),
     onSubmit: async (values, helpers) => {
       try {
@@ -236,26 +209,6 @@ export const UserEditForm = (props) => {
               xs={12}
               md={6}
             >
-              <TextField
-                fullWidth
-                select
-                id="role"
-                name="role"
-                label="Role"
-                value={formik.values.role}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                error={formik.touched.role && Boolean(formik.errors.role)}
-                helperText={formik.touched.role && formik.errors.role}  
-              >
-               {ROLE.map((option) => (
-              <MenuItem 
-                key={option.value} 
-                value={option.value}>
-              {option.label}
-              </MenuItem>
-              ))}
-              </TextField>
             </Grid>
           </Grid>
         </CardContent>

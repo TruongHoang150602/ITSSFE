@@ -1,7 +1,6 @@
 import NextLink from 'next/link';
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
-import ArrowLeftIcon from '@untitled-ui/icons-react/build/esm/ArrowLeft';
 import {
   Box,
   Button,
@@ -12,12 +11,12 @@ import {
   FormHelperText,
   Link,
   Stack,
-  SvgIcon,
   TextField,
   Typography
 } from '@mui/material';
 import { Layout as AuthLayout } from 'src/layouts/auth/layout';
-import { paths } from 'src/paths';
+import { useAuth } from 'src/hooks/use-auth';
+import { useRouter } from 'next/navigation';
 
 const initialValues = {
   email: '',
@@ -47,10 +46,21 @@ const validationSchema = Yup.object({
 });
 
 const Page = () => {
+  
+  const router = useRouter();
+  const auth = useAuth();
   const formik = useFormik({
     initialValues,
     validationSchema,
-    onSubmit: () => { 
+    onSubmit: async (values, helpers) => {
+      try {
+        await auth.signUp(values.name, values.email, values.password);
+        router.push('/auth/login');
+      } catch (err) {
+        helpers.setStatus({ success: false });
+        helpers.setErrors({ submit: err.message });
+        helpers.setSubmitting(false);
+      }
       
     }
   });

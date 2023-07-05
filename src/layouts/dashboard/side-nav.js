@@ -18,24 +18,19 @@ import { Scrollbar } from 'src/components/scrollbar';
 import { items } from './config';
 import { SideNavItem } from './side-nav-item';
 import { useAuth } from 'src/hooks/use-auth';
-import { useEffect } from 'react';
 
 export const SideNav = (props) => {
 
-  let userItems = items.admin;
+  let userItems = items.user;
   const auth = useAuth();
-  useEffect(() => {
-    
     if (auth.isAuthenticated) {
       const user = auth.user;
-      if (user.role === 1)
+      if (user.role === "admin")
         userItems = items.admin;
-      else if (user.role === 2 || user.role === 3 || user.role === 4)
+      else if (user.role === "caring" || user.role === "sale" || user.role === "coach")
         userItems = items.employee;
     }
-  }, []);
   
-   
   const { open, onClose } = props;
   const pathname = usePathname();
   const lgUp = useMediaQuery((theme) => theme.breakpoints.up('lg'));

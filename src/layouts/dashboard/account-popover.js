@@ -18,12 +18,9 @@ import {
   Typography
 } from '@mui/material';
 import { useAuth } from '../../hooks/use-auth';
-import { paths } from '../../paths';
-import { Issuer } from '../../utils/auth';
-import { useEffect } from 'react';
 
 export const AccountPopover = (props) => {
-  const { anchorEl, onClose, open, ...other } = props;
+  const { user, anchorEl, onClose, open, ...other } = props;
   const router = useRouter();
   const auth = useAuth();
   const handleLogout = () => {
@@ -31,12 +28,6 @@ export const AccountPopover = (props) => {
       auth.signOut();
       router.push('/auth/login');
     };
-  
-  let user  = null;
-  useEffect(() => {
-    user = auth.user;
-  }, []);
-
   
   return (
     <Popover

@@ -24,7 +24,7 @@ import { paths } from 'src/paths';
 
 const initialValues = {
   email: 'admin@gmail.com',
-  password: 'admin123',
+  password: '123456',
   submit: null
 };
 
