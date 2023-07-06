@@ -20,6 +20,7 @@ export const SocialPostAdd = (props) => {
   const user = useMockedUser();
   const smUp = useMediaQuery((theme) => theme.breakpoints.up('sm'));
 
+  
   return (
     <Card {...props}>
       <CardContent>

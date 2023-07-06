@@ -20,20 +20,20 @@ import { useRouter } from "next/navigation";
 const initialValues = (user) => {
   if (user)
     return {
-      address: user.address,
+      first_name: user.first_name,
       gender: user.gender,
-      birthday: user.birthday,
+      birth: user.birth,
       email: user.email,
-      name: user.name,
+      last_name: user.last_name,
       phone: user.phone,
       submit: null,
     };
   return {
-    address: "",
+    first_name: "",
     gender: "male",
-    birthday: new Date().toISOString().slice(0, 10),
+    birth: new Date().toISOString().slice(0, 10),
     email: "",
-    name: "",
+    last_name: "",
     phone: "",
     submit: null,
   };
@@ -45,11 +45,11 @@ export const AccountProfileDetails = (props) => {
   const formik = useFormik({
     initialValues: initialValues(user),
     validationSchema: Yup.object({
-      address: Yup.string().max(255),
+      first_name: Yup.string().max(255),
       gender: Yup.string(),
-      birthday: Yup.string(),
+      birth: Yup.string(),
       email: Yup.string().email("Must be a valid email").max(255).required("Email is required"),
-      name: Yup.string().max(255).required("Name is required"),
+      last_name: Yup.string().max(255).required("Name is required"),
       phone: Yup.string().max(15),
     }),
     onSubmit: async (values, helpers) => {
@@ -79,27 +79,27 @@ export const AccountProfileDetails = (props) => {
             <Grid container spacing={3}>
               <Grid xs={12} md={6}>
                 <TextField
-                  error={!!(formik.touched.name && formik.errors.name)}
+                  error={!!(formik.touched.last_name && formik.errors.last_name)}
                   fullWidth
-                  helperText={formik.touched.name && formik.errors.name}
-                  label="Full name"
-                  name="name"
+                  helperText={formik.touched.last_name && formik.errors.last_name}
+                  label="First name"
+                  name="fisrt_name"
                   onBlur={formik.handleBlur}
                   onChange={formik.handleChange}
                   required
-                  value={formik.values.name}
+                  value={formik.values.fisrt_name}
                 />
               </Grid>
               <Grid xs={12} md={6}>
                 <TextField
-                  error={!!(formik.touched.address && formik.errors.address)}
+                  error={!!(formik.touched.last_name && formik.errors.last_name)}
                   fullWidth
-                  helperText={formik.touched.address && formik.errors.address}
-                  label="Address"
-                  name="address"
+                  helperText={formik.touched.last_name && formik.errors.last_name}
+                  label="Last name"
+                  name="last_name"
                   onBlur={formik.handleBlur}
                   onChange={formik.handleChange}
-                  value={formik.values.address}
+                  value={formik.values.last_name}
                 />
               </Grid>
               <Grid xs={12} md={6}>
@@ -149,15 +149,15 @@ export const AccountProfileDetails = (props) => {
               </Grid>
               <Grid xs={12} md={6}>
                 <TextField
-                  error={!!(formik.touched.birthday && formik.errors.birthday)}
+                  error={!!(formik.touched.birth && formik.errors.birth)}
                   fullWidth
-                  helperText={formik.touched.birthday && formik.errors.birthday}
+                  helperText={formik.touched.birth && formik.errors.birth}
                   label="Birthday"
-                  name="birthday"
+                  name="birth"
                   type="date"
                   onBlur={formik.handleBlur}
                   onChange={formik.handleChange}
-                  value={formik.values.birthday}
+                  value={formik.values.birth}
                 />
               </Grid>
             </Grid>

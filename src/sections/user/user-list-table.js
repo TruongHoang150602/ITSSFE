@@ -213,7 +213,7 @@ export const UserListTable = (props) => {
                           width: 42
                         }}
                       >
-                        {getInitials(user.name)}
+                        {getInitials(user.fisrt_name + " " +  user.last_name)}
                       </Avatar>
                       <div>
                         <Link
@@ -222,7 +222,7 @@ export const UserListTable = (props) => {
                           href={paths.users.details(user.id)}
                           variant="subtitle2"
                         >
-                          {user.name}
+                          {user.fisrt_name + " " +  user.last_name}
                         </Link>
                         <Typography
                           color="text.secondary"
@@ -234,7 +234,7 @@ export const UserListTable = (props) => {
                     </Stack>
                   </TableCell>
                   <TableCell>
-                    {user.address}
+                    {user.gender}
                   </TableCell>
                   <TableCell>
                     {user.phone}

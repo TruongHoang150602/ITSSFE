@@ -168,7 +168,7 @@ export const EmployeeListTable = (props) => {
                 Role
               </TableCell>
               <TableCell>
-                Address
+                gender
               </TableCell>
               <TableCell>
                 Phone
@@ -239,7 +239,7 @@ export const EmployeeListTable = (props) => {
                     {employee.role}
                   </TableCell>
                   <TableCell>
-                    {employee.address}
+                    {employee.gender}
                   </TableCell>
                   <TableCell>
                     {employee.phone}

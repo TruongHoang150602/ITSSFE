@@ -14,12 +14,10 @@ import { paths } from 'src/paths';
 export const RoomCard = (props) => {
   const { room, onClickEdit, onClickDelete } = props;
 
-
-
   return (
     <Card variant="outlined">
       <CardMedia
-        image={room.media}
+        image={room.media || '/assets/rooms/room-1.pmg'}
         component={NextLink} 
         href={paths.gyms.details(room.id)}
         sx={{ height: 180 }}

@@ -24,17 +24,25 @@ const usePosts = () => {
     }
   }, [isMounted]);
 
-  useEffect(() => {
+  const createPost = useCallback(async (newPost) => {
+    try {
+      const response = await feedbacksApi.createFeedback(newPost);
       getPosts();
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    []);
+    } catch (err) {
+      console.error(err);
+    }
+  }, [isMounted, posts]);
 
-  return posts;
+  useEffect(() => {
+    getPosts();
+  }, [posts, isMounted]);
+
+  return { posts, createPost };
 };
 
+
 const SocialFeed = () => {
-  const posts = usePosts();
+  const { posts, createPost } = usePosts();
 
   usePageView();
 
@@ -42,7 +50,7 @@ const SocialFeed = () => {
     <>
       <Head>
         <title>
-          Dashboard: Social Feed | Devias Kit PRO
+          Dashboard: Feedback
         </title>
       </Head>
       <Box

@@ -57,7 +57,7 @@ export const AccountProfile = (props) => {
             {initUser.name}
           </Typography>
           <Typography color="text.secondary" variant="body2">
-            {initUser.address}
+            {initUser.email}
           </Typography>
           <Typography color="text.secondary" variant="body2">
             {initUser.role}

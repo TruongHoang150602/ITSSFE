@@ -38,19 +38,54 @@ const useRooms = () => {
     }
   }, [isMounted]);
 
-  useEffect(() => {
-      getRooms();
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    []);
+  const createRoom = useCallback(async (newRoom) => {
+    try {
+      const response = await roomsApi.createRoom(newRoom);
+      if (isMounted()) {
+        setRooms([...rooms, response]);
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  }, [isMounted, rooms]);
 
-  return rooms;
+  const editRoom = useCallback(async (roomId, updatedRoom) => {
+    try {
+      const response = await roomsApi.updateRoomById(roomId, updatedRoom);
+      if (isMounted()) {
+        const updatedRooms = rooms.map((room) =>
+          room.id === roomId ? response : room
+        );
+        setRooms(updatedRooms);
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  }, [isMounted, rooms]);
+
+  const deleteRoom = useCallback(async (roomId) => {
+    try {
+      await roomsApi.deleteRoomById(roomId);
+      if (isMounted()) {
+        const updatedRooms = rooms.filter((room) => room.id !== roomId);
+        setRooms(updatedRooms);
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  }, [isMounted, rooms]);
+
+  useEffect(() => {
+    getRooms();
+  }, []);
+
+  return { rooms, createRoom, editRoom, deleteRoom };
 };
 
 
+
 const Page = () => {
-  const rooms = useRooms();
-  console.log(rooms);
+  const { rooms, createRoom, editRoom, deleteRoom } = useRooms();
   const [openModal, setOpenModal] = useState(false);
   const [selectedRoom, setSelectedRoom] = useState(null);
 
@@ -64,7 +99,8 @@ const Page = () => {
   };
 
   const onClickDelete = (id) => {
-    console.log("Delete")
+    deleteRoom(id);
+    setOpenModal(false);
   };
 
   usePageView();
@@ -85,7 +121,7 @@ const Page = () => {
           <Stack spacing={4}>
             <Stack direction="row" justifyContent="space-between" spacing={4}>
               <Stack spacing={1}>
-                <Typography variant="h4">Employees</Typography>
+                <Typography variant="h4">Gyms</Typography>
                 <Stack alignItems="center" direction="row" spacing={1}>
                   <Button
                     color="inherit"
@@ -148,7 +184,7 @@ const Page = () => {
             </Grid>
           </Stack>
           <Dialog open={openModal} onClose={onCloseModel}>
-            <RoomAddForm room={selectedRoom} onClose={onCloseModel}></RoomAddForm>
+            <RoomAddForm room={selectedRoom} onClose={onCloseModel} editRoom={editRoom} createRoom={createRoom} ></RoomAddForm>
           </Dialog>
         </Container>
       </Box>

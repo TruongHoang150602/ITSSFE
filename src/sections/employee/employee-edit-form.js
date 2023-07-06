@@ -25,12 +25,12 @@ const ROLE = [{
     value: "admin"
 },
 {
-  label: "Caring staff",
+  label: "Customer Care",
   value: "caring"
 },
 {
-  label: "Coach",
-  value: "coach"
+  label: "Train",
+  value: "train"
 },
 {
   label: "Sale",
@@ -43,7 +43,7 @@ const initialValues = (employee) => {
   if(employee) return {
     address: employee.address || '',
     gender: employee.gender || 'male',
-    birthday: employee.birthday || new Date().toISOString().slice(0, 10),
+    birth: employee.birth || new Date().toISOString().slice(0, 10),
     email: employee.email || '',
     name: employee.name || '',
     phone: employee.phone || '',
@@ -53,7 +53,7 @@ const initialValues = (employee) => {
   return {
     address: '',
     gender: 'male',
-    birthday: new Date().toISOString().slice(0, 10),
+    birth: new Date().toISOString().slice(0, 10),
     email: '',
     name: '',
     phone: '',
@@ -68,18 +68,18 @@ export const EmployeeEditForm = (props) => {
   const formik = useFormik({
     initialValues:initialValues(employee),
     validationSchema: Yup.object({
-      address: Yup.string().max(255),
       gender: Yup.string(),
-      birthday: Yup.string(),
+      birth: Yup.string(),
       email: Yup
         .string()
         .email('Must be a valid email')
         .max(255)
         .required('Email is required'),
-      name: Yup
+      first_name: Yup
         .string()
         .max(255)
         .required('Name is required'),
+      last_name: Yup.string().max(255),
       phone: Yup.string().max(15),
       role: Yup.string().required('Role is required'),
     }),
@@ -129,15 +129,15 @@ export const EmployeeEditForm = (props) => {
               md={6}
             >
               <TextField
-                error={!!(formik.touched.name && formik.errors.name)}
+                error={!!(formik.touched.first_name && formik.errors.first_name)}
                 fullWidth
-                helperText={formik.touched.name && formik.errors.name}
-                label="Full name"
-                name="name"
+                helperText={formik.touched.first_name && formik.errors.first_name}
+                label="First name"
+                name="first_name"
                 onBlur={formik.handleBlur}
                 onChange={formik.handleChange}
                 required
-                value={formik.values.name}
+                value={formik.values.first_name}
               />
             </Grid>
             <Grid
@@ -145,14 +145,14 @@ export const EmployeeEditForm = (props) => {
               md={6}
             >
               <TextField
-                error={!!(formik.touched.address && formik.errors.address)}
+                error={!!(formik.touched.last_name && formik.errors.last_name)}
                 fullWidth
-                helperText={formik.touched.address && formik.errors.address}
-                label="Address"
-                name="address"
+                helperText={formik.touched.last_name && formik.errors.last_name}
+                label="Last name"
+                name="last_name"
                 onBlur={formik.handleBlur}
                 onChange={formik.handleChange}
-                value={formik.values.address}
+                value={formik.values.last_name}
               />
             </Grid>
             <Grid
@@ -216,15 +216,15 @@ export const EmployeeEditForm = (props) => {
               md={6}
             >
               <TextField
-                error={!!(formik.touched.birthday && formik.errors.birthday)}
+                error={!!(formik.touched.birth && formik.errors.birth)}
                 fullWidth
-                helperText={formik.touched.birthday && formik.errors.birthday}
+                helperText={formik.touched.birth && formik.errors.birth}
                 label="Birthday"
-                name="birthday"
+                name="birth"
                 type='date'
                 onBlur={formik.handleBlur}
                 onChange={formik.handleChange}
-                value={formik.values.birthday}
+                value={formik.values.birth}
               />
             </Grid>
           

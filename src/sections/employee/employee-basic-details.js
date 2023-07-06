@@ -4,7 +4,7 @@ import { PropertyList } from 'src/components/property-list';
 import { PropertyListItem } from 'src/components/property-list-item';
 
 export const EmployeeBasicDetails = (props) => {
-  const { address, email, phone, gender, birthday, role, ...other } = props;
+  const { email, phone, gender, birthday, role, ...other } = props;
   const mdUp = useMediaQuery((theme) => theme.breakpoints.up('md'));
   const align = mdUp ? 'horizontal' : 'vertical';
   return (
@@ -35,12 +35,6 @@ export const EmployeeBasicDetails = (props) => {
           label="Phone"
           value={phone}
         />
-          <PropertyListItem
-          align={align}
-          divider
-          label="Address"
-          value={address}
-        />
         <PropertyListItem
           align={align}
           divider
@@ -53,7 +47,6 @@ export const EmployeeBasicDetails = (props) => {
 };
 
 EmployeeBasicDetails.propTypes = {
-  address: PropTypes.string,
   email: PropTypes.string.isRequired,
   isVerified: PropTypes.bool.isRequired,
   phone: PropTypes.string,
