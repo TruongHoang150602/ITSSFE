@@ -23,7 +23,6 @@ class AuthApi {
           return null;
         }
         const user = data.find((user) => user.email === email);
-        console.log(user)
         if (!user || (user.password !== password)) {
           reject(new Error('Please check your email and password'));
           return;
@@ -39,7 +38,7 @@ class AuthApi {
   }
 
   async signUp(request) {
-    const { email, name, password } = request;
+    const { name, email, password } = request;
 
     return new Promise(async (resolve, reject) => {
       try {
@@ -71,7 +70,7 @@ class AuthApi {
 
         try {
           const response = await axios.post(`${this.baseUrl}`, user);
-          return response.data;
+          return resolve(response);
         } catch (error) {
           console.error('Error while creating user:', error);
           return null;

@@ -24,7 +24,7 @@ const statusOptions = [
 export const RegisEdit = (props) => {
   const { onCancel, onSave, regis } = props;
 
-  const createdAt = format(regis.createdAt, 'dd/MM/yyyy HH:mm');
+  // const createdAt = format(regis.createdAt, 'dd/MM/yyyy HH:mm');
 
   return (
     <Stack spacing={6}>
@@ -47,25 +47,26 @@ export const RegisEdit = (props) => {
             name="number"
             value={regis.number}
           />
-          <TextField
+           <TextField
             disabled
+            fullWidth
+            label="Date"
+            name="date"
+            value={regis.createdAt}
+          />
+          <TextField
+            
             fullWidth
             label="Customer name"
             name="customer_name"
             value={regis.customer.name}
           />
-          <TextField
-            disabled
-            fullWidth
-            label="Date"
-            name="date"
-            value={createdAt}
-          />
+         
           <TextField
             fullWidth
-            label="Address"
-            name="address"
-            value={regis.customer.address1}
+            label="Email"
+            name="email"
+            value={regis.customer.email}
           />
           <TextField
             fullWidth
@@ -75,9 +76,9 @@ export const RegisEdit = (props) => {
           />
           <TextField
             fullWidth
-            label="State/Region"
-            name="state_region"
-            value={regis.customer.city}
+            label="Package"
+            name="package"
+            value={regis.customer.package}
           />
           <TextField
             fullWidth
@@ -133,6 +134,5 @@ export const RegisEdit = (props) => {
 RegisEdit.propTypes = {
   onCancel: PropTypes.func,
   onSave: PropTypes.func,
-  // @ts-ignore
   regis: PropTypes.object
 };

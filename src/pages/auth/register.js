@@ -17,6 +17,7 @@ import {
 import { Layout as AuthLayout } from 'src/layouts/auth/layout';
 import { useAuth } from 'src/hooks/use-auth';
 import { useRouter } from 'next/navigation';
+import { toast } from 'react-hot-toast';
 
 const initialValues = {
   email: '',
@@ -55,6 +56,7 @@ const Page = () => {
     onSubmit: async (values, helpers) => {
       try {
         await auth.signUp(values.name, values.email, values.password);
+        toast.success("Sign up successful");
         router.push('/auth/login');
       } catch (err) {
         helpers.setStatus({ success: false });

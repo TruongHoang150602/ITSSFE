@@ -46,11 +46,8 @@ const handlers = {
     };
   },
   [HANDLERS.SIGN_UP]: (state, action) => {
-    const { user } = action.payload;
     return {
       ...state,
-      isAuthenticated: true,
-      user
     };
   },
   [HANDLERS.SIGN_OUT]: (state) => {
@@ -121,10 +118,10 @@ export const AuthProvider = (props) => {
 
   const signUp = async (email, name, password) => {
     try {
+      console.log("Done")
       await authApi.signUp({ email, name, password });
       dispatch({
         type: HANDLERS.SIGN_UP,
-        payload: user
       });
     } catch (error) {
       console.error('[Auth Api - Sign Up]:', error);

@@ -28,11 +28,11 @@ const tabs = [
 const sortOptions = [
   {
     label: 'Last update (newest)',
-    value: 'updatedAt|desc'
+    value: 'createdAt|desc'
   },
   {
     label: 'Last update (oldest)',
-    value: 'updatedAt|asc'
+    value: 'createdAt|asc'
   },
 ];
 
@@ -59,7 +59,7 @@ export const UserListSearch = (props) => {
       };
 
       if (value !== 'all') {
-        updatedFilters[role] = value;
+        updatedFilters.role = value;
       }
 
       return updatedFilters;

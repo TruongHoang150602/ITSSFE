@@ -1,14 +1,35 @@
-import { useCallback, useState } from 'react';
-import PropTypes from 'prop-types';
-import XIcon from '@untitled-ui/icons-react/build/esm/X';
-import { Box, Drawer, IconButton, Stack, SvgIcon, Typography, useMediaQuery } from '@mui/material';
-import { RegisDetails } from './regis-details';
-import { RegisEdit } from './regis-edit';
+import { useCallback, useState } from "react";
+import PropTypes from "prop-types";
+import XIcon from "@untitled-ui/icons-react/build/esm/X";
+import { Box, Drawer, IconButton, Stack, SvgIcon, Typography, useMediaQuery } from "@mui/material";
+import { RegisDetails } from "./regis-details";
+import { RegisEdit } from "./regis-edit";
+
+const valueRegis = (regis) => {
+  if (regis) return regis;
+  else
+    return {
+      createAt: "",
+      id: "",
+      createdAt: "",
+      customer: {
+        address: "",
+        email: "",
+        name: "",
+        phone: "",
+      },
+      package: "",
+      number: "",
+      paymentMethod: "",
+      totalAmount: 0,
+    };
+};
 
 export const RegisDrawer = (props) => {
-  const { container, onClose, open, regis } = props;
-  const [isEditing, setIsEditing] = useState(false);
-  const lgUp = useMediaQuery((theme) => theme.breakpoints.up('lg'));
+  const { container, onClose, open, edit, regis } = props;
+  const [isEditing, setIsEditing] = useState(edit);
+  const lgUp = useMediaQuery((theme) => theme.breakpoints.up("lg"));
+
 
   const handleEditOpen = useCallback(() => {
     setIsEditing(true);
@@ -19,8 +40,9 @@ export const RegisDrawer = (props) => {
   }, []);
 
   let content = null;
+  
+  const register = valueRegis(regis);
 
-  if (regis) {
     content = (
       <div>
         <Stack
@@ -29,19 +51,13 @@ export const RegisDrawer = (props) => {
           justifyContent="space-between"
           sx={{
             px: 3,
-            py: 2
+            py: 2,
           }}
         >
-          <Typography
-            color="inherit"
-            variant="h6"
-          >
-            {regis.number}
+          <Typography color="inherit" variant="h6">
+            {register.number}
           </Typography>
-          <IconButton
-            color="inherit"
-            onClick={onClose}
-          >
+          <IconButton color="inherit" onClick={onClose}>
             <SvgIcon>
               <XIcon />
             </SvgIcon>
@@ -50,29 +66,22 @@ export const RegisDrawer = (props) => {
         <Box
           sx={{
             px: 3,
-            py: 4
+            py: 4,
           }}
         >
-          {!isEditing
-            ? (
-              <RegisDetails
-                onApprove={onClose}
-                onEdit={handleEditOpen}
-                onReject={onClose}
-                regis={regis}
-              />
-            )
-            : (
-              <RegisEdit
-                onCancel={handleEditCancel}
-                onSave={handleEditCancel}
-                regis={regis}
-              />
-            )}
+          {!isEditing ? (
+            <RegisDetails
+              onApprove={onClose}
+              onEdit={handleEditOpen}
+              onReject={onClose}
+              regis={register}
+            />
+          ) : (
+            <RegisEdit onCancel={handleEditCancel} onSave={handleEditCancel} regis={register} />
+          )}
         </Box>
       </div>
     );
-  }
 
   if (lgUp) {
     return (
@@ -81,9 +90,9 @@ export const RegisDrawer = (props) => {
         open={open}
         PaperProps={{
           sx: {
-            position: 'relative',
-            width: 500
-          }
+            position: "relative",
+            width: 500,
+          },
         }}
         SlideProps={{ container }}
         variant="persistent"
@@ -100,19 +109,19 @@ export const RegisDrawer = (props) => {
       ModalProps={{
         container,
         sx: {
-          pointerEvents: 'none',
-          position: 'absolute'
-        }
+          pointerEvents: "none",
+          position: "absolute",
+        },
       }}
       onClose={onClose}
       open={open}
       PaperProps={{
         sx: {
-          maxWidth: '100%',
+          maxWidth: "100%",
           width: 400,
-          pointerEvents: 'auto',
-          position: 'absolute'
-        }
+          pointerEvents: "auto",
+          position: "absolute",
+        },
       }}
       SlideProps={{ container }}
       variant="temporary"
@@ -127,5 +136,5 @@ RegisDrawer.propTypes = {
   onClose: PropTypes.func,
   open: PropTypes.bool,
   // @ts-ignore
-  regis: PropTypes.object
+  regis: PropTypes.object,
 };

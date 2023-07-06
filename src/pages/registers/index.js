@@ -66,6 +66,7 @@ const Page = () => {
   const { regiss, regissCount } = useRegiss(search);
   const [drawer, setDrawer] = useState({
     isOpen: false,
+    isEdit: false,
     data: undefined
   });
   const currentRegis = useMemo(() => {
@@ -117,10 +118,20 @@ const Page = () => {
       return;
     }
 
+    else if(regisId){
+      setDrawer({
+        isOpen: true,
+        data: regisId
+      });
+      return;
+    }
     setDrawer({
       isOpen: true,
-      data: regisId
+      isEdit: true,
+      data: undefined
     });
+
+   
   }, [drawer]);
 
   const handleRegisClose = useCallback(() => {
@@ -180,6 +191,7 @@ const Page = () => {
                       </SvgIcon>
                     )}
                     variant="contained"
+                    onClick={handleRegisOpen}
                   >
                     Add
                   </Button>
@@ -208,6 +220,7 @@ const Page = () => {
             container={rootRef.current}
             onClose={handleRegisClose}
             open={drawer.isOpen}
+            edit = {drawer.isEdit}
             regis={currentRegis}
           />
         </Box>

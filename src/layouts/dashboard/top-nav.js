@@ -104,7 +104,7 @@ export const TopNav = (props) => {
                 height: 40,
                 width: 40
               }}
-              src={user ? user.avatar : null}
+              src={user ? user.avatar : ''}
             />
           </Stack>
         </Stack>

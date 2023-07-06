@@ -31,8 +31,8 @@ export const RegisDetails = (props) => {
   const lgUp = useMediaQuery((theme) => theme.breakpoints.up('lg'));
 
   const align = lgUp ? 'horizontal' : 'vertical';
-  const created = parseISO(regis.createdAt);
-  const createdAt = format(created, 'dd/MM/yyyy HH:mm');
+  // const created = parseISO(regis.createdAt);
+  // const createdAt = format(created, 'dd/MM/yyyy HH:mm');
   const totalAmount = numeral(regis.totalAmount).format(`${regis.currency}0,0.00`);
 
   return (
@@ -100,7 +100,7 @@ export const RegisDetails = (props) => {
             disableGutters
             divider
             label="Date"
-            value={createdAt}
+            value={regis.createdAt}
           />
           <PropertyListItem
             align={align}
@@ -136,6 +136,5 @@ RegisDetails.propTypes = {
   onApprove: PropTypes.func,
   onEdit: PropTypes.func,
   onReject: PropTypes.func,
-  // @ts-ignore
   regis: PropTypes.object
 };
