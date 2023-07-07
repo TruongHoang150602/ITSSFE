@@ -15,11 +15,30 @@ import {
 } from '@mui/material';
 import { useMockedUser } from 'src/hooks/use-mocked-user';
 import { getInitials } from 'src/utils/get-initials';
+import { createResourceId } from 'src/utils/create-resource-id';
 
 export const SocialPostAdd = (props) => {
+  const {createPost, ... other} = props;
   const user = useMockedUser();
   const smUp = useMediaQuery((theme) => theme.breakpoints.up('sm'));
 
+  const onClickPost = () => {
+    const postContent = document.getElementById('postContent').value;
+    if(! postContent) return;
+    const post = {
+      id: createResourceId(),
+      author: {
+        id: user.id,
+        avatar: user.avatar,
+        name: `${user.first_name} ${user.last_name}`
+      },
+      createdAt: new Date().getTime(),
+      parentFeedbackId: null,
+      message: postContent
+    }
+    createPost(post);
+    document.getElementById('postContent').value = '';
+  }
   
   return (
     <Card {...props}>
@@ -47,6 +66,7 @@ export const SocialPostAdd = (props) => {
               multiline
               placeholder="What's on your mind"
               rows={3}
+              id='postContent'
             />
             <Stack
               alignItems="center"
@@ -83,7 +103,7 @@ export const SocialPostAdd = (props) => {
                 </Stack>
               )}
               <div>
-                <Button variant="contained">
+                <Button variant="contained" onClick={onClickPost}>
                   Post
                 </Button>
               </div>

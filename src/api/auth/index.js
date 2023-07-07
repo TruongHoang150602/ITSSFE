@@ -17,6 +17,7 @@ class AuthApi {
         try {
           const response = await axios.get(`${this.baseUrl}`);
           data =  response.data;
+          console.log(data)
         } catch (error) {
           console.error('Error while fetching users:', error);
           window.location.href = '/500';

@@ -22,11 +22,13 @@ import { SocialCommentAdd } from './social-comment-add';
 
 export const SocialPostCard = (props) => {
   const {
+    postId,
     authorAvatar,
     authorName,
     comments,
     createdAt,
     message,
+    createPost,
     ...other
   } = props;
 
@@ -111,7 +113,7 @@ export const SocialPostCard = (props) => {
           ))}
         </Stack>
         <Divider sx={{ my: 3 }} />
-        <SocialCommentAdd />
+        <SocialCommentAdd parentId={postId} createPost={createPost} />
       </Box>
     </Card>
   );

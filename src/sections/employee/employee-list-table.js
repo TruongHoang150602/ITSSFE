@@ -1,8 +1,8 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
-import NextLink from 'next/link';
-import PropTypes from 'prop-types';
-import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
-import Edit02Icon from '@untitled-ui/icons-react/build/esm/Edit02';
+import { useCallback, useEffect, useMemo, useState } from "react";
+import NextLink from "next/link";
+import PropTypes from "prop-types";
+import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
+import Edit02Icon from "@untitled-ui/icons-react/build/esm/Edit02";
 import {
   Avatar,
   Box,
@@ -23,11 +23,11 @@ import {
   TableHead,
   TablePagination,
   TableRow,
-  Typography
-} from '@mui/material';
-import { Scrollbar } from 'src/components/scrollbar';
-import { paths } from 'src/paths';
-import { getInitials } from 'src/utils/get-initials';
+  Typography,
+} from "@mui/material";
+import { Scrollbar } from "src/components/scrollbar";
+import { paths } from "src/paths";
+import { getInitials } from "src/utils/get-initials";
 
 const useSelectionModel = (employees) => {
   const employeeIds = useMemo(() => {
@@ -62,7 +62,7 @@ const useSelectionModel = (employees) => {
     deselectOne,
     selectAll,
     selectOne,
-    selected
+    selected,
   };
 };
 
@@ -79,15 +79,18 @@ export const EmployeeListTable = (props) => {
   } = props;
   const { deselectAll, selectAll, deselectOne, selectOne, selected } = useSelectionModel(employees);
 
-  const handleToggleAll = useCallback((event) => {
-    const { checked } = event.target;
+  const handleToggleAll = useCallback(
+    (event) => {
+      const { checked } = event.target;
 
-    if (checked) {
-      selectAll();
-    } else {
-      deselectAll();
-    }
-  }, [selectAll, deselectAll]);
+      if (checked) {
+        selectAll();
+      } else {
+        deselectAll();
+      }
+    },
+    [selectAll, deselectAll]
+  );
 
   const selectedAll = selected.length === employees.length;
   const selectedSome = selected.length > 0 && selected.length < employees.length;
@@ -108,44 +111,30 @@ export const EmployeeListTable = (props) => {
   };
 
   return (
-    <Box
-      sx={{ position: 'relative' }}
-      {...other}>
+    <Box sx={{ position: "relative" }} {...other}>
       {enableBulkActions && (
         <Stack
           direction="row"
           spacing={2}
           sx={{
-            alignItems: 'center',
-            backgroundColor: (theme) => theme.palette.mode === 'dark'
-              ? 'neutral.800'
-              : 'neutral.50',
-            display: enableBulkActions ? 'flex' : 'none',
-            position: 'absolute',
+            alignItems: "center",
+            backgroundColor: (theme) =>
+              theme.palette.mode === "dark" ? "neutral.800" : "neutral.50",
+            display: enableBulkActions ? "flex" : "none",
+            position: "absolute",
             top: 0,
             left: 0,
-            width: '100%',
+            width: "100%",
             px: 2,
             py: 0.5,
-            zIndex: 10
+            zIndex: 10,
           }}
         >
-          <Checkbox
-            checked={selectedAll}
-            indeterminate={selectedSome}
-            onChange={handleToggleAll}
-          />
-          <Button
-            onClick={handleClickOpen}
-            color="inherit"
-            size="small"
-          >
+          <Checkbox checked={selectedAll} indeterminate={selectedSome} onChange={handleToggleAll} />
+          <Button onClick={handleClickOpen} color="inherit" size="small">
             Delete
           </Button>
-          <Button
-            color="inherit"
-            size="small"
-          >
+          <Button color="inherit" size="small">
             Edit
           </Button>
         </Stack>
@@ -161,32 +150,18 @@ export const EmployeeListTable = (props) => {
                   onChange={handleToggleAll}
                 />
               </TableCell>
-              <TableCell>
-                Name
-              </TableCell>
-              <TableCell>
-                Role
-              </TableCell>
-              <TableCell>
-                gender
-              </TableCell>
-              <TableCell>
-                Phone
-              </TableCell>
-              <TableCell align='right'>
-                Action
-              </TableCell>
+              <TableCell>Name</TableCell>
+              <TableCell>Role</TableCell>
+              <TableCell>gender</TableCell>
+              <TableCell>Phone</TableCell>
+              <TableCell align="right">Action</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {employees.map((employee) => {
               const isSelected = selected.includes(employee.id);
               return (
-                <TableRow
-                  hover
-                  key={employee.id}
-                  selected={isSelected}
-                >
+                <TableRow hover key={employee.id} selected={isSelected}>
                   <TableCell padding="checkbox">
                     <Checkbox
                       checked={isSelected}
@@ -203,20 +178,14 @@ export const EmployeeListTable = (props) => {
                     />
                   </TableCell>
                   <TableCell>
-                    <Stack
-                      alignItems="center"
-                      direction="row"
-                      spacing={1}
-                    >
+                    <Stack alignItems="center" direction="row" spacing={1}>
                       <Avatar
                         src={employee.avatar}
                         sx={{
                           height: 42,
-                          width: 42
+                          width: 42,
                         }}
-                      >
-                        {getInitials(employee.name)}
-                      </Avatar>
+                      ></Avatar>
                       <div>
                         <Link
                           color="inherit"
@@ -224,31 +193,19 @@ export const EmployeeListTable = (props) => {
                           href={paths.employees.details(employee.id)}
                           variant="subtitle2"
                         >
-                          {employee.name}
+                          {employee.first_name} {' '} {employee.last_name}
                         </Link>
-                        <Typography
-                          color="text.secondary"
-                          variant="body2"
-                        >
+                        <Typography color="text.secondary" variant="body2">
                           {employee.email}
                         </Typography>
                       </div>
                     </Stack>
                   </TableCell>
-                  <TableCell>
-                    {employee.role}
-                  </TableCell>
-                  <TableCell>
-                    {employee.gender}
-                  </TableCell>
-                  <TableCell>
-                    {employee.phone}
-                  </TableCell>
+                  <TableCell>{employee.role}</TableCell>
+                  <TableCell>{employee.gender}</TableCell>
+                  <TableCell>{employee.phone}</TableCell>
                   <TableCell align="right">
-                    <IconButton
-                      component={NextLink}
-                      href={paths.employees.edit(employee.id)}
-                    >
+                    <IconButton component={NextLink} href={paths.employees.edit(employee.id)}>
                       <SvgIcon>
                         <Edit02Icon />
                       </SvgIcon>
@@ -269,24 +226,20 @@ export const EmployeeListTable = (props) => {
         rowsPerPage={rowsPerPage}
         rowsPerPageOptions={[5, 10, 25]}
       />
-       <Dialog
-        open={open}
-        onClose={handleClose}
-        aria-labelledby="draggable-dialog-title"
-      >
-        <DialogTitle style={{ cursor: 'move', color: 'red' }} id="draggable-dialog-title">
+      <Dialog open={open} onClose={handleClose} aria-labelledby="draggable-dialog-title">
+        <DialogTitle style={{ cursor: "move", color: "red" }} id="draggable-dialog-title">
           Delete
         </DialogTitle>
         <DialogContent>
-          <DialogContentText>
-            Are you sure you want to delete this employee?
-          </DialogContentText>
+          <DialogContentText>Are you sure you want to delete this employee?</DialogContentText>
         </DialogContent>
         <DialogActions>
           <Button autoFocus onClick={handleClose}>
             Cancel
           </Button>
-          <Button onClick={handleConfirmDelete} color="error">Delete</Button>
+          <Button onClick={handleConfirmDelete} color="error">
+            Delete
+          </Button>
         </DialogActions>
       </Dialog>
     </Box>
@@ -299,5 +252,5 @@ EmployeeListTable.propTypes = {
   onPageChange: PropTypes.func.isRequired,
   onRowsPerPageChange: PropTypes.func,
   page: PropTypes.number.isRequired,
-  rowsPerPage: PropTypes.number.isRequired
+  rowsPerPage: PropTypes.number.isRequired,
 };

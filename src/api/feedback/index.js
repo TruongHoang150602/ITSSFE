@@ -1,5 +1,7 @@
 import axios from 'axios';
 import { deepCopy } from 'src/utils/deep-copy';
+import { applySort } from 'src/utils/apply-sort';
+import { wait } from 'src/utils/wait';
 
 class FeedbacksApi {
 
@@ -19,16 +21,19 @@ class FeedbacksApi {
       return [];
     }
     data = deepCopy(data);
-
-    const feedbacks = data.map(feedback => {
-      const comments = data.filter(item => item.parentFeedbackId === feedback.id);
+    data = applySort(data, 'createdAt', 'desc');
+    let feedbacks = data.map(feedback => {
+      let comments = data.filter(item => item.parentFeedbackId === feedback.id);
+      comments = applySort(comments, 'createdAt', 'asc');
       return {
         ...feedback,
         comments
       };
     });
-    
 
+    feedbacks = feedbacks.filter(item => item.parentFeedbackId === null);
+    
+    
     return feedbacks;
   }
 

@@ -26,7 +26,7 @@ class UsersApi {
       data = data.filter((user) => {
         if (typeof filters.query !== 'undefined' && filters.query !== '') {
           let queryMatched = false;
-          const properties = ['email', 'name'];
+          const properties = ['email', 'first_name', 'last_name'];
 
           properties.forEach((property) => {
             if ((user[property]).toLowerCase().includes(filters.query.toLowerCase())) {

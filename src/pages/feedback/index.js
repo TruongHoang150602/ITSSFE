@@ -31,11 +31,11 @@ const usePosts = () => {
     } catch (err) {
       console.error(err);
     }
-  }, [isMounted, posts]);
+  }, [isMounted]);
 
   useEffect(() => {
     getPosts();
-  }, [posts, isMounted]);
+  }, [isMounted]);
 
   return { posts, createPost };
 };
@@ -76,9 +76,10 @@ const SocialFeed = () => {
             spacing={3}
             sx={{ mt: 3 }}
           >
-            <SocialPostAdd />
+            <SocialPostAdd createPost={createPost} />
             {posts.map((post) => (
               <SocialPostCard
+                postId={post.id}
                 key={post.id}
                 authorAvatar={post.author.avatar}
                 authorName={post.author.name}
@@ -86,6 +87,7 @@ const SocialFeed = () => {
                 createdAt={post.createdAt}
                 media={post.media}
                 message={post.message}
+                createPost={createPost}
               />
             ))}
           </Stack>

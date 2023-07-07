@@ -14,10 +14,31 @@ import {
 } from '@mui/material';
 import { useMockedUser } from 'src/hooks/use-mocked-user';
 import { getInitials } from 'src/utils/get-initials';
+import { createResourceId } from 'src/utils/create-resource-id';
 
 export const SocialCommentAdd = (props) => {
+  const { parentId, createPost, ... other} = props;
   const smUp = useMediaQuery((theme) => theme.breakpoints.up('sm'));
   const user = useMockedUser();
+
+  const onClickSend = () => {
+    const postContent = document.getElementById('sendContent').value;
+    if(! postContent) return;
+    const post = {
+      id: createResourceId(),
+      author: {
+        id: user.id,
+        avatar: user.avatar,
+        name: `${user.first_name} ${user.last_name}`
+      },
+      createdAt: new Date().getTime(),
+      parentFeedbackId: parentId,
+      message: postContent
+    }
+    console.log("sent");
+    createPost(post);
+    document.getElementById('sendContent').value = '';
+  }
 
   return (
     <div {...props}>
@@ -45,6 +66,7 @@ export const SocialCommentAdd = (props) => {
             placeholder="Type your reply"
             rows={3}
             variant="outlined"
+            id='sendContent'
           />
           <Stack
             alignItems="center"
@@ -90,7 +112,7 @@ export const SocialCommentAdd = (props) => {
               )}
             </Stack>
             <div>
-              <Button variant="contained">
+              <Button variant="contained" onClick={onClickSend}>
                 Send
               </Button>
             </div>

@@ -121,6 +121,45 @@ export const items = {
     },
   ],
 
+  coach:  [
+    {
+      title: 'Overview',
+      path: '/dashboard/employee',
+      icon: (
+        <SvgIcon fontSize="small">
+          <ChartBarIcon />
+        </SvgIcon>
+      )
+    },
+    {
+      title: 'Registers',
+      path: '/registers',
+      icon: (
+        <SvgIcon fontSize="small">
+          <ReceiptLongIcon />
+        </SvgIcon>
+      )
+    },
+    {
+      title: 'Feedback',
+      path: '/feedback',
+      icon: (
+        <SvgIcon fontSize="small">
+          <FeedIcon />
+        </SvgIcon>
+      )
+    },
+    {
+      title: 'Packages',
+      path: '/packages',
+      icon: (
+        <SvgIcon fontSize="small">
+          <CardTravelIcon />
+        </SvgIcon>
+      )
+    },
+  ],
+
     user:  [
       {
         title: 'Overview',
