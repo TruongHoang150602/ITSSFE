@@ -1,21 +1,14 @@
-import NextLink from 'next/link';
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
-import ArrowLeftIcon from '@untitled-ui/icons-react/build/esm/ArrowLeft';
 import {
-  Box,
   Button,
   Card,
   CardContent,
   CardHeader,
-  Link,
   Stack,
-  SvgIcon,
   TextField,
-  Typography
 } from '@mui/material';
 import { Layout as AuthLayout } from 'src/layouts/auth/layout';
-import { paths } from 'src/paths';
 
 const initialValues = {
   password: '',

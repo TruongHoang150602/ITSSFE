@@ -1,11 +1,6 @@
-import { useCallback, useState } from "react";
-import Head from "next/head";
-import NextLink from "next/link";
 import * as Yup from "yup";
 import { useFormik } from "formik";
 import { useRouter } from "next/navigation";
-import { wait } from "src/utils/wait";
-import ArrowLeftIcon from "@untitled-ui/icons-react/build/esm/ArrowLeft";
 import {
   Box,
   Button,
@@ -24,7 +19,7 @@ import { paths } from "src/paths";
 
 const initialValues = {
   email: "admin@gmail.com",
-  password: "123456",
+  password: "admin123",
   submit: null,
 };
 

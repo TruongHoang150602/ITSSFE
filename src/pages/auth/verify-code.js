@@ -1,10 +1,7 @@
-import NextLink from 'next/link';
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
-import ArrowLeftIcon from '@untitled-ui/icons-react/build/esm/ArrowLeft';
 import { MuiOtpInput } from 'mui-one-time-password-input';
 import {
-  Box,
   Button,
   Card,
   CardContent,
@@ -12,12 +9,8 @@ import {
   FormControl,
   FormHelperText,
   FormLabel,
-  Link,
-  SvgIcon,
-  Typography
 } from '@mui/material';
 import { Layout as AuthLayout } from 'src/layouts/auth/layout';
-import { paths } from 'src/paths';
 
 const initialValues = {
   code: ''

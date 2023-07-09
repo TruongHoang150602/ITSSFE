@@ -1,7 +1,6 @@
 import NextLink from 'next/link';
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
-import ArrowLeftIcon from '@untitled-ui/icons-react/build/esm/ArrowLeft';
 import {
   Box,
   Button,
