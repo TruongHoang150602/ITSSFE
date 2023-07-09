@@ -1,3 +1,4 @@
+import React from 'react';
 import axios from 'axios';
 import { createResourceId } from 'src/utils/create-resource-id';
 import { wait } from 'src/utils/wait';
@@ -9,14 +10,14 @@ class AuthApi {
   }
   async signIn(request) {
     const { email, password } = request;
-    
+
     return new Promise(async (resolve, reject) => {
       try {
-        
+
         let data = null;
         try {
           const response = await axios.get(`${this.baseUrl}`);
-          data =  response.data;
+          data = response.data;
           console.log(data)
         } catch (error) {
           console.error('Error while fetching users:', error);
@@ -34,7 +35,7 @@ class AuthApi {
         console.error('[Auth Api]: ', err);
         reject(new Error('Internal server error'));
       }
-      
+
     });
   }
 
@@ -46,7 +47,7 @@ class AuthApi {
         let data = null;
         try {
           const response = await axios.get(`${this.baseUrl}`);
-          data =  response.data;
+          data = response.data;
         } catch (error) {
           console.error('Error while fetching users:', error);
           window.location.href = '/500';
@@ -66,7 +67,7 @@ class AuthApi {
           name,
           password,
           role: "user",
-          
+
         };
 
         try {
@@ -77,7 +78,7 @@ class AuthApi {
           return null;
         }
 
-        
+
       } catch (err) {
         console.error('[Auth Api]: ', err);
         reject(new Error('Internal server error'));
