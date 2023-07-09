@@ -258,4 +258,5 @@ RegisEdit.propTypes = {
   onCancel: PropTypes.func,
   onSave: PropTypes.func,
   regis: PropTypes.object,
+  regis: PropTypes.object,
 };

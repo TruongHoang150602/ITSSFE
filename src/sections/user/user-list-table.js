@@ -1,8 +1,8 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
-import NextLink from 'next/link';
-import PropTypes from 'prop-types';
-import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
-import Edit02Icon from '@untitled-ui/icons-react/build/esm/Edit02';
+import { useCallback, useEffect, useMemo, useState } from "react";
+import NextLink from "next/link";
+import PropTypes from "prop-types";
+import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
+import Edit02Icon from "@untitled-ui/icons-react/build/esm/Edit02";
 import {
   Avatar,
   Box,
@@ -23,12 +23,12 @@ import {
   TableHead,
   TablePagination,
   TableRow,
-  Typography
-} from '@mui/material';
-import { Scrollbar } from 'src/components/scrollbar';
-import { paths } from 'src/paths';
-import { getInitials } from 'src/utils/get-initials';
-import usersApi from 'src/api/users';
+  Typography,
+} from "@mui/material";
+import { Scrollbar } from "src/components/scrollbar";
+import { paths } from "src/paths";
+import { getInitials } from "src/utils/get-initials";
+import usersApi from "src/api/users";
 
 const useSelectionModel = (users) => {
   const userIds = useMemo(() => {
@@ -63,7 +63,7 @@ const useSelectionModel = (users) => {
     deselectOne,
     selectAll,
     selectOne,
-    selected
+    selected,
   };
 };
 
@@ -80,15 +80,18 @@ export const UserListTable = (props) => {
   } = props;
   const { deselectAll, selectAll, deselectOne, selectOne, selected } = useSelectionModel(users);
 
-  const handleToggleAll = useCallback((event) => {
-    const { checked } = event.target;
+  const handleToggleAll = useCallback(
+    (event) => {
+      const { checked } = event.target;
 
-    if (checked) {
-      selectAll();
-    } else {
-      deselectAll();
-    }
-  }, [selectAll, deselectAll]);
+      if (checked) {
+        selectAll();
+      } else {
+        deselectAll();
+      }
+    },
+    [selectAll, deselectAll]
+  );
 
   const selectedAll = selected.length === users.length;
   const selectedSome = selected.length > 0 && selected.length < users.length;
@@ -109,44 +112,30 @@ export const UserListTable = (props) => {
   };
 
   return (
-    <Box
-      sx={{ position: 'relative' }}
-      {...other}>
+    <Box sx={{ position: "relative" }} {...other}>
       {enableBulkActions && (
         <Stack
           direction="row"
           spacing={2}
           sx={{
-            alignItems: 'center',
-            backgroundColor: (theme) => theme.palette.mode === 'dark'
-              ? 'neutral.800'
-              : 'neutral.50',
-            display: enableBulkActions ? 'flex' : 'none',
-            position: 'absolute',
+            alignItems: "center",
+            backgroundColor: (theme) =>
+              theme.palette.mode === "dark" ? "neutral.800" : "neutral.50",
+            display: enableBulkActions ? "flex" : "none",
+            position: "absolute",
             top: 0,
             left: 0,
-            width: '100%',
+            width: "100%",
             px: 2,
             py: 0.5,
-            zIndex: 10
+            zIndex: 10,
           }}
         >
-          <Checkbox
-            checked={selectedAll}
-            indeterminate={selectedSome}
-            onChange={handleToggleAll}
-          />
-          <Button
-            onClick={handleClickOpen}
-            color="inherit"
-            size="small"
-          >
+          <Checkbox checked={selectedAll} indeterminate={selectedSome} onChange={handleToggleAll} />
+          <Button onClick={handleClickOpen} color="inherit" size="small">
             Delete
           </Button>
-          <Button
-            color="inherit"
-            size="small"
-          >
+          <Button color="inherit" size="small">
             Edit
           </Button>
         </Stack>
@@ -162,29 +151,17 @@ export const UserListTable = (props) => {
                   onChange={handleToggleAll}
                 />
               </TableCell>
-              <TableCell>
-                Name
-              </TableCell>
-              <TableCell>
-                Address
-              </TableCell>
-              <TableCell>
-                Phone
-              </TableCell>
-              <TableCell align='right'>
-                Action
-              </TableCell>
+              <TableCell>Name</TableCell>
+              <TableCell>Address</TableCell>
+              <TableCell>Phone</TableCell>
+              <TableCell align="right">Action</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {users.map((user) => {
               const isSelected = selected.includes(user.id);
               return (
-                <TableRow
-                  hover
-                  key={user.id}
-                  selected={isSelected}
-                >
+                <TableRow hover key={user.id} selected={isSelected}>
                   <TableCell padding="checkbox">
                     <Checkbox
                       checked={isSelected}
@@ -201,16 +178,12 @@ export const UserListTable = (props) => {
                     />
                   </TableCell>
                   <TableCell>
-                    <Stack
-                      alignItems="center"
-                      direction="row"
-                      spacing={1}
-                    >
+                    <Stack alignItems="center" direction="row" spacing={1}>
                       <Avatar
                         src={user.avatar}
                         sx={{
                           height: 42,
-                          width: 42
+                          width: 42,
                         }}
                       >
                         {getInitials(user.first_name + " " +  user.last_name)}
@@ -224,26 +197,16 @@ export const UserListTable = (props) => {
                         >
                           {user.first_name} {user.last_name}
                         </Link>
-                        <Typography
-                          color="text.secondary"
-                          variant="body2"
-                        >
+                        <Typography color="text.secondary" variant="body2">
                           {user.email}
                         </Typography>
                       </div>
                     </Stack>
                   </TableCell>
-                  <TableCell>
-                    {user.gender}
-                  </TableCell>
-                  <TableCell>
-                    {user.phone}
-                  </TableCell>
+                  <TableCell>{user.gender}</TableCell>
+                  <TableCell>{user.phone}</TableCell>
                   <TableCell align="right">
-                    <IconButton
-                      component={NextLink}
-                      href={paths.users.edit(user.id)}
-                    >
+                    <IconButton component={NextLink} href={paths.users.edit(user.id)}>
                       <SvgIcon>
                         <Edit02Icon />
                       </SvgIcon>
@@ -264,24 +227,20 @@ export const UserListTable = (props) => {
         rowsPerPage={rowsPerPage}
         rowsPerPageOptions={[5, 10, 25]}
       />
-       <Dialog
-        open={open}
-        onClose={handleClose}
-        aria-labelledby="draggable-dialog-title"
-      >
-        <DialogTitle style={{ cursor: 'move', color: 'red' }} id="draggable-dialog-title">
+      <Dialog open={open} onClose={handleClose} aria-labelledby="draggable-dialog-title">
+        <DialogTitle style={{ cursor: "move", color: "red" }} id="draggable-dialog-title">
           Delete
         </DialogTitle>
         <DialogContent>
-          <DialogContentText>
-            Are you sure you want to delete this user?
-          </DialogContentText>
+          <DialogContentText>Are you sure you want to delete this user?</DialogContentText>
         </DialogContent>
         <DialogActions>
           <Button autoFocus onClick={handleClose}>
             Cancel
           </Button>
-          <Button onClick={handleConfirmDelete} color="error">Delete</Button>
+          <Button onClick={handleConfirmDelete} color="error">
+            Delete
+          </Button>
         </DialogActions>
       </Dialog>
     </Box>
@@ -294,5 +253,5 @@ UserListTable.propTypes = {
   onPageChange: PropTypes.func.isRequired,
   onRowsPerPageChange: PropTypes.func,
   page: PropTypes.number.isRequired,
-  rowsPerPage: PropTypes.number.isRequired
+  rowsPerPage: PropTypes.number.isRequired,
 };

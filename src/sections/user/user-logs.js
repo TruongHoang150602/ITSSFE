@@ -67,6 +67,9 @@ export const UserLogs = (props) => {
               <TableCell>Coach</TableCell>
               <TableCell>Status</TableCell>
               <TableCell>Date</TableCell>
+              <TableCell>Coach</TableCell>
+              <TableCell>Status</TableCell>
+              <TableCell>Date</TableCell>
             </TableRow>
           </TableHead>
           {process && (
@@ -127,5 +130,6 @@ export const UserLogs = (props) => {
 };
 
 UserLogs.propTypes = {
+  logs: PropTypes.array,
   logs: PropTypes.array,
 };

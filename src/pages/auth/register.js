@@ -2,6 +2,7 @@ import * as Yup from "yup";
 import { useFormik } from "formik";
 import {
   Box,
+  IconButton,
   Button,
   Card,
   CardContent,
@@ -25,18 +26,20 @@ const initialValues = {
   policy: false,
 };
 
+// Validate credentials
 const validationSchema = Yup.object({
   email: Yup.string().email("Must be a valid email").max(255).required("Email is required"),
   password: Yup.string().min(7).max(255).required("Password is required"),
   confirmPass: Yup.string()
-  .oneOf([Yup.ref("password"), null], "Passwords must match")
-  .required("Confirm password is required"),
+    .oneOf([Yup.ref("password"), null], "Passwords must match")
+    .required("Confirm password is required"),
   policy: Yup.boolean().oneOf([true], "This field must be checked"),
 });
 
 const Page = () => {
   const router = useRouter();
   const auth = useAuth();
+  // Routing
   const formik = useFormik({
     initialValues,
     validationSchema,
@@ -55,11 +58,13 @@ const Page = () => {
 
   return (
     <Card elevation={16}>
+      {/*Form's header*/}
       <CardHeader
         subheader={
           <Typography color="text.secondary" variant="body2">
-            Already have an account? &nbsp;
+            Already have an account?
             <Link href="/auth/login" underline="hover" variant="subtitle2">
+              {" "}
               Log in
             </Link>
           </Typography>
@@ -67,6 +72,8 @@ const Page = () => {
         sx={{ pb: 0 }}
         title="Register"
       />
+
+      {/*Form's content*/}
       <CardContent>
         <form noValidate onSubmit={formik.handleSubmit}>
           <Stack spacing={3}>
@@ -92,7 +99,7 @@ const Page = () => {
               type="password"
               value={formik.values.password}
             />
-             <TextField
+            <TextField
               error={!!(formik.touched.confirmPass && formik.errors.confirmPass)}
               fullWidth
               helperText={formik.touched.confirmPass && formik.errors.confirmPass}

@@ -1,10 +1,10 @@
-import NextLink from 'next/link';
-import * as Yup from 'yup';
-import { useFormik } from 'formik';
-import ArrowLeftIcon from '@untitled-ui/icons-react/build/esm/ArrowLeft';
-import { MuiOtpInput } from 'mui-one-time-password-input';
+// import NextLink from 'next/link';
+import * as Yup from "yup";
+import { useFormik } from "formik";
+// import ArrowLeftIcon from '@untitled-ui/icons-react/build/esm/ArrowLeft';
+import { MuiOtpInput } from "mui-one-time-password-input";
 import {
-  Box,
+  // Box,
   Button,
   Card,
   CardContent,
@@ -12,89 +12,67 @@ import {
   FormControl,
   FormHelperText,
   FormLabel,
-  Link,
-  SvgIcon,
-  Typography
-} from '@mui/material';
-import { Layout as AuthLayout } from 'src/layouts/auth/layout';
-import { paths } from 'src/paths';
+  // Link,
+  // SvgIcon,
+  // Typography
+} from "@mui/material";
+import { Layout as AuthLayout } from "src/layouts/auth/layout";
+// import { paths } from 'src/paths';
 
 const initialValues = {
-  code: ''
+  code: "",
 };
 
 const validationSchema = Yup.object({
-  code: Yup
-    .string()
-    .min(6)
-    .max(6)
-    .required('Code is required')
+  code: Yup.string().min(6).max(6).required("Code is required"),
 });
 
 const Page = () => {
   const formik = useFormik({
     initialValues,
     validationSchema,
-    onSubmit: () => { }
+    onSubmit: () => {},
   });
 
   return (
-      <Card elevation={16}>
-        <CardHeader
-          sx={{ pb: 0 }}
-          title="Verify code"
-        />
-        <CardContent>
-          <form
-            noValidate
-            onSubmit={formik.handleSubmit}
-          >
-            <FormControl error={!!(formik.touched.code && formik.errors.code)}>
-              <FormLabel
-                sx={{
-                  display: 'block',
-                  mb: 2
-                }}
-              >
-                Code
-              </FormLabel>
-              <MuiOtpInput
-                length={6}
-                onBlur={() => formik.handleBlur('code')}
-                onChange={(value) => formik.setFieldValue('code', value)}
-                onFocus={() => formik.setFieldTouched('code')}
-                sx={{
-                  '& .MuiFilledInput-input': {
-                    p: '14px'
-                  }
-                }}
-                value={formik.values.code}
-              />
-              {!!(formik.touched.code && formik.errors.code) && (
-                <FormHelperText>
-                  {formik.errors.code}
-                </FormHelperText>
-              )}
-            </FormControl>
-            <Button
-              fullWidth
-              size="large"
-              sx={{ mt: 2 }}
-              type="submit"
-              variant="contained"
+    <Card elevation={16}>
+      <CardHeader sx={{ pb: 0 }} title="Verify code" />
+      <CardContent>
+        <form noValidate onSubmit={formik.handleSubmit}>
+          <FormControl error={!!(formik.touched.code && formik.errors.code)}>
+            <FormLabel
+              sx={{
+                display: "block",
+                mb: 2,
+              }}
             >
-              Verify
-            </Button>
-          </form>
-        </CardContent>
-      </Card>
+              Code
+            </FormLabel>
+            <MuiOtpInput
+              length={6}
+              onBlur={() => formik.handleBlur("code")}
+              onChange={(value) => formik.setFieldValue("code", value)}
+              onFocus={() => formik.setFieldTouched("code")}
+              sx={{
+                "& .MuiFilledInput-input": {
+                  p: "14px",
+                },
+              }}
+              value={formik.values.code}
+            />
+            {!!(formik.touched.code && formik.errors.code) && (
+              <FormHelperText>{formik.errors.code}</FormHelperText>
+            )}
+          </FormControl>
+          <Button fullWidth size="large" sx={{ mt: 2 }} type="submit" variant="contained">
+            Verify
+          </Button>
+        </form>
+      </CardContent>
+    </Card>
   );
 };
 
-Page.getLayout = (page) => (
-  <AuthLayout>
-    {page}
-  </AuthLayout>
-);
+Page.getLayout = (page) => <AuthLayout>{page}</AuthLayout>;
 
 export default Page;

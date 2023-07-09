@@ -1,30 +1,28 @@
-import PropTypes from 'prop-types';
-import { Card, CardContent, CardHeader } from '@mui/material';
-import { useTheme } from '@mui/material/styles';
-import { Chart } from 'src/components/chart';
+import PropTypes from "prop-types";
+import { Card, CardContent, CardHeader } from "@mui/material";
+import { useTheme } from "@mui/material/styles";
+import { Chart } from "src/components/chart";
 
 const useChartOptions = () => {
   const theme = useTheme();
 
   return {
     chart: {
-      background: 'transparent',
+      background: "transparent",
       stacked: true,
       toolbar: {
-        show: false
-      }
+        show: false,
+      },
     },
     colors: [
       theme.palette.primary.main,
-      theme.palette.mode === 'dark'
-        ? theme.palette.primary.darkest
-        : theme.palette.primary.light
+      theme.palette.mode === "dark" ? theme.palette.primary.darkest : theme.palette.primary.light,
     ],
     dataLabels: {
-      enabled: false
+      enabled: false,
     },
     legend: {
-      show: false
+      show: false,
     },
     grid: {
       borderColor: theme.palette.divider,
@@ -32,53 +30,45 @@ const useChartOptions = () => {
         bottom: 0,
         left: 0,
         right: 0,
-        top: 0
+        top: 0,
       },
-      strokeDashArray: 2
+      strokeDashArray: 2,
     },
     plotOptions: {
       bar: {
         borderRadius: 8,
-        columnWidth: '32px',
-        horizontal: true
-      }
+        columnWidth: "32px",
+        horizontal: true,
+      },
     },
     theme: {
-      mode: theme.palette.mode
+      mode: theme.palette.mode,
     },
     xaxis: {
       axisBorder: {
-        show: false
+        show: false,
       },
       axisTicks: {
-        show: false
+        show: false,
       },
-      categories: [
-        'Jun',
-        'Jul',
-        'Aug',
-        'Sep',
-        'Oct',
-        'Nov',
-        'Dec'
-      ],
+      categories: ["Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
       labels: {
         style: {
-          colors: theme.palette.text.secondary
-        }
-      }
+          colors: theme.palette.text.secondary,
+        },
+      },
     },
     yaxis: {
       axisBorder: {
-        show: false
+        show: false,
       },
       axisTicks: {
-        show: false
+        show: false,
       },
       labels: {
-        show: false
-      }
-    }
+        show: false,
+      },
+    },
   };
 };
 
@@ -88,22 +78,14 @@ export const AnalyticsTrafficSources = (props) => {
 
   return (
     <Card>
-      <CardHeader
-        sx={{ pb: 0 }}
-        title="Traffic Sources"
-      />
+      <CardHeader sx={{ pb: 0 }} title="Traffic Sources" />
       <CardContent sx={{ pt: 0 }}>
-        <Chart
-          height={400}
-          options={chartOptions}
-          series={chartSeries}
-          type="bar"
-        />
+        <Chart height={400} options={chartOptions} series={chartSeries} type="bar" />
       </CardContent>
     </Card>
   );
 };
 
 AnalyticsTrafficSources.propTypes = {
-  chartSeries: PropTypes.any.isRequired
+  chartSeries: PropTypes.any.isRequired,
 };

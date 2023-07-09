@@ -1,7 +1,7 @@
-import PropTypes from 'prop-types';
-import { Card, CardHeader, useMediaQuery } from '@mui/material';
-import { PropertyList } from 'src/components/property-list';
-import { PropertyListItem } from 'src/components/property-list-item';
+import PropTypes from "prop-types";
+import { Card, CardHeader, useMediaQuery } from "@mui/material";
+import { PropertyList } from "src/components/property-list";
+import { PropertyListItem } from "src/components/property-list-item";
 
 export const UserBasicDetails = (props) => {
   const { birthday, email, phone, gender, ...other } = props;
@@ -44,5 +44,5 @@ UserBasicDetails.propTypes = {
   gender: PropTypes.string,
   birthday: PropTypes.string,
   email: PropTypes.string.isRequired,
-  phone: PropTypes.string
+  phone: PropTypes.string,
 };
