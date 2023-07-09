@@ -1,12 +1,12 @@
-import NextLink from 'next/link';
-import Head from 'next/head';
-import { useRouter } from 'next/router';
-import { Box, Breadcrumbs, Container, Link, Stack, Typography } from '@mui/material';
-import { BreadcrumbsSeparator } from 'src/components/breadcrumbs-separator';
-import { usePageView } from 'src/hooks/use-page-view';
-import { Layout as DashboardLayout } from 'src/layouts/dashboard/layout';
-import { paths } from 'src/paths';
-import { EquipmentCreateForm } from 'src/sections/equipment/equip-create-form';
+import NextLink from "next/link";
+import Head from "next/head";
+import { useRouter } from "next/router";
+import { Box, Breadcrumbs, Container, Link, Stack, Typography } from "@mui/material";
+import { BreadcrumbsSeparator } from "src/components/breadcrumbs-separator";
+import { usePageView } from "src/hooks/use-page-view";
+import { Layout as DashboardLayout } from "src/layouts/dashboard/layout";
+import { paths } from "src/paths";
+import { EquipmentCreateForm } from "src/sections/equipment/equip-create-form";
 
 const EquipmentCreate = () => {
   usePageView();
@@ -14,23 +14,19 @@ const EquipmentCreate = () => {
   return (
     <>
       <Head>
-        <title>
-          Dashboard: Equipment Create | Devias Kit PRO
-        </title>
+        <title>Dashboard: Equipment Create | Devias Kit PRO</title>
       </Head>
       <Box
         component="main"
         sx={{
           flexGrow: 1,
-          py: 8
+          py: 8,
         }}
       >
         <Container maxWidth="xl">
           <Stack spacing={3}>
             <Stack spacing={1}>
-              <Typography variant="h4">
-                Create a new equipment
-              </Typography>
+              <Typography variant="h4">Create a new equipment</Typography>
               <Breadcrumbs separator={<BreadcrumbsSeparator />}>
                 <Link
                   color="text.primary"
@@ -48,15 +44,12 @@ const EquipmentCreate = () => {
                 >
                   Equipments
                 </Link>
-                <Typography
-                  color="text.secondary"
-                  variant="subtitle2"
-                >
+                <Typography color="text.secondary" variant="subtitle2">
                   Create
                 </Typography>
               </Breadcrumbs>
             </Stack>
-            <EquipmentCreateForm gymId = {gymId} />
+            <EquipmentCreateForm gymId={gymId} />
           </Stack>
         </Container>
       </Box>
@@ -64,10 +57,6 @@ const EquipmentCreate = () => {
   );
 };
 
-EquipmentCreate.getLayout = (page) => (
-  <DashboardLayout>
-    {page}
-  </DashboardLayout>
-);
+EquipmentCreate.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 
 export default EquipmentCreate;

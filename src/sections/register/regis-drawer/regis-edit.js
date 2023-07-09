@@ -1,24 +1,24 @@
-import PropTypes from 'prop-types';
-import { format } from 'date-fns';
-import { Button, Stack, TextField, Typography } from '@mui/material';
+import PropTypes from "prop-types";
+import { format } from "date-fns";
+import { Button, Stack, TextField, Typography } from "@mui/material";
 
 const statusOptions = [
   {
-    label: 'Canceled',
-    value: 'canceled'
+    label: "Canceled",
+    value: "canceled",
   },
   {
-    label: 'Complete',
-    value: 'complete'
+    label: "Complete",
+    value: "complete",
   },
   {
-    label: 'Pending',
-    value: 'pending'
+    label: "Pending",
+    value: "pending",
   },
   {
-    label: 'Rejected',
-    value: 'rejected'
-  }
+    label: "Rejected",
+    value: "rejected",
+  },
 ];
 
 export const RegisEdit = (props) => {
@@ -29,63 +29,22 @@ export const RegisEdit = (props) => {
   return (
     <Stack spacing={6}>
       <Stack spacing={3}>
-        <Typography variant="h6">
-          Details
-        </Typography>
+        <Typography variant="h6">Details</Typography>
         <Stack spacing={3}>
+          <TextField disabled fullWidth label="ID" name="id" value={regis.id} />
+          <TextField disabled fullWidth label="Number" name="number" value={regis.number} />
+          <TextField disabled fullWidth label="Date" name="date" value={regis.createdAt} />
           <TextField
-            disabled
-            fullWidth
-            label="ID"
-            name="id"
-            value={regis.id}
-          />
-          <TextField
-            disabled
-            fullWidth
-            label="Number"
-            name="number"
-            value={regis.number}
-          />
-           <TextField
-            disabled
-            fullWidth
-            label="Date"
-            name="date"
-            value={regis.createdAt}
-          />
-          <TextField
-            
             fullWidth
             label="Customer name"
             name="customer_name"
             value={regis.customer.name}
           />
-         
-          <TextField
-            fullWidth
-            label="Email"
-            name="email"
-            value={regis.customer.email}
-          />
-          <TextField
-            fullWidth
-            label="Country"
-            name="country"
-            value={regis.customer.country}
-          />
-          <TextField
-            fullWidth
-            label="Package"
-            name="package"
-            value={regis.customer.package}
-          />
-          <TextField
-            fullWidth
-            label="Total Amount"
-            name="amount"
-            value={regis.totalAmount}
-          />
+
+          <TextField fullWidth label="Email" name="email" value={regis.customer.email} />
+          <TextField fullWidth label="Country" name="country" value={regis.customer.country} />
+          <TextField fullWidth label="Package" name="package" value={regis.customer.package} />
+          <TextField fullWidth label="Total Amount" name="amount" value={regis.totalAmount} />
           <TextField
             fullWidth
             label="Status"
@@ -95,34 +54,17 @@ export const RegisEdit = (props) => {
             value={regis.status}
           >
             {statusOptions.map((option) => (
-              <option
-                key={option.value}
-                value={option.value}
-              >
+              <option key={option.value} value={option.value}>
                 {option.label}
               </option>
             ))}
           </TextField>
         </Stack>
-        <Stack
-          alignItems="center"
-          direction="row"
-          flexWrap="wrap"
-          spacing={2}
-        >
-          <Button
-            color="primary"
-            onClick={onSave}
-            size="small"
-            variant="contained"
-          >
+        <Stack alignItems="center" direction="row" flexWrap="wrap" spacing={2}>
+          <Button color="primary" onClick={onSave} size="small" variant="contained">
             Save changes
           </Button>
-          <Button
-            color="inherit"
-            onClick={onCancel}
-            size="small"
-          >
+          <Button color="inherit" onClick={onCancel} size="small">
             Cancel
           </Button>
         </Stack>
@@ -134,5 +76,5 @@ export const RegisEdit = (props) => {
 RegisEdit.propTypes = {
   onCancel: PropTypes.func,
   onSave: PropTypes.func,
-  regis: PropTypes.object
+  regis: PropTypes.object,
 };

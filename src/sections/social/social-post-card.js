@@ -1,7 +1,7 @@
-import { useCallback, useState } from 'react';
-import PropTypes from 'prop-types';
-import { formatDistanceToNowStrict } from 'date-fns';
-import ClockIcon from '@untitled-ui/icons-react/build/esm/Clock';
+import { useCallback, useState } from "react";
+import PropTypes from "prop-types";
+import { formatDistanceToNowStrict } from "date-fns";
+import ClockIcon from "@untitled-ui/icons-react/build/esm/Clock";
 import {
   Avatar,
   Box,
@@ -15,82 +15,46 @@ import {
   Stack,
   SvgIcon,
   Tooltip,
-  Typography
-} from '@mui/material';
-import { SocialComment } from './social-comment';
-import { SocialCommentAdd } from './social-comment-add';
+  Typography,
+} from "@mui/material";
+import { SocialComment } from "./social-comment";
+import { SocialCommentAdd } from "./social-comment-add";
 
 export const SocialPostCard = (props) => {
-  const {
-    postId,
-    authorAvatar,
-    authorName,
-    comments,
-    createdAt,
-    message,
-    createPost,
-    ...other
-  } = props;
+  const { postId, authorAvatar, authorName, comments, createdAt, message, createPost, ...other } =
+    props;
 
   return (
     <Card {...other}>
       <CardHeader
-        avatar={(
-          <Avatar
-            component="a"
-            href="#"
-            src={authorAvatar}
-          />
-        )}
+        avatar={<Avatar component="a" href="#" src={authorAvatar} />}
         disableTypography
-        subheader={(
-          <Stack
-            alignItems="center"
-            direction="row"
-            spacing={1}
-          >
+        subheader={
+          <Stack alignItems="center" direction="row" spacing={1}>
             <SvgIcon color="action">
               <ClockIcon />
             </SvgIcon>
-            <Typography
-              color="text.secondary"
-              variant="caption"
-            >
-              {formatDistanceToNowStrict(createdAt)}
-              {' '}
-              ago
+            <Typography color="text.secondary" variant="caption">
+              {formatDistanceToNowStrict(createdAt)} ago
             </Typography>
           </Stack>
-        )}
-        title={(
-          <Stack
-            alignItems="center"
-            direction="row"
-            spacing={0.5}
-            sx={{ mb: 1 }}
-          >
-            <Link
-              color="text.primary"
-              href="#"
-              variant="subtitle2"
-            >
+        }
+        title={
+          <Stack alignItems="center" direction="row" spacing={0.5} sx={{ mb: 1 }}>
+            <Link color="text.primary" href="#" variant="subtitle2">
               {authorName}
             </Link>
-            <Typography variant="body2">
-              updated her status
-            </Typography>
+            <Typography variant="body2">updated her status</Typography>
           </Stack>
-        )}
+        }
       />
       <Box
         sx={{
           pb: 2,
-          px: 3
+          px: 3,
         }}
       >
-        <Typography variant="body1">
-          {message}
-        </Typography>
+        <Typography variant="body1">{message}</Typography>
 
         <Stack
           alignItems="center"
@@ -98,8 +62,7 @@ export const SocialPostCard = (props) => {
           justifyContent="space-between"
           spacing={2}
           sx={{ mt: 2 }}
-        >
-        </Stack>
+        ></Stack>
         <Divider sx={{ my: 3 }} />
         <Stack spacing={3}>
           {comments.map((comment) => (
@@ -126,5 +89,5 @@ SocialPostCard.propTypes = {
   createdAt: PropTypes.number.isRequired,
   isLiked: PropTypes.bool.isRequired,
   likes: PropTypes.number.isRequired,
-  message: PropTypes.string.isRequired
+  message: PropTypes.string.isRequired,
 };

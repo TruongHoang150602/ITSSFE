@@ -193,7 +193,7 @@ export const EmployeeListTable = (props) => {
                           href={paths.employees.details(employee.id)}
                           variant="subtitle2"
                         >
-                          {employee.first_name} {' '} {employee.last_name}
+                          {employee.first_name} {employee.last_name}
                         </Link>
                         <Typography color="text.secondary" variant="body2">
                           {employee.email}

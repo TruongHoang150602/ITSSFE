@@ -10,7 +10,7 @@ import {
   Typography,
   Unstable_Grid2 as Grid,
 } from "@mui/material";
-import { useMounted } from 'src/hooks/use-mounted';
+import { useMounted } from "src/hooks/use-mounted";
 
 import Download01Icon from "@untitled-ui/icons-react/build/esm/Download01";
 import PlusIcon from "@untitled-ui/icons-react/build/esm/Plus";
@@ -20,7 +20,6 @@ import { Layout as DashboardLayout } from "src/layouts/dashboard/layout";
 import { RoomCard } from "src/sections/gym/room-card";
 import { RoomAddForm } from "src/sections/gym/room-add-form";
 import roomsApi from "src/api/rooms";
-
 
 const useRooms = () => {
   const isMounted = useMounted();
@@ -38,42 +37,49 @@ const useRooms = () => {
     }
   }, [isMounted]);
 
-  const createRoom = useCallback(async (newRoom) => {
-    try {
-      const response = await roomsApi.createRoom(newRoom);
-      if (isMounted()) {
-        setRooms([...rooms, response]);
+  const createRoom = useCallback(
+    async (newRoom) => {
+      try {
+        const response = await roomsApi.createRoom(newRoom);
+        if (isMounted()) {
+          setRooms([...rooms, response]);
+        }
+      } catch (err) {
+        console.error(err);
       }
-    } catch (err) {
-      console.error(err);
-    }
-  }, [isMounted, rooms]);
+    },
+    [isMounted, rooms]
+  );
 
-  const editRoom = useCallback(async (roomId, updatedRoom) => {
-    try {
-      const response = await roomsApi.updateRoomById(roomId, updatedRoom);
-      if (isMounted()) {
-        const updatedRooms = rooms.map((room) =>
-          room.id === roomId ? response : room
-        );
-        setRooms(updatedRooms);
+  const editRoom = useCallback(
+    async (roomId, updatedRoom) => {
+      try {
+        const response = await roomsApi.updateRoomById(roomId, updatedRoom);
+        if (isMounted()) {
+          const updatedRooms = rooms.map((room) => (room.id === roomId ? response : room));
+          setRooms(updatedRooms);
+        }
+      } catch (err) {
+        console.error(err);
       }
-    } catch (err) {
-      console.error(err);
-    }
-  }, [isMounted, rooms]);
+    },
+    [isMounted, rooms]
+  );
 
-  const deleteRoom = useCallback(async (roomId) => {
-    try {
-      await roomsApi.deleteRoomById(roomId);
-      if (isMounted()) {
-        const updatedRooms = rooms.filter((room) => room.id !== roomId);
-        setRooms(updatedRooms);
+  const deleteRoom = useCallback(
+    async (roomId) => {
+      try {
+        await roomsApi.deleteRoomById(roomId);
+        if (isMounted()) {
+          const updatedRooms = rooms.filter((room) => room.id !== roomId);
+          setRooms(updatedRooms);
+        }
+      } catch (err) {
+        console.error(err);
       }
-    } catch (err) {
-      console.error(err);
-    }
-  }, [isMounted, rooms]);
+    },
+    [isMounted, rooms]
+  );
 
   useEffect(() => {
     getRooms();
@@ -81,8 +87,6 @@ const useRooms = () => {
 
   return { rooms, createRoom, editRoom, deleteRoom };
 };
-
-
 
 const Page = () => {
   const { rooms, createRoom, editRoom, deleteRoom } = useRooms();
@@ -173,18 +177,19 @@ const Page = () => {
               }}
             >
               {rooms.map((room) => (
-                <Grid key={room.id} 
-                  xs={12} 
-                  md={4}>
-                  <RoomCard  room={room} 
-                    onClickEdit={onClickEdit} 
-                    onClickDelete={onClickDelete} />
+                <Grid key={room.id} xs={12} md={4}>
+                  <RoomCard room={room} onClickEdit={onClickEdit} onClickDelete={onClickDelete} />
                 </Grid>
               ))}
             </Grid>
           </Stack>
           <Dialog open={openModal} onClose={onCloseModel}>
-            <RoomAddForm room={selectedRoom} onClose={onCloseModel} editRoom={editRoom} createRoom={createRoom} ></RoomAddForm>
+            <RoomAddForm
+              room={selectedRoom}
+              onClose={onCloseModel}
+              editRoom={editRoom}
+              createRoom={createRoom}
+            ></RoomAddForm>
           </Dialog>
         </Container>
       </Box>

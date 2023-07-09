@@ -1,4 +1,4 @@
-const { parseISO, isSameMonth } = require('date-fns');
+const { parseISO, isSameMonth } = require("date-fns");
 import {
   Box,
   Button,
@@ -61,8 +61,7 @@ export const UserCalendar = (props) => {
             tileContent={tileContent}
           />
         </Box>
-        <Typography variant="body1" 
-            align="center">
+        <Typography variant="body1" align="center">
           {`This month you have trained ${count} sessions. Let's keep trying !`}
         </Typography>
       </Stack>

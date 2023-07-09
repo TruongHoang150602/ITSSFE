@@ -1,12 +1,12 @@
-import { useCallback, useEffect, useState } from 'react';
-import Head from 'next/head';
-import { Box, Container, Stack, Typography } from '@mui/material';
-import feedbacksApi from 'src/api/feedback';
-import { useMounted } from 'src/hooks/use-mounted';
-import { usePageView } from 'src/hooks/use-page-view';
-import { Layout as DashboardLayout } from 'src/layouts/dashboard/layout';
-import { SocialPostAdd } from 'src/sections/social/social-post-add';
-import { SocialPostCard } from 'src/sections/social/social-post-card';
+import { useCallback, useEffect, useState } from "react";
+import Head from "next/head";
+import { Box, Container, Stack, Typography } from "@mui/material";
+import feedbacksApi from "src/api/feedback";
+import { useMounted } from "src/hooks/use-mounted";
+import { usePageView } from "src/hooks/use-page-view";
+import { Layout as DashboardLayout } from "src/layouts/dashboard/layout";
+import { SocialPostAdd } from "src/sections/social/social-post-add";
+import { SocialPostCard } from "src/sections/social/social-post-card";
 
 const usePosts = () => {
   const isMounted = useMounted();
@@ -24,14 +24,17 @@ const usePosts = () => {
     }
   }, [isMounted]);
 
-  const createPost = useCallback(async (newPost) => {
-    try {
-      const response = await feedbacksApi.createFeedback(newPost);
-      getPosts();
-    } catch (err) {
-      console.error(err);
-    }
-  }, [isMounted]);
+  const createPost = useCallback(
+    async (newPost) => {
+      try {
+        const response = await feedbacksApi.createFeedback(newPost);
+        getPosts();
+      } catch (err) {
+        console.error(err);
+      }
+    },
+    [isMounted]
+  );
 
   useEffect(() => {
     getPosts();
@@ -39,7 +42,6 @@ const usePosts = () => {
 
   return { posts, createPost };
 };
-
 
 const SocialFeed = () => {
   const { posts, createPost } = usePosts();
@@ -49,33 +51,25 @@ const SocialFeed = () => {
   return (
     <>
       <Head>
-        <title>
-          Dashboard: Feedback
-        </title>
+        <title>Dashboard: Feedback</title>
       </Head>
       <Box
         component="main"
         sx={{
           flexGrow: 1,
-          py: 8
+          py: 8,
         }}
       >
         <Container maxWidth="lg">
           <Stack spacing={1}>
-            <Typography
-              color="text.secondary"
-              variant="overline"
-            >
+            <Typography color="text.secondary" variant="overline">
               Feedback
             </Typography>
             <Typography variant="h4">
               Feedback for you to get a better service experience
             </Typography>
           </Stack>
-          <Stack
-            spacing={3}
-            sx={{ mt: 3 }}
-          >
+          <Stack spacing={3} sx={{ mt: 3 }}>
             <SocialPostAdd createPost={createPost} />
             {posts.map((post) => (
               <SocialPostCard
@@ -97,10 +91,6 @@ const SocialFeed = () => {
   );
 };
 
-SocialFeed.getLayout = (page) => (
-  <DashboardLayout>
-    {page}
-  </DashboardLayout>
-);
+SocialFeed.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 
 export default SocialFeed;

@@ -1,8 +1,8 @@
-import { useCallback, useEffect, useState } from 'react';
-import Head from 'next/head';
-import NextLink from 'next/link';
-import { useRouter } from 'next/router';
-import PlusIcon from '@untitled-ui/icons-react/build/esm/Plus';
+import { useCallback, useEffect, useState } from "react";
+import Head from "next/head";
+import NextLink from "next/link";
+import { useRouter } from "next/router";
+import PlusIcon from "@untitled-ui/icons-react/build/esm/Plus";
 import {
   Box,
   Breadcrumbs,
@@ -12,16 +12,16 @@ import {
   Link,
   Stack,
   SvgIcon,
-  Typography
-} from '@mui/material';
-import { BreadcrumbsSeparator } from 'src/components/breadcrumbs-separator';
-import { useMounted } from 'src/hooks/use-mounted';
-import { usePageView } from 'src/hooks/use-page-view';
-import { Layout as DashboardLayout } from 'src/layouts/dashboard/layout';
-import { paths } from 'src/paths';
-import { EquipmentListSearch } from 'src/sections/equipment/equip-list-search';
-import { EquipmentListTable } from 'src/sections/equipment/equip-list-table';
-import roomsApi from 'src/api/rooms';
+  Typography,
+} from "@mui/material";
+import { BreadcrumbsSeparator } from "src/components/breadcrumbs-separator";
+import { useMounted } from "src/hooks/use-mounted";
+import { usePageView } from "src/hooks/use-page-view";
+import { Layout as DashboardLayout } from "src/layouts/dashboard/layout";
+import { paths } from "src/paths";
+import { EquipmentListSearch } from "src/sections/equipment/equip-list-search";
+import { EquipmentListTable } from "src/sections/equipment/equip-list-table";
+import roomsApi from "src/api/rooms";
 
 const useSearch = () => {
   const [search, setSearch] = useState({
@@ -29,15 +29,15 @@ const useSearch = () => {
       name: undefined,
       category: [],
       status: [],
-      inStock: undefined
+      inStock: undefined,
     },
     page: 0,
-    rowsPerPage: 5
+    rowsPerPage: 5,
   });
 
   return {
     search,
-    updateSearch: setSearch
+    updateSearch: setSearch,
   };
 };
 
@@ -46,7 +46,7 @@ const useEquipments = (search) => {
   const isMounted = useMounted();
   const [state, setState] = useState({
     equipments: [],
-    equipmentsCount: 0
+    equipmentsCount: 0,
   });
 
   const getEquipments = useCallback(async () => {
@@ -57,7 +57,7 @@ const useEquipments = (search) => {
       if (isMounted()) {
         setState({
           equipments: response.equipment,
-          equipmentsCount: response.count
+          equipmentsCount: response.count,
         });
       }
     } catch (err) {
@@ -65,13 +65,13 @@ const useEquipments = (search) => {
     }
   }, [search, isMounted]);
 
-  useEffect(() => {
+  useEffect(
+    () => {
       getEquipments();
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [search]);
-  
-
+    [search]
+  );
 
   return state;
 };
@@ -83,52 +83,53 @@ const EquipmentList = () => {
 
   usePageView();
 
-  const handleFiltersChange = useCallback((filters) => {
-    updateSearch((prevState) => ({
-      ...prevState,
-      filters
-    }));
-  }, [updateSearch]);
+  const handleFiltersChange = useCallback(
+    (filters) => {
+      updateSearch((prevState) => ({
+        ...prevState,
+        filters,
+      }));
+    },
+    [updateSearch]
+  );
 
-  const handlePageChange = useCallback((event, page) => {
-    updateSearch((prevState) => ({
-      ...prevState,
-      page
-    }));
-  }, [updateSearch]);
+  const handlePageChange = useCallback(
+    (event, page) => {
+      updateSearch((prevState) => ({
+        ...prevState,
+        page,
+      }));
+    },
+    [updateSearch]
+  );
 
-  const handleRowsPerPageChange = useCallback((event) => {
-    updateSearch((prevState) => ({
-      ...prevState,
-      rowsPerPage: parseInt(event.target.value, 10)
-    }));
-  }, [updateSearch]);
+  const handleRowsPerPageChange = useCallback(
+    (event) => {
+      updateSearch((prevState) => ({
+        ...prevState,
+        rowsPerPage: parseInt(event.target.value, 10),
+      }));
+    },
+    [updateSearch]
+  );
 
   return (
     <>
       <Head>
-        <title>
-          Dashboard: Equipment List | Devias Kit PRO
-        </title>
+        <title>Dashboard: Equipment List | Devias Kit PRO</title>
       </Head>
       <Box
         component="main"
         sx={{
           flexGrow: 1,
-          py: 8
+          py: 8,
         }}
       >
         <Container maxWidth="xl">
           <Stack spacing={4}>
-            <Stack
-              direction="row"
-              justifyContent="space-between"
-              spacing={4}
-            >
+            <Stack direction="row" justifyContent="space-between" spacing={4}>
               <Stack spacing={1}>
-                <Typography variant="h4">
-                  Equipments
-                </Typography>
+                <Typography variant="h4">Equipments</Typography>
                 <Breadcrumbs separator={<BreadcrumbsSeparator />}>
                   <Link
                     color="text.primary"
@@ -146,27 +147,20 @@ const EquipmentList = () => {
                   >
                     Gyms
                   </Link>
-                  <Typography
-                    color="text.secondary"
-                    variant="subtitle2"
-                  >
+                  <Typography color="text.secondary" variant="subtitle2">
                     Equipment
                   </Typography>
                 </Breadcrumbs>
               </Stack>
-              <Stack
-                alignItems="center"
-                direction="row"
-                spacing={3}
-              >
+              <Stack alignItems="center" direction="row" spacing={3}>
                 <Button
                   component={NextLink}
                   href={paths.gyms.create(gymId)}
-                  startIcon={(
+                  startIcon={
                     <SvgIcon>
                       <PlusIcon />
                     </SvgIcon>
-                  )}
+                  }
                   variant="contained"
                 >
                   Add
@@ -191,10 +185,6 @@ const EquipmentList = () => {
   );
 };
 
-EquipmentList.getLayout = (page) => (
-  <DashboardLayout>
-    {page}
-  </DashboardLayout>
-);
+EquipmentList.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 
 export default EquipmentList;
