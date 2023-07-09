@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useState, useCallback, useEffect } from "react";
 import Head from "next/head";
 import NextLink from "next/link";
 import PlusIcon from "@untitled-ui/icons-react/build/esm/Plus";
@@ -55,7 +55,6 @@ const usePackages = (search) => {
     () => {
       getPackages();
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     [search]
   );
 
@@ -65,7 +64,7 @@ const usePackages = (search) => {
 const PackageList = () => {
   const { search, updateSearch } = useSearch();
   const { packages, packagesCount } = usePackages(search);
-
+  
   usePageView();
 
   const handleFiltersChange = useCallback(

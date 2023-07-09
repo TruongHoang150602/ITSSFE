@@ -1,8 +1,8 @@
 import React from 'react';
 import axios from 'axios';
 import { createResourceId } from 'src/utils/create-resource-id';
-import { wait } from 'src/utils/wait';
-import usersApi from '../users';
+// import { wait } from 'src/utils/wait';
+// import usersApi from '../users';
 
 class AuthApi {
   constructor(baseUrl) {

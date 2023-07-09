@@ -1,8 +1,12 @@
 import axios from 'axios';
 import { deepCopy } from 'src/utils/deep-copy';
 import { applySort } from 'src/utils/apply-sort';
-import { wait } from 'src/utils/wait';
-
+// import { wait } from 'src/utils/wait';
+/* 
+This class has methods to perform HTTP requests such as getting 
+a list of feedbacks, getting feedback by ID, creating new feedback, 
+updating feedback, and deleting feedback.
+*/
 class FeedbacksApi {
 
   constructor(baseUrl) {

@@ -3,7 +3,7 @@ import NextLink from "next/link";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import ArrowLeftIcon from "@untitled-ui/icons-react/build/esm/ArrowLeft";
-import { Avatar, Box, Chip, Container, Link, Stack, SvgIcon, Typography } from "@mui/material";
+import { Avatar, Box, Chip, Container, Link, Stack, SvgIcon, Typography, Dialog } from "@mui/material";
 import usersApi from "src/api/users";
 import { useMounted } from "src/hooks/use-mounted";
 import { usePageView } from "src/hooks/use-page-view";

@@ -1,5 +1,5 @@
 import Head from "next/head";
-import { useState, useCallback, useEffect } from "react";
+import React, { useCallback, useEffect } from "react";
 import {
   Box,
   Button,
@@ -23,7 +23,7 @@ import roomsApi from "src/api/rooms";
 
 const useRooms = () => {
   const isMounted = useMounted();
-  const [rooms, setRooms] = useState([]);
+  const [rooms, setRooms] = React.useState([]);
 
   const getRooms = useCallback(async () => {
     try {
@@ -90,8 +90,8 @@ const useRooms = () => {
 
 const Page = () => {
   const { rooms, createRoom, editRoom, deleteRoom } = useRooms();
-  const [openModal, setOpenModal] = useState(false);
-  const [selectedRoom, setSelectedRoom] = useState(null);
+  const [openModal, setOpenModal] = React.useState(false);
+  const [selectedRoom, setSelectedRoom] = React.useState(null);
 
   const onCloseModel = () => {
     setOpenModal(false);
