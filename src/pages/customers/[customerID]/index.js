@@ -18,26 +18,9 @@ import {
   Tab,
   Tabs,
   Typography,
-<<<<<<< HEAD
-  Unstable_Grid2 as Grid
-} from '@mui/material';
-import usersApi  from 'src/api/users';
-import { useMounted } from 'src/hooks/use-mounted';
-import { usePageView } from 'src/hooks/use-page-view';
-import { Layout as DashboardLayout } from 'src/layouts/dashboard/layout';
-import { paths } from 'src/paths';
-import { UserBasicDetails } from 'src/sections/user/user-basic-details';
-import { UserDataManagement } from 'src/sections/user/user-data-management';
-import { UserCalendar } from 'src/sections/user/user-calendar-activity';
-import { UserInvoices } from 'src/sections/user/user-invoices';
-import { UserMember } from 'src/sections/user/user-member';
-import { UserLogs } from 'src/sections/user/user-logs';
-import { getInitials } from 'src/utils/get-initials';
-import { useAuth } from 'src/hooks/use-auth';
-=======
   Unstable_Grid2 as Grid,
 } from "@mui/material";
-import usersApi from "src/api/users";
+import customersApi from "src/api/customers";
 import { useMounted } from "src/hooks/use-mounted";
 import { usePageView } from "src/hooks/use-page-view";
 import { Layout as DashboardLayout } from "src/layouts/dashboard/layout";
@@ -49,25 +32,25 @@ import { UserInvoices } from "src/sections/user/user-invoices";
 import { UserMember } from "src/sections/user/user-member";
 import { UserLogs } from "src/sections/user/user-logs";
 import { getInitials } from "src/utils/get-initials";
->>>>>>> 09c0717cfcb3f8eb7795dcf47c307ace14f0e4f2
+import { useAuth } from "src/hooks/use-auth";
 
 const tabs = [
   { label: "Details", value: "details" },
   { label: "Activity", value: "logs" },
 ];
 
-const useUser = () => {
+const useCustomer = () => {
   const route = useRouter();
   const isMounted = useMounted();
-  const [user, setUser] = useState(null);
+  const [customer, setCustomer] = useState(null);
 
-  const getUser = useCallback(async () => {
+  const getCustomer = useCallback(async () => {
     try {
-      const { userId } = route.query;
-      const response = await usersApi.getUserById(userId);
+      const { customerId } = route.query;
+      const response = await customersApi.getCustomerById(customerId);
 
       if (isMounted()) {
-        setUser(response);
+        setCustomer(response);
       }
     } catch (err) {
       console.error(err);
@@ -76,13 +59,13 @@ const useUser = () => {
 
   useEffect(
     () => {
-      getUser();
+      getCustomer();
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     []
   );
 
-  return user;
+  return customer;
 };
 
 const useLogs = () => {
@@ -92,8 +75,8 @@ const useLogs = () => {
 
   const getLogs = useCallback(async () => {
     try {
-      const { userId } = route.query;
-      const response = await usersApi.getProcessById(userId);
+      const { customerId } = route.query;
+      const response = await customersApi.getProcessById(customerId);
       if (isMounted()) {
         setLogs(response);
       }
@@ -102,36 +85,32 @@ const useLogs = () => {
     }
   }, [isMounted]);
 
-<<<<<<< HEAD
   const addLog = useCallback(async (newLog) => {
     try {
-      const {userId} = route.query;
-      const response = await usersApi.addProcessById(userId, newLog);
+      const { customerId } = route.query;
+      const response = await customersApi.addProcessById(customerId, newLog);
       getLogs();
     } catch (err) {
       console.error(err);
     }
   }, []);
 
-  useEffect(() => {
-=======
   useEffect(
     () => {
->>>>>>> 09c0717cfcb3f8eb7795dcf47c307ace14f0e4f2
       getLogs();
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     []
   );
 
-  return {logs, addLog};
+  return { logs, addLog };
 };
 
 const Page = () => {
   const [currentTab, setCurrentTab] = useState("details");
-  const user = useUser();
-  const {logs, addLog} = useLogs();
-  const role = useAuth().user.role;
+  const customer = useCustomer();
+  const { logs, addLog } = useLogs();
+  const role = useAuth().customer.role;
 
   usePageView();
 
@@ -139,20 +118,14 @@ const Page = () => {
     setCurrentTab(value);
   }, []);
 
-  if (!user) {
+  if (!customer) {
     return null;
   }
 
   return (
     <>
       <Head>
-<<<<<<< HEAD
-        <title>
-          Dashboard: User Details
-        </title>
-=======
-        <title>Dashboard: User Details | Devias Kit PRO</title>
->>>>>>> 09c0717cfcb3f8eb7795dcf47c307ace14f0e4f2
+        <title>Dashboard: Customer Details</title>
       </Head>
       <Box
         component="main"
@@ -178,7 +151,7 @@ const Page = () => {
                   <SvgIcon sx={{ mr: 1 }}>
                     <ArrowLeftIcon />
                   </SvgIcon>
-                  <Typography variant="subtitle2">Users</Typography>
+                  <Typography variant="subtitle2">Customers</Typography>
                 </Link>
               </div>
               <Stack
@@ -192,79 +165,41 @@ const Page = () => {
               >
                 <Stack alignItems="center" direction="row" spacing={2}>
                   <Avatar
-                    src={user.avatar}
+                    src={customer.avatar}
                     sx={{
                       height: 64,
                       width: 64,
                     }}
                   >
-                    {getInitials(user.name)}
+                    {getInitials(customer.name)}
                   </Avatar>
                   <Stack spacing={1}>
-<<<<<<< HEAD
                     <Typography variant="h4">
-                    {user.first_name} {user.last_name}
+                      {customer.first_name} {customer.last_name}
                     </Typography>
-                    <Stack
-                      alignItems="center"
-                      direction="row"
-                      spacing={1}
-                    >
-                      <Typography variant="subtitle2">
-                        user_id:
-                      </Typography>
-                      <Chip
-                        label={user.id}
-                        size="small"
-                      />
-                    </Stack>
-                  </Stack>
-                </Stack>
-                { role === "admin" &&
-                (
-                <Stack
-                  alignItems="center"
-                  direction="row"
-                  spacing={2}
-                >
-=======
-                    <Typography variant="h4">{user.email}</Typography>
                     <Stack alignItems="center" direction="row" spacing={1}>
-                      <Typography variant="subtitle2">user_id:</Typography>
-                      <Chip label={user.id} size="small" />
+                      <Typography variant="subtitle2">customer_id:</Typography>
+                      <Chip label={customer.id} size="small" />
                     </Stack>
                   </Stack>
                 </Stack>
-                <Stack alignItems="center" direction="row" spacing={2}>
->>>>>>> 09c0717cfcb3f8eb7795dcf47c307ace14f0e4f2
-                  <Button
-                    color="inherit"
-                    component={NextLink}
-                    endIcon={
-                      <SvgIcon>
-                        <Edit02Icon />
-                      </SvgIcon>
-                    }
-                    href={paths.users.edit(user.id)}
-                  >
-                    Edit
-                  </Button>
-<<<<<<< HEAD
-=======
-                  <Button
-                    endIcon={
-                      <SvgIcon>
-                        <ChevronDownIcon />
-                      </SvgIcon>
-                    }
-                    variant="contained"
-                  >
-                    Actions
-                  </Button>
->>>>>>> 09c0717cfcb3f8eb7795dcf47c307ace14f0e4f2
-                </Stack>
+                {role === "admin" && (
+                  <Stack alignItems="center" direction="row" spacing={2}>
+                    <Button
+                      color="inherit"
+                      component={NextLink}
+                      endIcon={
+                        <SvgIcon>
+                          <Edit02Icon />
+                        </SvgIcon>
+                      }
+                      href={paths.users.edit(customer.id)}
+                    >
+                      Edit
+                    </Button>
+                  </Stack>
                 )}
-              </Stack> 
+              </Stack>
               <div>
                 <Tabs
                   indicatorColor="primary"
@@ -286,34 +221,24 @@ const Page = () => {
               <div>
                 <Stack container spacing={4}>
                   <UserBasicDetails
-                    address={user.address}
-                    gender={user.gender}
-                    birthday={user.birthday}
-                    email={user.email}
-                    phone={user.phone}
-                    role={user.role}
+                    address={customer.address}
+                    gender={customer.gender}
+                    birthday={customer.birthday}
+                    email={customer.email}
+                    phone={customer.phone}
+                    role={customer.role}
                   />
                   <UserMember />
-                  <UserDataManagement id={user.id} />
+                  <UserDataManagement id={customer.id} />
                 </Stack>
               </div>
             )}
-<<<<<<< HEAD
-            {currentTab === 'logs' && 
-              <Stack 
-                container 
-                spacing={4} >
-                  <UserCalendar activity = {logs} />
-                <UserLogs logs={logs} addLog={addLog} />
-              </Stack>}
-=======
             {currentTab === "logs" && (
               <Stack container spacing={4}>
                 <UserCalendar activity={logs} />
-                <UserLogs logs={logs} />
+                <UserLogs logs={logs} addLog={addLog} />
               </Stack>
             )}
->>>>>>> 09c0717cfcb3f8eb7795dcf47c307ace14f0e4f2
           </Stack>
         </Container>
       </Box>
