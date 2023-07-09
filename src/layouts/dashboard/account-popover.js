@@ -2,13 +2,12 @@ import NextLink from 'next/link';
 import { useRouter } from 'next/navigation';
 import PropTypes from 'prop-types';
 import toast from 'react-hot-toast';
-// import CreditCard01Icon from '@untitled-ui/icons-react/build/esm/CreditCard01';
 import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
 import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
 import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
 import {
   Box,
-  Button,
+  IconButton,
   Divider,
   ListItemButton,
   ListItemIcon,

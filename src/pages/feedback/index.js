@@ -24,10 +24,12 @@ const usePosts = () => {
     }
   }, [isMounted]);
 
+  // call function feedbackApi to create new feedback
   const createPost = useCallback(
     async (newPost) => {
       try {
         const response = await feedbacksApi.createFeedback(newPost);
+        // display new list post
         getPosts();
       } catch (err) {
         console.error(err);
