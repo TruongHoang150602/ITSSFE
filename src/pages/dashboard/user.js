@@ -1,10 +1,8 @@
-import { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import Head from "next/head";
 import {
-  Avatar,
+  Alert,
   Box,
-  Button,
-  Chip,
   Container,
   Stack,
   Unstable_Grid2 as Grid,
