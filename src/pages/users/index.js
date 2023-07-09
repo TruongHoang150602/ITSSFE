@@ -1,16 +1,16 @@
-import { useCallback, useEffect, useState } from 'react';
-import Head from 'next/head';
-import Download01Icon from '@untitled-ui/icons-react/build/esm/Download01';
-import PlusIcon from '@untitled-ui/icons-react/build/esm/Plus';
-import Upload01Icon from '@untitled-ui/icons-react/build/esm/Upload01';
-import { Box, Button, Card, Container, Dialog, Stack, SvgIcon, Typography } from '@mui/material';
-import usersApi from 'src/api/users';
-import { useMounted } from 'src/hooks/use-mounted';
-import { usePageView } from 'src/hooks/use-page-view';
-import { Layout as DashboardLayout } from 'src/layouts/dashboard/layout';
-import { UserListSearch } from 'src/sections/user/user-list-search';
-import { UserListTable } from 'src/sections/user/user-list-table';
-import { UserEditForm } from 'src/sections/user/user-edit-form';
+import { useCallback, useEffect, useState } from "react";
+import Head from "next/head";
+import Download01Icon from "@untitled-ui/icons-react/build/esm/Download01";
+import PlusIcon from "@untitled-ui/icons-react/build/esm/Plus";
+import Upload01Icon from "@untitled-ui/icons-react/build/esm/Upload01";
+import { Box, Button, Card, Container, Dialog, Stack, SvgIcon, Typography } from "@mui/material";
+import usersApi from "src/api/users";
+import { useMounted } from "src/hooks/use-mounted";
+import { usePageView } from "src/hooks/use-page-view";
+import { Layout as DashboardLayout } from "src/layouts/dashboard/layout";
+import { UserListSearch } from "src/sections/user/user-list-search";
+import { UserListTable } from "src/sections/user/user-list-table";
+import { UserEditForm } from "src/sections/user/user-edit-form";
 
 const useSearch = () => {
   const [search, setSearch] = useState({
@@ -20,13 +20,13 @@ const useSearch = () => {
     },
     page: 0,
     rowsPerPage: 5,
-    sortBy: 'updatedAt',
-    sortDir: 'desc'
+    sortBy: "updatedAt",
+    sortDir: "desc",
   });
 
   return {
     search,
-    updateSearch: setSearch
+    updateSearch: setSearch,
   };
 };
 
@@ -34,7 +34,7 @@ const useUsers = (search) => {
   const isMounted = useMounted();
   const [state, setState] = useState({
     users: [],
-    usersCount: 0
+    usersCount: 0,
   });
 
   const getUsers = useCallback(async () => {
@@ -44,7 +44,7 @@ const useUsers = (search) => {
       if (isMounted()) {
         setState({
           users: response.data,
-          usersCount: response.count
+          usersCount: response.count,
         });
       }
     } catch (err) {
@@ -52,14 +52,17 @@ const useUsers = (search) => {
     }
   }, [search, isMounted]);
 
-  const deleteUser = useCallback(async (userId) => {
-    try {
-      await usersApi.deleteUserById(userId);
-      getUsers();
-    } catch (err) {
-      console.error(err);
-    }
-  }, [getUsers]);
+  const deleteUser = useCallback(
+    async (userId) => {
+      try {
+        await usersApi.deleteUserById(userId);
+        getUsers();
+      } catch (err) {
+        console.error(err);
+      }
+    },
+    [getUsers]
+  );
 
   useEffect(() => {
     getUsers();
@@ -67,124 +70,119 @@ const useUsers = (search) => {
 
   return {
     state,
-    deleteUser
+    deleteUser,
   };
 };
 
 const Page = () => {
-
-  const [openModal, setOpenModal] = useState(false)
+  const [openModal, setOpenModal] = useState(false);
   const { search, updateSearch } = useSearch();
   const { state, deleteUser } = useUsers(search);
-  
+
   usePageView();
 
-  const handleFiltersChange = useCallback((filters) => {
-    updateSearch((prevState) => ({
-      ...prevState,
-      filters
-    }));
-  }, [updateSearch]);
+  const handleFiltersChange = useCallback(
+    (filters) => {
+      updateSearch((prevState) => ({
+        ...prevState,
+        filters,
+      }));
+    },
+    [updateSearch]
+  );
 
-  const handleSortChange = useCallback((sort) => {
-    updateSearch((prevState) => ({
-      ...prevState,
-      sortBy: sort.sortBy,
-      sortDir: sort.sortDir
-    }));
-  }, [updateSearch]);
+  const handleSortChange = useCallback(
+    (sort) => {
+      updateSearch((prevState) => ({
+        ...prevState,
+        sortBy: sort.sortBy,
+        sortDir: sort.sortDir,
+      }));
+    },
+    [updateSearch]
+  );
 
-  const handlePageChange = useCallback((event, page) => {
-    updateSearch((prevState) => ({
-      ...prevState,
-      page
-    }));
-  }, [updateSearch]);
+  const handlePageChange = useCallback(
+    (event, page) => {
+      updateSearch((prevState) => ({
+        ...prevState,
+        page,
+      }));
+    },
+    [updateSearch]
+  );
 
-  const handleRowsPerPageChange = useCallback((event) => {
-    updateSearch((prevState) => ({
-      ...prevState,
-      rowsPerPage: parseInt(event.target.value, 10)
-    }));
-  }, [updateSearch]);
+  const handleRowsPerPageChange = useCallback(
+    (event) => {
+      updateSearch((prevState) => ({
+        ...prevState,
+        rowsPerPage: parseInt(event.target.value, 10),
+      }));
+    },
+    [updateSearch]
+  );
 
   const handleDeleteUser = (userId) => {
     deleteUser(userId);
-  } 
+  };
 
   const onCloseModel = () => {
-      setOpenModal(false);
-  }
-
-
+    setOpenModal(false);
+  };
 
   return (
     <>
       <Head>
-        <title>
-          Dashboard: Users List | GymCenter
-        </title>
+        <title>Dashboard: Users List | GymCenter</title>
       </Head>
       <Box
         component="main"
         sx={{
           flexGrow: 1,
-          py: 8
+          py: 8,
         }}
       >
         <Container maxWidth="xl">
           <Stack spacing={4}>
-            <Stack
-              direction="row"
-              justifyContent="space-between"
-              spacing={4}
-            >
+            <Stack direction="row" justifyContent="space-between" spacing={4}>
               <Stack spacing={1}>
-                <Typography variant="h4">
-                  Users
-                </Typography>
-                <Stack
-                  alignItems="center"
-                  direction="row"
-                  spacing={1}
-                >
+                <Typography variant="h4">Users</Typography>
+                <Stack alignItems="center" direction="row" spacing={1}>
                   <Button
                     color="inherit"
                     size="small"
-                    startIcon={(
+                    startIcon={
                       <SvgIcon>
                         <Upload01Icon />
                       </SvgIcon>
-                    )}
+                    }
                   >
                     Import
                   </Button>
                   <Button
                     color="inherit"
                     size="small"
-                    startIcon={(
+                    startIcon={
                       <SvgIcon>
                         <Download01Icon />
                       </SvgIcon>
-                    )}
+                    }
                   >
                     Export
                   </Button>
                 </Stack>
               </Stack>
-              <Stack
-                alignItems="center"
-                direction="row"
-                spacing={3}
-              >
+              <Stack alignItems="center" direction="row" spacing={3}>
                 <Button
-                  startIcon={(
+                  startIcon={
                     <SvgIcon>
                       <PlusIcon />
                     </SvgIcon>
-                  )}
+                  }
                   variant="contained"
-                  onClick={() => {setOpenModal(true)}}
+                  onClick={() => {
+                    setOpenModal(true);
+                  }}
                 >
                   Add
                 </Button>
@@ -209,11 +207,8 @@ const Page = () => {
             </Card>
           </Stack>
 
-          <Dialog 
-              open={openModal} 
-              onClose={(onCloseModel)} 
-          >
-            <UserEditForm onClose={onCloseModel}  ></UserEditForm>
+          <Dialog open={openModal} onClose={onCloseModel}>
+            <UserEditForm onClose={onCloseModel}></UserEditForm>
           </Dialog>
         </Container>
       </Box>
@@ -221,10 +216,6 @@ const Page = () => {
   );
 };
 
-Page.getLayout = (page) => (
-  <DashboardLayout>
-    {page}
-  </DashboardLayout>
-);
+Page.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 
 export default Page;

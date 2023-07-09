@@ -1,16 +1,16 @@
-import { useCallback, useEffect, useState } from 'react';
-import Head from 'next/head';
-import Download01Icon from '@untitled-ui/icons-react/build/esm/Download01';
-import PlusIcon from '@untitled-ui/icons-react/build/esm/Plus';
-import Upload01Icon from '@untitled-ui/icons-react/build/esm/Upload01';
-import { Box, Button, Card, Container, Dialog, Stack, SvgIcon, Typography } from '@mui/material';
-import employeesApi from 'src/api/employees';
-import { useMounted } from 'src/hooks/use-mounted';
-import { usePageView } from 'src/hooks/use-page-view';
-import { Layout as DashboardLayout } from 'src/layouts/dashboard/layout';
-import { EmployeeListSearch } from 'src/sections/employee/employee-list-search';
-import { EmployeeListTable } from 'src/sections/employee/employee-list-table';
-import { EmployeeEditForm } from 'src/sections/employee/employee-edit-form';
+import { useCallback, useEffect, useState } from "react";
+import Head from "next/head";
+import Download01Icon from "@untitled-ui/icons-react/build/esm/Download01";
+import PlusIcon from "@untitled-ui/icons-react/build/esm/Plus";
+import Upload01Icon from "@untitled-ui/icons-react/build/esm/Upload01";
+import { Box, Button, Card, Container, Dialog, Stack, SvgIcon, Typography } from "@mui/material";
+import employeesApi from "src/api/employees";
+import { useMounted } from "src/hooks/use-mounted";
+import { usePageView } from "src/hooks/use-page-view";
+import { Layout as DashboardLayout } from "src/layouts/dashboard/layout";
+import { EmployeeListSearch } from "src/sections/employee/employee-list-search";
+import { EmployeeListTable } from "src/sections/employee/employee-list-table";
+import { EmployeeEditForm } from "src/sections/employee/employee-edit-form";
 
 const useSearch = () => {
   const [search, setSearch] = useState({
@@ -20,13 +20,13 @@ const useSearch = () => {
     },
     page: 0,
     rowsPerPage: 5,
-    sortBy: 'updatedAt',
-    sortDir: 'desc'
+    sortBy: "updatedAt",
+    sortDir: "desc",
   });
 
   return {
     search,
-    updateSearch: setSearch
+    updateSearch: setSearch,
   };
 };
 
@@ -34,7 +34,7 @@ const useEmployees = (search) => {
   const isMounted = useMounted();
   const [state, setState] = useState({
     employees: [],
-    employeesCount: 0
+    employeesCount: 0,
   });
 
   const getEmployees = useCallback(async () => {
@@ -45,23 +45,26 @@ const useEmployees = (search) => {
       if (isMounted()) {
         setState({
           employees: response.data,
-          employeesCount: response.count
+          employeesCount: response.count,
         });
       }
     } catch (err) {
       console.error(err);
     }
-  }, [search,isMounted]);
+  }, [search, isMounted]);
 
-  const deleteEmployee = useCallback(async (employeeId) => {
-    try {
-      await employeesApi.deleteEmployeeById(employeeId);
-      // Refresh the employee list
-      getEmployees();
-    } catch (err) {
-      console.error(err);
-    }
-  }, [getEmployees]);
+  const deleteEmployee = useCallback(
+    async (employeeId) => {
+      try {
+        await employeesApi.deleteEmployeeById(employeeId);
+        // Refresh the employee list
+        getEmployees();
+      } catch (err) {
+        console.error(err);
+      }
+    },
+    [getEmployees]
+  );
 
   useEffect(() => {
     getEmployees();
@@ -69,125 +72,119 @@ const useEmployees = (search) => {
 
   return {
     state,
-    deleteEmployee
+    deleteEmployee,
   };
 };
 
 const Page = () => {
-
-  const [openModal, setOpenModal] = useState(false)
+  const [openModal, setOpenModal] = useState(false);
   const { search, updateSearch } = useSearch();
   const { state, deleteEmployee } = useEmployees(search);
-  
-  
+
   usePageView();
 
-  const handleFiltersChange = useCallback((filters) => {
-    updateSearch((prevState) => ({
-      ...prevState,
-      filters
-    }));
-  }, [updateSearch]);
+  const handleFiltersChange = useCallback(
+    (filters) => {
+      updateSearch((prevState) => ({
+        ...prevState,
+        filters,
+      }));
+    },
+    [updateSearch]
+  );
 
-  const handleSortChange = useCallback((sort) => {
-    updateSearch((prevState) => ({
-      ...prevState,
-      sortBy: sort.sortBy,
-      sortDir: sort.sortDir
-    }));
-  }, [updateSearch]);
+  const handleSortChange = useCallback(
+    (sort) => {
+      updateSearch((prevState) => ({
+        ...prevState,
+        sortBy: sort.sortBy,
+        sortDir: sort.sortDir,
+      }));
+    },
+    [updateSearch]
+  );
 
-  const handlePageChange = useCallback((event, page) => {
-    updateSearch((prevState) => ({
-      ...prevState,
-      page
-    }));
-  }, [updateSearch]);
+  const handlePageChange = useCallback(
+    (event, page) => {
+      updateSearch((prevState) => ({
+        ...prevState,
+        page,
+      }));
+    },
+    [updateSearch]
+  );
 
-  const handleRowsPerPageChange = useCallback((event) => {
-    updateSearch((prevState) => ({
-      ...prevState,
-      rowsPerPage: parseInt(event.target.value, 10)
-    }));
-  }, [updateSearch]);
+  const handleRowsPerPageChange = useCallback(
+    (event) => {
+      updateSearch((prevState) => ({
+        ...prevState,
+        rowsPerPage: parseInt(event.target.value, 10),
+      }));
+    },
+    [updateSearch]
+  );
 
   const handleDeleteEmployee = (employeeId) => {
     deleteEmployee(employeeId);
-  } 
+  };
 
   const onCloseModel = () => {
-      setOpenModal(false);
-  }
-
-
+    setOpenModal(false);
+  };
 
   return (
     <>
       <Head>
-        <title>
-          Dashboard: Employees List | GymCenter
-        </title>
+        <title>Dashboard: Employees List | GymCenter</title>
       </Head>
       <Box
         component="main"
         sx={{
           flexGrow: 1,
-          py: 8
+          py: 8,
         }}
       >
         <Container maxWidth="xl">
           <Stack spacing={4}>
-            <Stack
-              direction="row"
-              justifyContent="space-between"
-              spacing={4}
-            >
+            <Stack direction="row" justifyContent="space-between" spacing={4}>
               <Stack spacing={1}>
-                <Typography variant="h4">
-                  Employees
-                </Typography>
-                <Stack
-                  alignItems="center"
-                  direction="row"
-                  spacing={1}
-                >
+                <Typography variant="h4">Employees</Typography>
+                <Stack alignItems="center" direction="row" spacing={1}>
                   <Button
                     color="inherit"
                     size="small"
-                    startIcon={(
+                    startIcon={
                       <SvgIcon>
                         <Upload01Icon />
                       </SvgIcon>
-                    )}
+                    }
                   >
                     Import
                   </Button>
                   <Button
                     color="inherit"
                     size="small"
-                    startIcon={(
+                    startIcon={
                       <SvgIcon>
                         <Download01Icon />
                       </SvgIcon>
-                    )}
+                    }
                   >
                     Export
                   </Button>
                 </Stack>
               </Stack>
-              <Stack
-                alignItems="center"
-                direction="row"
-                spacing={3}
-              >
+              <Stack alignItems="center" direction="row" spacing={3}>
                 <Button
-                  startIcon={(
+                  startIcon={
                     <SvgIcon>
                       <PlusIcon />
                     </SvgIcon>
-                  )}
+                  }
                   variant="contained"
-                  onClick={() => {setOpenModal(true)}}
+                  onClick={() => {
+                    setOpenModal(true);
+                  }}
                 >
                   Add
                 </Button>
@@ -201,24 +198,21 @@ const Page = () => {
                 sortDir={search.sortDir}
               />
               {state.employees && (
-              <EmployeeListTable
-                employees={state.employees}
-                employeesCount={state.employeesCount}
-                onPageChange={handlePageChange}
-                onRowsPerPageChange={handleRowsPerPageChange}
-                rowsPerPage={search.rowsPerPage}
-                page={search.page}
-                handleDeleteEmployee={handleDeleteEmployee}
-              />
+                <EmployeeListTable
+                  employees={state.employees}
+                  employeesCount={state.employeesCount}
+                  onPageChange={handlePageChange}
+                  onRowsPerPageChange={handleRowsPerPageChange}
+                  rowsPerPage={search.rowsPerPage}
+                  page={search.page}
+                  handleDeleteEmployee={handleDeleteEmployee}
+                />
               )}
             </Card>
           </Stack>
 
-          <Dialog 
-              open={openModal} 
-              onClose={(onCloseModel)} 
-          >
-            <EmployeeEditForm onClose={onCloseModel}  ></EmployeeEditForm>
+          <Dialog open={openModal} onClose={onCloseModel}>
+            <EmployeeEditForm onClose={onCloseModel}></EmployeeEditForm>
           </Dialog>
         </Container>
       </Box>
@@ -226,10 +220,6 @@ const Page = () => {
   );
 };
 
-Page.getLayout = (page) => (
-  <DashboardLayout>
-    {page}
-  </DashboardLayout>
-);
+Page.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 
 export default Page;

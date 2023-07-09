@@ -1,11 +1,11 @@
-import NextLink from 'next/link';
-import Head from 'next/head';
-import { Box, Breadcrumbs, Container, Link, Stack, Typography } from '@mui/material';
-import { BreadcrumbsSeparator } from 'src/components/breadcrumbs-separator';
-import { usePageView } from 'src/hooks/use-page-view';
-import { Layout as DashboardLayout } from 'src/layouts/dashboard/layout';
-import { paths } from 'src/paths';
-import { PackageCreateForm } from 'src/sections/package/package-create-form';
+import NextLink from "next/link";
+import Head from "next/head";
+import { Box, Breadcrumbs, Container, Link, Stack, Typography } from "@mui/material";
+import { BreadcrumbsSeparator } from "src/components/breadcrumbs-separator";
+import { usePageView } from "src/hooks/use-page-view";
+import { Layout as DashboardLayout } from "src/layouts/dashboard/layout";
+import { paths } from "src/paths";
+import { PackageCreateForm } from "src/sections/package/package-create-form";
 
 const PackageCreate = () => {
   usePageView();
@@ -13,23 +13,19 @@ const PackageCreate = () => {
   return (
     <>
       <Head>
-        <title>
-          Dashboard: Package Create | Devias Kit PRO
-        </title>
+        <title>Dashboard: Package Create | Devias Kit PRO</title>
       </Head>
       <Box
         component="main"
         sx={{
           flexGrow: 1,
-          py: 8
+          py: 8,
         }}
       >
         <Container maxWidth="xl">
           <Stack spacing={3}>
             <Stack spacing={1}>
-              <Typography variant="h4">
-                Create a new package
-              </Typography>
+              <Typography variant="h4">Create a new package</Typography>
               <Breadcrumbs separator={<BreadcrumbsSeparator />}>
                 <Link
                   color="text.primary"
@@ -47,10 +43,7 @@ const PackageCreate = () => {
                 >
                   Packages
                 </Link>
-                <Typography
-                  color="text.secondary"
-                  variant="subtitle2"
-                >
+                <Typography color="text.secondary" variant="subtitle2">
                   Create
                 </Typography>
               </Breadcrumbs>
@@ -63,10 +56,6 @@ const PackageCreate = () => {
   );
 };
 
-PackageCreate.getLayout = (page) => (
-  <DashboardLayout>
-    {page}
-  </DashboardLayout>
-);
+PackageCreate.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 
 export default PackageCreate;

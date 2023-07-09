@@ -59,7 +59,6 @@ export const RoomAddForm = (props) => {
           helpers.setSubmitting(false);
           toast.success("Employee created");
         }
-        
       } catch (err) {
         console.error(err);
         toast.error("Something went wrong!");
@@ -119,7 +118,12 @@ export const RoomAddForm = (props) => {
           spacing={3}
           sx={{ p: 3 }}
         >
-          <Button disabled={formik.isSubmitting} type="submit" variant="contained" onClick={onClose}>
+          <Button
+            disabled={formik.isSubmitting}
+            type="submit"
+            variant="contained"
+            onClick={onClose}
+          >
             Add
           </Button>
           <Button color="inherit" disabled={formik.isSubmitting} onClick={onClose}>

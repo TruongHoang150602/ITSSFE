@@ -1,11 +1,11 @@
-import { Fragment, useCallback, useState } from 'react';
-import numeral from 'numeral';
-import PropTypes from 'prop-types';
-import { toast } from 'react-hot-toast';
-import ChevronDownIcon from '@untitled-ui/icons-react/build/esm/ChevronDown';
-import ChevronRightIcon from '@untitled-ui/icons-react/build/esm/ChevronRight';
-import DotsHorizontalIcon from '@untitled-ui/icons-react/build/esm/DotsHorizontal';
-import Image01Icon from '@untitled-ui/icons-react/build/esm/Image01';
+import { Fragment, useCallback, useState } from "react";
+import numeral from "numeral";
+import PropTypes from "prop-types";
+import { toast } from "react-hot-toast";
+import ChevronDownIcon from "@untitled-ui/icons-react/build/esm/ChevronDown";
+import ChevronRightIcon from "@untitled-ui/icons-react/build/esm/ChevronRight";
+import DotsHorizontalIcon from "@untitled-ui/icons-react/build/esm/DotsHorizontal";
+import Image01Icon from "@untitled-ui/icons-react/build/esm/Image01";
 import {
   Box,
   Button,
@@ -26,36 +26,36 @@ import {
   TablePagination,
   TableRow,
   TextField,
-  Typography
-} from '@mui/material';
-import { Scrollbar } from 'src/components/scrollbar';
-import { SeverityPill } from 'src/components/severity-pill';
+  Typography,
+} from "@mui/material";
+import { Scrollbar } from "src/components/scrollbar";
+import { SeverityPill } from "src/components/severity-pill";
 
 const categoryOptions = [
   {
-    label: 'Healthcare',
-    value: 'healthcare'
+    label: "Healthcare",
+    value: "healthcare",
   },
   {
-    label: 'Makeup',
-    value: 'makeup'
+    label: "Makeup",
+    value: "makeup",
   },
   {
-    label: 'Dress',
-    value: 'dress'
+    label: "Dress",
+    value: "dress",
   },
   {
-    label: 'Skincare',
-    value: 'skincare'
+    label: "Skincare",
+    value: "skincare",
   },
   {
-    label: 'Jewelry',
-    value: 'jewelry'
+    label: "Jewelry",
+    value: "jewelry",
   },
   {
-    label: 'Blouse',
-    value: 'blouse'
-  }
+    label: "Blouse",
+    value: "blouse",
+  },
 ];
 
 export const EquipmentListTable = (props) => {
@@ -86,11 +86,11 @@ export const EquipmentListTable = (props) => {
 
   const handleEquipmentUpdate = useCallback(() => {
     setCurrentEquipment(null);
-    toast.success('Equipment updated');
+    toast.success("Equipment updated");
   }, []);
 
   const handleEquipmentDelete = useCallback(() => {
-    toast.error('Equipment cannot be deleted');
+    toast.error("Equipment cannot be deleted");
   }, []);
 
   return (
@@ -100,18 +100,10 @@ export const EquipmentListTable = (props) => {
           <TableHead>
             <TableRow>
               <TableCell />
-              <TableCell >
-                Name
-              </TableCell>
-              <TableCell >
-                Price
-              </TableCell>
-              <TableCell>
-               Purchase Date
-              </TableCell>
-              <TableCell>
-               Warranty Period
-              </TableCell>
+              <TableCell>Name</TableCell>
+              <TableCell>Price</TableCell>
+              <TableCell>Purchase Date</TableCell>
+              <TableCell>Warranty Period</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -120,104 +112,84 @@ export const EquipmentListTable = (props) => {
               const price = numeral(equipment.price).format(`${equipment.currency}0,0.00`);
               return (
                 <Fragment key={equipment.id}>
-                  <TableRow
-                    hover
-                    key={equipment.id}
-                  >
+                  <TableRow hover key={equipment.id}>
                     <TableCell
                       padding="checkbox"
                       sx={{
                         ...(isCurrent && {
-                          position: 'relative',
-                          '&:after': {
-                            position: 'absolute',
+                          position: "relative",
+                          "&:after": {
+                            position: "absolute",
                             content: '" "',
                             top: 0,
                             left: 0,
-                            backgroundColor: 'primary.main',
+                            backgroundColor: "primary.main",
                             width: 3,
-                            height: 'calc(100% + 1px)'
-                          }
-                        })
+                            height: "calc(100% + 1px)",
+                          },
+                        }),
                       }}
-                      
                     >
                       <IconButton onClick={() => handleEquipmentToggle(equipment.id)}>
-                        <SvgIcon>
-                          {isCurrent ? <ChevronDownIcon /> : <ChevronRightIcon />}
-                        </SvgIcon>
+                        <SvgIcon>{isCurrent ? <ChevronDownIcon /> : <ChevronRightIcon />}</SvgIcon>
                       </IconButton>
                     </TableCell>
-                    <TableCell >
+                    <TableCell>
                       <Box
                         sx={{
-                          alignItems: 'center',
-                          display: 'flex'
+                          alignItems: "center",
+                          display: "flex",
                         }}
                       >
-                        {equipment.image
-                          ? (
-                            <Box
-                              sx={{
-                                alignItems: 'center',
-                                backgroundColor: 'neutral.50',
-                                backgroundImage: `url(${equipment.image})`,
-                                backgroundPosition: 'center',
-                                backgroundSize: 'cover',
-                                borderRadius: 1,
-                                display: 'flex',
-                                height: 80,
-                                justifyContent: 'center',
-                                overflow: 'hidden',
-                                width: 80
-                              }}
-                            />
-                          )
-                          : (
-                            <Box
-                              sx={{
-                                alignItems: 'center',
-                                backgroundColor: 'neutral.50',
-                                borderRadius: 1,
-                                display: 'flex',
-                                height: 80,
-                                justifyContent: 'center',
-                                width: 80
-                              }}
-                            >
-                              <SvgIcon>
-                                <Image01Icon />
-                              </SvgIcon>
-                            </Box>
-                          )}
+                        {equipment.image ? (
+                          <Box
+                            sx={{
+                              alignItems: "center",
+                              backgroundColor: "neutral.50",
+                              backgroundImage: `url(${equipment.image})`,
+                              backgroundPosition: "center",
+                              backgroundSize: "cover",
+                              borderRadius: 1,
+                              display: "flex",
+                              height: 80,
+                              justifyContent: "center",
+                              overflow: "hidden",
+                              width: 80,
+                            }}
+                          />
+                        ) : (
+                          <Box
+                            sx={{
+                              alignItems: "center",
+                              backgroundColor: "neutral.50",
+                              borderRadius: 1,
+                              display: "flex",
+                              height: 80,
+                              justifyContent: "center",
+                              width: 80,
+                            }}
+                          >
+                            <SvgIcon>
+                              <Image01Icon />
+                            </SvgIcon>
+                          </Box>
+                        )}
                         <Box
                           sx={{
-                            cursor: 'pointer',
-                            ml: 2
+                            cursor: "pointer",
+                            ml: 2,
                           }}
                         >
-                          <Typography variant="subtitle2">
-                            {equipment.name}
-                          </Typography>
-                          <Typography
-                            color="text.secondary"
-                            variant="body2"
-                          >
+                          <Typography variant="subtitle2">{equipment.name}</Typography>
+                          <Typography color="text.secondary" variant="body2">
                             in {equipment.category}
                           </Typography>
                         </Box>
                       </Box>
                     </TableCell>
-                    <TableCell>
-                      {price}
-                    </TableCell>
-                    <TableCell>
-                      {new Date().toISOString().slice(0, 10)}
-                    </TableCell>
-                    <TableCell>
-                     {` ${equipment.warrantyPeriod} year`}
-                    </TableCell>
-                   
+                    <TableCell>{price}</TableCell>
+                    <TableCell>{new Date().toISOString().slice(0, 10)}</TableCell>
+                    <TableCell>{` ${equipment.warrantyPeriod} year`}</TableCell>
                   </TableRow>
                   {isCurrent && (
                     <TableRow>
@@ -225,44 +197,31 @@ export const EquipmentListTable = (props) => {
                         colSpan={7}
                         sx={{
                           p: 0,
-                          position: 'relative',
-                          '&:after': {
-                            position: 'absolute',
+                          position: "relative",
+                          "&:after": {
+                            position: "absolute",
                             content: '" "',
                             top: 0,
                             left: 0,
-                            backgroundColor: 'primary.main',
+                            backgroundColor: "primary.main",
                             width: 3,
-                            height: 'calc(100% + 1px)'
-                          }
+                            height: "calc(100% + 1px)",
+                          },
                         }}
                       >
-                        <CardContent >
+                        <CardContent>
                           <Grid
                             container
                             spacing={3}
                             sx={{
-                              width: "98%"
+                              width: "98%",
                             }}
                           >
-                            <Grid
-                              item
-                              md={6}
-                              xs={12}
-                            >
-                              <Typography variant="h6">
-                                Basic details
-                              </Typography>
+                            <Grid item md={6} xs={12}>
+                              <Typography variant="h6">Basic details</Typography>
                               <Divider sx={{ my: 2 }} />
-                              <Grid
-                                container
-                                spacing={3}
-                              >
-                                <Grid
-                                  item
-                                  md={6}
-                                  xs={12}
-                                >
+                              <Grid container spacing={3}>
+                                <Grid item md={6} xs={12}>
                                   <TextField
                                     defaultValue={equipment.name}
                                     fullWidth
@@ -270,12 +229,8 @@ export const EquipmentListTable = (props) => {
                                     name="name"
                                   />
                                 </Grid>
-                    
-                                <Grid
-                                  item
-                                  md={6}
-                                  xs={12}
-                                >
+
+                                <Grid item md={6} xs={12}>
                                   <TextField
                                     defaultValue={equipment.category}
                                     fullWidth
@@ -283,38 +238,23 @@ export const EquipmentListTable = (props) => {
                                     select
                                   >
                                     {categoryOptions.map((option) => (
-                                      <MenuItem
-                                        key={option.value}
-                                        value={option.value}
-                                      >
+                                      <MenuItem key={option.value} value={option.value}>
                                         {option.label}
                                       </MenuItem>
                                     ))}
                                   </TextField>
                                 </Grid>
-                               
                               </Grid>
                             </Grid>
-                            <Grid
-                              item
-                              md={6}
-                              xs={12}
-                            >
-                              <Typography variant="h6">
-                                Pricing
-                              </Typography>
+                            <Grid item md={6} xs={12}>
+                              <Typography variant="h6">Pricing</Typography>
                               <Divider sx={{ my: 2 }} />
-                              <Grid
-                                container
-                                spacing={3}
-                              >
-                                <Grid
-                                  item
-                                  md={6}
-                                  xs={12}
-                                >
+                              <Grid container spacing={3}>
+                                <Grid item md={6} xs={12}>
                                   <TextField
-                                    defaultValue={equipment.price || new Date().toISOString().slice(0, 10)}
+                                    defaultValue={
+                                      equipment.price || new Date().toISOString().slice(0, 10)
+                                    }
                                     fullWidth
                                     label="Price"
                                     name="price"
@@ -323,16 +263,12 @@ export const EquipmentListTable = (props) => {
                                         <InputAdornment position="start">
                                           {equipment.currency}
                                         </InputAdornment>
-                                      )
+                                      ),
                                     }}
                                     type="number"
                                   />
                                 </Grid>
-                                <Grid
-                                  item
-                                  md={6}
-                                  xs={12}
-                                >
+                                <Grid item md={6} xs={12}>
                                   <TextField
                                     defaultValue={equipment.purchaseDate}
                                     fullWidth
@@ -346,21 +282,19 @@ export const EquipmentListTable = (props) => {
                                   md={6}
                                   xs={12}
                                   sx={{
-                                    alignItems: 'center',
-                                    display: 'flex'
+                                    alignItems: "center",
+                                    display: "flex",
                                   }}
                                 >
-                                <TextField
+                                  <TextField
                                     defaultValue={equipment.warrantyPeriod}
                                     fullWidth
                                     label="warranty Period"
                                     name="warrantyPeriod"
                                     InputProps={{
                                       startAdornment: (
-                                        <InputAdornment position="start">
-                                           year
-                                        </InputAdornment>
-                                      )
+                                        <InputAdornment position="start">year</InputAdornment>
+                                      ),
                                     }}
                                     type="number"
                                   />
@@ -374,13 +308,9 @@ export const EquipmentListTable = (props) => {
                           alignItems="center"
                           direction="row"
                           justifyContent="space-between"
-                          sx={{ p: 2 , width: '95%'}}
+                          sx={{ p: 2, width: "95%" }}
                         >
-                          <Stack
-                            alignItems="center"
-                            direction="row"
-                            spacing={2}
-                          >
+                          <Stack alignItems="center" direction="row" spacing={2}>
                             <Button
                               onClick={handleEquipmentUpdate}
                               type="submit"
@@ -388,18 +318,12 @@ export const EquipmentListTable = (props) => {
                             >
                               Update
                             </Button>
-                            <Button
-                              color="inherit"
-                              onClick={handleEquipmentClose}
-                            >
+                            <Button color="inherit" onClick={handleEquipmentClose}>
                               Cancel
                             </Button>
                           </Stack>
                           <div>
-                            <Button
-                              onClick={handleEquipmentDelete}
-                              color="error"
-                            >
+                            <Button onClick={handleEquipmentDelete} color="error">
                               Delete equipment
                             </Button>
                           </div>
@@ -432,5 +356,5 @@ EquipmentListTable.propTypes = {
   onPageChange: PropTypes.func.isRequired,
   onRowsPerPageChange: PropTypes.func,
   page: PropTypes.number.isRequired,
-  rowsPerPage: PropTypes.number.isRequired
+  rowsPerPage: PropTypes.number.isRequired,
 };

@@ -1,38 +1,38 @@
 export const paths = {
-  index: '/',
+  index: "/",
   dashboard: {
-    admin: 'dashboard/admin', 
-    employee: 'dashboard/employee', 
-    user: 'dashboard/user', 
+    admin: "dashboard/admin",
+    employee: "dashboard/employee",
+    user: "dashboard/user",
   },
   employees: {
-    index: '/employees',
+    index: "/employees",
     details: (id) => `/employees/${id}`,
     edit: (id) => `/employees/${id}/edit`,
   },
   users: {
-    index: '/users',
+    index: "/users",
     details: (id) => `/users/${id}`,
     edit: (id) => `/users/${id}/edit`,
   },
   gyms: {
-    index: '/gyms',
+    index: "/gyms",
     details: (id) => `/gyms/${id}`,
     create: (id) => `/gyms/${id}/create`,
   },
   registers: {
-    index: '/registers',
+    index: "/registers",
   },
 
   feedback: {
-    index: '/feedback',
+    index: "/feedback",
   },
   packages: {
-    index: '/packages',
-    create: '/packages/create',
+    index: "/packages",
+    create: "/packages/create",
   },
-  
-  401: '/401',
-  404: '/404',
-  500: '/500'
+
+  401: "/401",
+  404: "/404",
+  500: "/500",
 };

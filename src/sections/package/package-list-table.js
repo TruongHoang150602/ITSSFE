@@ -217,9 +217,12 @@ export const PackageListTable = (props) => {
                             </Button>
                           </Stack>
                           <div>
-                            <Button  onClick={() => {
+                            <Button
+                              onClick={() => {
                                 handlePackageDelete(pack.id);
-                              }} color="error">
+                              }}
+                              color="error"
+                            >
                               Delete package
                             </Button>
                           </div>
