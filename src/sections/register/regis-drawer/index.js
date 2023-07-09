@@ -30,7 +30,6 @@ export const RegisDrawer = (props) => {
   const [isEditing, setIsEditing] = useState(edit);
   const lgUp = useMediaQuery((theme) => theme.breakpoints.up("lg"));
 
-
   const handleEditOpen = useCallback(() => {
     setIsEditing(true);
   }, []);
@@ -40,48 +39,48 @@ export const RegisDrawer = (props) => {
   }, []);
 
   let content = null;
-  
+
   const register = valueRegis(regis);
 
-    content = (
-      <div>
-        <Stack
-          alignItems="center"
-          direction="row"
-          justifyContent="space-between"
-          sx={{
-            px: 3,
-            py: 2,
-          }}
-        >
-          <Typography color="inherit" variant="h6">
-            {register.number}
-          </Typography>
-          <IconButton color="inherit" onClick={onClose}>
-            <SvgIcon>
-              <XIcon />
-            </SvgIcon>
-          </IconButton>
-        </Stack>
-        <Box
-          sx={{
-            px: 3,
-            py: 4,
-          }}
-        >
-          {!isEditing ? (
-            <RegisDetails
-              onApprove={onClose}
-              onEdit={handleEditOpen}
-              onReject={onClose}
-              regis={register}
-            />
-          ) : (
-            <RegisEdit onCancel={handleEditCancel} onSave={handleEditCancel} regis={register} />
-          )}
-        </Box>
-      </div>
-    );
+  content = (
+    <div>
+      <Stack
+        alignItems="center"
+        direction="row"
+        justifyContent="space-between"
+        sx={{
+          px: 3,
+          py: 2,
+        }}
+      >
+        <Typography color="inherit" variant="h6">
+          {register.number}
+        </Typography>
+        <IconButton color="inherit" onClick={onClose}>
+          <SvgIcon>
+            <XIcon />
+          </SvgIcon>
+        </IconButton>
+      </Stack>
+      <Box
+        sx={{
+          px: 3,
+          py: 4,
+        }}
+      >
+        {!isEditing ? (
+          <RegisDetails
+            onApprove={onClose}
+            onEdit={handleEditOpen}
+            onReject={onClose}
+            regis={register}
+          />
+        ) : (
+          <RegisEdit onCancel={handleEditCancel} onSave={handleEditCancel} regis={register} />
+        )}
+      </Box>
+    </div>
+  );
 
   if (lgUp) {
     return (

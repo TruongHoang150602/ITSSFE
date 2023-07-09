@@ -1,9 +1,11 @@
-import { useCallback, useState } from "react";
-import Head from "next/head";
-import NextLink from "next/link";
+// import { useCallback, useState } from "react";
+// import Head from "next/head";
+// import NextLink from "next/link";
 import * as Yup from "yup";
 import { useFormik } from "formik";
 import { useRouter } from "next/navigation";
+// import { wait } from "src/utils/wait";
+// import ArrowLeftIcon from "@untitled-ui/icons-react/build/esm/ArrowLeft";
 import {
   Box,
   Button,
@@ -12,13 +14,13 @@ import {
   CardHeader,
   Link,
   Stack,
-  SvgIcon,
+  // SvgIcon,
   TextField,
   Typography,
 } from "@mui/material";
 import { useAuth } from "src/hooks/use-auth";
 import { Layout as AuthLayout } from "src/layouts/auth/layout";
-import { paths } from "src/paths";
+// import { paths } from "src/paths";
 
 const initialValues = {
   email: "admin@gmail.com",
@@ -26,6 +28,7 @@ const initialValues = {
   submit: null,
 };
 
+// Validate credentials
 const validationSchema = Yup.object({
   email: Yup.string().email("Must be a valid email").max(255).required("Email is required"),
   password: Yup.string().max(255).required("Password is required"),
@@ -34,6 +37,8 @@ const validationSchema = Yup.object({
 const Page = () => {
   const router = useRouter();
   const auth = useAuth();
+
+  // Routing
   const formik = useFormik({
     initialValues: initialValues,
     validationSchema: validationSchema,
@@ -51,10 +56,11 @@ const Page = () => {
 
   return (
     <Card elevation={16}>
+      {/* Form's header */}
       <CardHeader
         subheader={
           <Typography color="text.secondary" variant="body2">
-            Don't have an account?
+            Don't have an account yet?
             <Link href="/auth/register" underline="hover" variant="subtitle2">
               {" "}
               Register
@@ -64,6 +70,8 @@ const Page = () => {
         sx={{ pb: 0 }}
         title="Log in"
       />
+
+      {/* Form's content */}
       <CardContent>
         <form noValidate onSubmit={formik.handleSubmit}>
           <Stack spacing={3}>

@@ -54,7 +54,7 @@ export const AccountProfileDetails = (props) => {
     }),
     onSubmit: async (values, helpers) => {
       try {
-        console.log('submit')
+        console.log("submit");
         usersApi.updateUserById(user.id, formik.values);
         helpers.setStatus({ success: true });
         helpers.setSubmitting(false);

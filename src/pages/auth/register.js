@@ -26,6 +26,7 @@ const initialValues = {
   policy: false,
 };
 
+// Validate credentials
 const validationSchema = Yup.object({
   email: Yup.string().email("Must be a valid email").max(255).required("Email is required"),
   password: Yup.string().min(7).max(255).required("Password is required"),
@@ -38,6 +39,7 @@ const validationSchema = Yup.object({
 const Page = () => {
   const router = useRouter();
   const auth = useAuth();
+  // Routing
   const formik = useFormik({
     initialValues,
     validationSchema,
@@ -56,6 +58,7 @@ const Page = () => {
 
   return (
     <Card elevation={16}>
+      {/*Form's header*/}
       <CardHeader
         subheader={
           <Typography color="text.secondary" variant="body2">
@@ -69,6 +72,8 @@ const Page = () => {
         sx={{ pb: 0 }}
         title="Register"
       />
+
+      {/*Form's content*/}
       <CardContent>
         <form noValidate onSubmit={formik.handleSubmit}>
           <Stack spacing={3}>

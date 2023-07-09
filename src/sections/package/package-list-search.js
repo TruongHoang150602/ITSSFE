@@ -1,67 +1,67 @@
-import { useCallback, useMemo, useRef, useState } from 'react';
-import PropTypes from 'prop-types';
-import SearchMdIcon from '@untitled-ui/icons-react/build/esm/SearchMd';
-import { Box, Chip, Divider, Input, Stack, SvgIcon, Typography } from '@mui/material';
-import { MultiSelect } from 'src/components/multi-select';
-import { useUpdateEffect } from 'src/hooks/use-update-effect';
+import { useCallback, useMemo, useRef, useState } from "react";
+import PropTypes from "prop-types";
+import SearchMdIcon from "@untitled-ui/icons-react/build/esm/SearchMd";
+import { Box, Chip, Divider, Input, Stack, SvgIcon, Typography } from "@mui/material";
+import { MultiSelect } from "src/components/multi-select";
+import { useUpdateEffect } from "src/hooks/use-update-effect";
 
 const categoryOptions = [
   {
-    label: 'Healthcare',
-    value: 'healthcare'
+    label: "Healthcare",
+    value: "healthcare",
   },
   {
-    label: 'Makeup',
-    value: 'makeup'
+    label: "Makeup",
+    value: "makeup",
   },
   {
-    label: 'Dress',
-    value: 'dress'
+    label: "Dress",
+    value: "dress",
   },
   {
-    label: 'Skincare',
-    value: 'skincare'
+    label: "Skincare",
+    value: "skincare",
   },
   {
-    label: 'Jewelry',
-    value: 'jewelry'
+    label: "Jewelry",
+    value: "jewelry",
   },
   {
-    label: 'Blouse',
-    value: 'blouse'
-  }
+    label: "Blouse",
+    value: "blouse",
+  },
 ];
 
 const statusOptions = [
   {
-    label: 'Published',
-    value: 'published'
+    label: "Published",
+    value: "published",
   },
   {
-    label: 'Draft',
-    value: 'draft'
-  }
+    label: "Draft",
+    value: "draft",
+  },
 ];
 
 const stockOptions = [
   {
-    label: 'All',
-    value: 'all'
+    label: "All",
+    value: "all",
   },
   {
-    label: 'Available',
-    value: 'available'
+    label: "Available",
+    value: "available",
   },
   {
-    label: 'Out of Stock',
-    value: 'outOfStock'
-  }
+    label: "Out of Stock",
+    value: "outOfStock",
+  },
 ];
 
 export const PackageListSearch = (props) => {
   const { onFiltersChange, ...other } = props;
   const queryRef = useRef(null);
-  const [query, setQuery] = useState('');
+  const [query, setQuery] = useState("");
   const [chips, setChips] = useState([]);
 
   const handleChipsUpdate = useCallback(() => {
@@ -69,25 +69,25 @@ export const PackageListSearch = (props) => {
       name: undefined,
       category: [],
       status: [],
-      inStock: undefined
+      inStock: undefined,
     };
 
     chips.forEach((chip) => {
       switch (chip.field) {
-        case 'name':
+        case "name":
           // There will (or should) be only one chips with field "name"
           // so we can set up it directly
           filters.name = chip.value;
           break;
-        case 'category':
+        case "category":
           filters.category.push(chip.value);
           break;
-        case 'status':
+        case "status":
           filters.status.push(chip.value);
           break;
-        case 'inStock':
+        case "inStock":
           // The value can be "available" or "outOfStock" and we transform it to a boolean
-          filters.inStock = chip.value === 'available';
+          filters.inStock = chip.value === "available";
           break;
         default:
           break;
@@ -101,14 +101,10 @@ export const PackageListSearch = (props) => {
     handleChipsUpdate();
   }, [chips, handleChipsUpdate]);
 
- 
   const handleQueryChange = useCallback((event) => {
     event.preventDefault();
-    setQuery(queryRef.current?.value || '');
+    setQuery(queryRef.current?.value || "");
   }, []);
-
-  
- 
 
   return (
     <div {...other}>
@@ -137,5 +133,5 @@ export const PackageListSearch = (props) => {
 };
 
 PackageListSearch.propTypes = {
-  onFiltersChange: PropTypes.func
+  onFiltersChange: PropTypes.func,
 };

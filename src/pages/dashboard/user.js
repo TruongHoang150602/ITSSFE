@@ -1,12 +1,6 @@
 import React, { useCallback, useEffect, useState } from "react";
 import Head from "next/head";
-import {
-  Alert,
-  Box,
-  Container,
-  Stack,
-  Unstable_Grid2 as Grid,
-} from "@mui/material";
+import { Avatar, Box, Button, Chip, Container, Stack, Unstable_Grid2 as Grid } from "@mui/material";
 import usersApi from "src/api/users";
 import { useMounted } from "src/hooks/use-mounted";
 import { usePageView } from "src/hooks/use-page-view";

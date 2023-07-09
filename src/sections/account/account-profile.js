@@ -10,30 +10,31 @@ import {
 } from "@mui/material";
 
 const initialValues = (user) => {
-  if(user) return {
-    address: user.address,
-    gender: user.gender,
-    birthday: user.birthday,
-    email: user.email ,
-    name: user.name ,
-    phone: user.phone ,
-    avatar: user.avatar ,
-    role: user.role ,
-  }
+  if (user)
+    return {
+      address: user.address,
+      gender: user.gender,
+      birthday: user.birthday,
+      email: user.email,
+      name: user.name,
+      phone: user.phone,
+      avatar: user.avatar,
+      role: user.role,
+    };
   return {
-    address: '',
-    gender: '',
-    birthday: '',
-    email: '',
-    name: '',
-    phone: '',
-    avatar: '',
-    role: '',
-  }
-}
+    address: "",
+    gender: "",
+    birthday: "",
+    email: "",
+    name: "",
+    phone: "",
+    avatar: "",
+    role: "",
+  };
+};
 
 export const AccountProfile = (props) => {
-  const {user, ...other} = props;
+  const { user, ...other } = props;
   const initUser = initialValues(user);
   return (
     <Card>
