@@ -14,11 +14,9 @@ import {
   Grid,
   IconButton,
   InputAdornment,
-  LinearProgress,
   MenuItem,
   Stack,
   SvgIcon,
-  Switch,
   Table,
   TableBody,
   TableCell,
@@ -29,32 +27,15 @@ import {
   Typography
 } from '@mui/material';
 import { Scrollbar } from 'src/components/scrollbar';
-import { SeverityPill } from 'src/components/severity-pill';
 
 const categoryOptions = [
   {
-    label: 'Healthcare',
-    value: 'healthcare'
+    label: 'Strength',
+    value: 'Strength'
   },
   {
-    label: 'Makeup',
-    value: 'makeup'
-  },
-  {
-    label: 'Dress',
-    value: 'dress'
-  },
-  {
-    label: 'Skincare',
-    value: 'skincare'
-  },
-  {
-    label: 'Jewelry',
-    value: 'jewelry'
-  },
-  {
-    label: 'Blouse',
-    value: 'blouse'
+    label: 'Cardio',
+    value: 'Cardio'
   }
 ];
 
@@ -66,16 +47,18 @@ export const EquipmentListTable = (props) => {
     equipments,
     equipmentsCount,
     rowsPerPage,
+    editEquip,
+    deleteEquip,
     ...other
   } = props;
   const [currentEquipment, setCurrentEquipment] = useState(null);
 
   const handleEquipmentToggle = useCallback((equipmentId) => {
+    console.log(currentEquipment);
     setCurrentEquipment((prevEquipmentId) => {
       if (prevEquipmentId === equipmentId) {
         return null;
       }
-
       return equipmentId;
     });
   }, []);
@@ -85,11 +68,14 @@ export const EquipmentListTable = (props) => {
   }, []);
 
   const handleEquipmentUpdate = useCallback(() => {
+
     setCurrentEquipment(null);
     toast.success('Equipment updated');
   }, []);
 
-  const handleEquipmentDelete = useCallback(() => {
+  const handleEquipmentDelete = useCallback((equipId) => {
+    deleteEquip(equipId);
+    setCurrentEquipment(null);
     toast.error('Equipment cannot be deleted');
   }, []);
 
@@ -397,7 +383,7 @@ export const EquipmentListTable = (props) => {
                           </Stack>
                           <div>
                             <Button
-                              onClick={handleEquipmentDelete}
+                              onClick={() => {handleEquipmentDelete(equipment.id)}}
                               color="error"
                             >
                               Delete equipment

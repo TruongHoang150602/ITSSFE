@@ -21,17 +21,17 @@ const initialValues = (user) => {
   if (user)
     return {
       first_name: user.first_name,
-      gender: user.gender,
-      birth: user.birth,
-      email: user.email,
       last_name: user.last_name,
+      gender: user.gender,
+      birthday: user.birthday,
+      email: user.email,
       phone: user.phone,
       submit: null,
     };
   return {
     first_name: "",
     gender: "male",
-    birth: new Date().toISOString().slice(0, 10),
+    birthday: new Date().toISOString().slice(0, 10),
     email: "",
     last_name: "",
     phone: "",
@@ -47,15 +47,19 @@ export const AccountProfileDetails = (props) => {
     validationSchema: Yup.object({
       first_name: Yup.string().max(255),
       gender: Yup.string(),
-      birth: Yup.string(),
+      birthday: Yup.string(),
       email: Yup.string().email("Must be a valid email").max(255).required("Email is required"),
-      last_name: Yup.string().max(255).required("Name is required"),
+      last_name: Yup.string().max(255),
       phone: Yup.string().max(15),
     }),
     onSubmit: async (values, helpers) => {
       try {
-        console.log('submit')
-        usersApi.updateUserById(user.id, formik.values);
+        const updateUser = {
+          ...user,
+          ...values
+        }
+        console.log(updateUser)
+        usersApi.updateUserById(user.id, updateUser);
         helpers.setStatus({ success: true });
         helpers.setSubmitting(false);
         toast.success("User updated");
@@ -83,11 +87,11 @@ export const AccountProfileDetails = (props) => {
                   fullWidth
                   helperText={formik.touched.last_name && formik.errors.last_name}
                   label="First name"
-                  name="fisrt_name"
+                  name="first_name"
                   onBlur={formik.handleBlur}
                   onChange={formik.handleChange}
                   required
-                  value={formik.values.fisrt_name}
+                  value={formik.values.first_name}
                 />
               </Grid>
               <Grid xs={12} md={6}>
@@ -149,15 +153,15 @@ export const AccountProfileDetails = (props) => {
               </Grid>
               <Grid xs={12} md={6}>
                 <TextField
-                  error={!!(formik.touched.birth && formik.errors.birth)}
+                  error={!!(formik.touched.birthday && formik.errors.birthday)}
                   fullWidth
-                  helperText={formik.touched.birth && formik.errors.birth}
+                  helperText={formik.touched.birthday && formik.errors.birthday}
                   label="Birthday"
-                  name="birth"
+                  name="birthday"
                   type="date"
                   onBlur={formik.handleBlur}
                   onChange={formik.handleChange}
-                  value={formik.values.birth}
+                  value={formik.values.birthday}
                 />
               </Grid>
             </Grid>

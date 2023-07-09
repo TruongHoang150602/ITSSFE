@@ -1,31 +1,31 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import Head from 'next/head';
-import PlusIcon from '@untitled-ui/icons-react/build/esm/Plus';
-import { Box, Button, Divider, Stack, SvgIcon, Typography } from '@mui/material';
-import  registersApi  from 'src/api/registers';
-import { useMounted } from 'src/hooks/use-mounted';
-import { usePageView } from 'src/hooks/use-page-view';
-import { Layout as DashboardLayout } from 'src/layouts/dashboard/layout';
-import { RegisDrawer } from 'src/sections/register/regis-drawer';
-import { RegisListContainer } from 'src/sections/register/regis-list-container';
-import { RegisListSearch } from 'src/sections/register/regis-list-search';
-import { RegisListTable } from 'src/sections/register/regis-list-table';
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import Head from "next/head";
+import PlusIcon from "@untitled-ui/icons-react/build/esm/Plus";
+import { Box, Button, Divider, Stack, SvgIcon, Typography } from "@mui/material";
+import registersApi from "src/api/registers";
+import { useMounted } from "src/hooks/use-mounted";
+import { usePageView } from "src/hooks/use-page-view";
+import { Layout as DashboardLayout } from "src/layouts/dashboard/layout";
+import { RegisDrawer } from "src/sections/register/regis-drawer";
+import { RegisListContainer } from "src/sections/register/regis-list-container";
+import { RegisListSearch } from "src/sections/register/regis-list-search";
+import { RegisListTable } from "src/sections/register/regis-list-table";
 
 const useSearch = () => {
   const [search, setSearch] = useState({
     filters: {
       query: undefined,
-      status: undefined
+      status: undefined,
     },
     page: 0,
     rowsPerPage: 5,
-    sortBy: 'createdAt',
-    sortDir: 'desc'
+    sortBy: "createdAt",
+    sortDir: "desc",
   });
 
   return {
     search,
-    updateSearch: setSearch
+    updateSearch: setSearch,
   };
 };
 
@@ -33,17 +33,17 @@ const useRegiss = (search) => {
   const isMounted = useMounted();
   const [state, setState] = useState({
     regiss: [],
-    regissCount: 0
+    regissCount: 0,
   });
 
   const getRegiss = useCallback(async () => {
     try {
       const response = await registersApi.getRegisters(search);
-      console.log(response)
+      console.log(response);
       if (isMounted()) {
         setState({
           regiss: response.data,
-          regissCount: response.count
+          regissCount: response.count,
         });
       }
     } catch (err) {
@@ -51,23 +51,57 @@ const useRegiss = (search) => {
     }
   }, [search, isMounted]);
 
-  useEffect(() => {
-      getRegiss();
+  const createRegis = useCallback(
+    async (regissData) => {
+      try {
+        const response = await registersApi.createRegister(regissData);
+        console.log(response);
+        if (isMounted()) {
+          getRegiss();
+        }
+      } catch (err) {
+        console.error(err);
+      }
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [search]);
+    [isMounted]
+  );
 
-  return state;
+  const updateRegis = useCallback(
+    async (regissId, regissData) => {
+      try {
+        // Make an API call to update an existing regiss
+        const response = await registersApi.updateRegisterById(regissId, regissData);
+        console.log(response);
+        if (isMounted()) {
+          // Update the state with the updated regiss
+          getRegiss();
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    },
+    [isMounted]
+  );
+
+  useEffect(() => {
+    getRegiss();
+  }, [search]);
+
+  return {
+    ...state,
+    createRegis,
+    updateRegis,
+  };
 };
 
 const Page = () => {
   const rootRef = useRef(null);
   const { search, updateSearch } = useSearch();
-  const { regiss, regissCount } = useRegiss(search);
+  const { regiss, regissCount, createRegis, updateRegis } = useRegiss(search);
   const [drawer, setDrawer] = useState({
     isOpen: false,
     isEdit: false,
-    data: undefined
+    data: undefined,
   });
   const currentRegis = useMemo(() => {
     if (!drawer.data) {
@@ -79,95 +113,104 @@ const Page = () => {
 
   usePageView();
 
-  const handleFiltersChange = useCallback((filters) => {
-    updateSearch((prevState) => ({
-      ...prevState,
-      filters
-    }));
-  }, [updateSearch]);
+  const handleFiltersChange = useCallback(
+    (filters) => {
+      updateSearch((prevState) => ({
+        ...prevState,
+        filters,
+      }));
+    },
+    [updateSearch]
+  );
 
-  const handleSortChange = useCallback((sortDir) => {
-    updateSearch((prevState) => ({
-      ...prevState,
-      sortDir
-    }));
-  }, [updateSearch]);
+  const handleSortChange = useCallback(
+    (sortDir) => {
+      updateSearch((prevState) => ({
+        ...prevState,
+        sortDir,
+      }));
+    },
+    [updateSearch]
+  );
 
-  const handlePageChange = useCallback((event, page) => {
-    updateSearch((prevState) => ({
-      ...prevState,
-      page
-    }));
-  }, [updateSearch]);
+  const handlePageChange = useCallback(
+    (event, page) => {
+      updateSearch((prevState) => ({
+        ...prevState,
+        page,
+      }));
+    },
+    [updateSearch]
+  );
 
-  const handleRowsPerPageChange = useCallback((event) => {
-    updateSearch((prevState) => ({
-      ...prevState,
-      rowsPerPage: parseInt(event.target.value, 10)
-    }));
-  }, [updateSearch]);
+  const handleRowsPerPageChange = useCallback(
+    (event) => {
+      updateSearch((prevState) => ({
+        ...prevState,
+        rowsPerPage: parseInt(event.target.value, 10),
+      }));
+    },
+    [updateSearch]
+  );
 
-  const handleRegisOpen = useCallback((regisId) => {
-    // Close drawer if is the same regis
+  const handleRegisOpen = useCallback(
+    (regisId) => {
+      // Close drawer if is the same regis
 
-    if (drawer.isOpen && drawer.data === regisId) {
-      setDrawer({
-        isOpen: false,
-        data: undefined
-      });
-      return;
-    }
-
-    else if(regisId){
+      if (drawer.isOpen && drawer.data === regisId) {
+        setDrawer({
+          isOpen: false,
+          data: undefined,
+        });
+        return;
+      } else if (regisId) {
+        setDrawer({
+          isOpen: true,
+          data: regisId,
+        });
+        return;
+      }
       setDrawer({
         isOpen: true,
-        data: regisId
+        isEdit: true,
+        data: undefined,
       });
-      return;
-    }
-    setDrawer({
-      isOpen: true,
-      isEdit: true,
-      data: undefined
-    });
-
-   
-  }, [drawer]);
+    },
+    [drawer]
+  );
 
   const handleRegisClose = useCallback(() => {
     setDrawer({
       isOpen: false,
-      data: undefined
+      data: undefined,
     });
   }, []);
 
   return (
     <>
       <Head>
-        <title>
-          Register List
-        </title>
+        <title>Register List</title>
       </Head>
       <Divider />
       <Box
         component="main"
         ref={rootRef}
         sx={{
-          display: 'flex',
-          flex: '1 1 auto',
-          overflow: 'hidden',
-          position: 'relative'
+          display: "flex",
+          flex: "1 1 auto",
+          overflow: "hidden",
+          position: "relative",
         }}
       >
         <Box
           ref={rootRef}
           sx={{
             bottom: 0,
-            display: 'flex',
+            display: "flex",
             left: 0,
-            position: 'absolute',
+            position: "absolute",
             right: 0,
-            top: 0
+            top: 0,
           }}
         >
           <RegisListContainer open={drawer.isOpen}>
@@ -179,17 +222,15 @@ const Page = () => {
                 spacing={4}
               >
                 <div>
-                  <Typography variant="h4">
-                    Registers
-                  </Typography>
+                  <Typography variant="h4">Registers</Typography>
                 </div>
                 <div>
                   <Button
-                    startIcon={(
+                    startIcon={
                       <SvgIcon>
                         <PlusIcon />
                       </SvgIcon>
-                    )}
+                    }
                     variant="contained"
                     onClick={handleRegisOpen}
                   >
@@ -220,8 +261,10 @@ const Page = () => {
             container={rootRef.current}
             onClose={handleRegisClose}
             open={drawer.isOpen}
-            edit = {drawer.isEdit}
+            edit={drawer.isEdit}
             regis={currentRegis}
+            createRegis={createRegis}
+            updateRegis={updateRegis}
           />
         </Box>
       </Box>
@@ -229,10 +272,6 @@ const Page = () => {
   );
 };
 
-Page.getLayout = (page) => (
-  <DashboardLayout>
-    {page}
-  </DashboardLayout>
-);
+Page.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 
 export default Page;

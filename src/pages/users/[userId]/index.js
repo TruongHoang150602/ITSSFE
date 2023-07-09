@@ -32,6 +32,7 @@ import { UserInvoices } from 'src/sections/user/user-invoices';
 import { UserMember } from 'src/sections/user/user-member';
 import { UserLogs } from 'src/sections/user/user-logs';
 import { getInitials } from 'src/utils/get-initials';
+import { useAuth } from 'src/hooks/use-auth';
 
 const tabs = [
   { label: 'Details', value: 'details' },
@@ -74,7 +75,6 @@ const useLogs = () => {
     try {
       const {userId} = route.query;
       const response = await usersApi.getProcessById(userId);
-      console.log(response);
       if (isMounted()) {
         setLogs(response);
       }
@@ -83,19 +83,30 @@ const useLogs = () => {
     }
   }, [isMounted]);
 
+  const addLog = useCallback(async (newLog) => {
+    try {
+      const {userId} = route.query;
+      const response = await usersApi.addProcessById(userId, newLog);
+      getLogs();
+    } catch (err) {
+      console.error(err);
+    }
+  }, []);
+
   useEffect(() => {
       getLogs();
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     []);
 
-  return logs;
+  return {logs, addLog};
 };
 
 const Page = () => {
   const [currentTab, setCurrentTab] = useState('details');
   const user = useUser();
-  const logs = useLogs();
+  const {logs, addLog} = useLogs();
+  const role = useAuth().user.role;
 
   usePageView();
 
@@ -111,7 +122,7 @@ const Page = () => {
     <>
       <Head>
         <title>
-          Dashboard: User Details | Devias Kit PRO
+          Dashboard: User Details
         </title>
       </Head>
       <Box
@@ -168,7 +179,7 @@ const Page = () => {
                   </Avatar>
                   <Stack spacing={1}>
                     <Typography variant="h4">
-                      {user.email}
+                    {user.first_name} {user.last_name}
                     </Typography>
                     <Stack
                       alignItems="center"
@@ -185,6 +196,8 @@ const Page = () => {
                     </Stack>
                   </Stack>
                 </Stack>
+                { role === "admin" &&
+                (
                 <Stack
                   alignItems="center"
                   direction="row"
@@ -202,18 +215,9 @@ const Page = () => {
                   >
                     Edit
                   </Button>
-                  <Button
-                    endIcon={(
-                      <SvgIcon>
-                        <ChevronDownIcon />
-                      </SvgIcon>
-                    )}
-                    variant="contained"
-                  >
-                    Actions
-                  </Button>
                 </Stack>
-              </Stack>
+                )}
+              </Stack> 
               <div>
                 <Tabs
                   indicatorColor="primary"
@@ -258,7 +262,7 @@ const Page = () => {
                 container 
                 spacing={4} >
                   <UserCalendar activity = {logs} />
-                <UserLogs logs={logs} />
+                <UserLogs logs={logs} addLog={addLog} />
               </Stack>}
           </Stack>
         </Container>

@@ -18,6 +18,7 @@ import { Layout as DashboardLayout } from 'src/layouts/dashboard/layout';
 import { paths } from 'src/paths';
 import { PackageListSearch } from 'src/sections/package/package-list-search';
 import { PackageListTable } from 'src/sections/package/package-list-table';
+import { useAuth } from 'src/hooks/use-auth';
 
 const useSearch = () => {
   const [search, setSearch] = useState({
@@ -71,7 +72,7 @@ const usePackages = (search) => {
 const PackageList = () => {
   const { search, updateSearch } = useSearch();
   const { packages, packagesCount } = usePackages(search);
-
+  const role = useAuth().user.role;
   usePageView();
 
   const handleFiltersChange = useCallback((filters) => {
@@ -122,6 +123,7 @@ const PackageList = () => {
                 </Typography>
                
               </Stack>
+              {role === "admin" && (
               <Stack
                 alignItems="center"
                 direction="row"
@@ -140,6 +142,7 @@ const PackageList = () => {
                   Add
                 </Button>
               </Stack>
+              )}
             </Stack>
             <Card>
               <PackageListSearch onFiltersChange={handleFiltersChange} />

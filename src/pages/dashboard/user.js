@@ -46,7 +46,7 @@ const useLogs = (userId) => {
 
 const Page = () => {
   const user = useAuth().user;
-  const logs = useLogs(user.id);
+  const logs = useLogs(user ? user.id : 0);
 
   usePageView();
 

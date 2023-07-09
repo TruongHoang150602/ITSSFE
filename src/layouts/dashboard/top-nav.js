@@ -25,11 +25,13 @@ export const TopNav = (props) => {
   const { onNavOpen } = props;
   const lgUp = useMediaQuery((theme) => theme.breakpoints.up('lg'));
   const accountPopover = usePopover();
-  const auth = useAuth();
-  let user = null;
-  useEffect( () => {
-    user = auth.user;
-  },[user]);
+  const user = useAuth().user;
+  // useEffect( () => {
+  //   console.log("getUser")
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  //   user = auth.user;
+  // },[]);
+  console.log(user)
   return (
     <>
       <Box

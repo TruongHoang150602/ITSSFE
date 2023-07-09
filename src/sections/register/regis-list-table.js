@@ -10,14 +10,6 @@ import {
   TableRow,
   Typography
 } from '@mui/material';
-import { SeverityPill } from 'src/components/severity-pill';
-
-const statusMap = {
-  complete: 'success',
-  pending: 'info',
-  canceled: 'warning',
-  rejected: 'error'
-};
 
 export const RegisListTable = (props) => {
   const {
@@ -42,8 +34,7 @@ export const RegisListTable = (props) => {
             const createdAtMonth = format(createdAt, 'LLL').toUpperCase();
             const createdAtDay = format(createdAt, 'd');
 
-            const totalAmount = numeral(regis.totalAmount).format(`${regis.currency}0,0.00`);
-            const statusColor = statusMap[regis.status] || 'warning';
+            const totalAmount = numeral(regis.totalAmount).format(`${regis.currency}0,0.00 $`);
 
             return (
               <TableRow
@@ -84,7 +75,7 @@ export const RegisListTable = (props) => {
                   </Box>
                   <Box sx={{ ml: 2 }}>
                     <Typography variant="subtitle2">
-                      {regis.number}
+                      {regis.customer.name}
                     </Typography>
                     <Typography
                       color="text.secondary"
@@ -95,9 +86,7 @@ export const RegisListTable = (props) => {
                   </Box>
                 </TableCell>
                 <TableCell align="right">
-                  <SeverityPill color={statusColor}>
-                    {regis.status}
-                  </SeverityPill>
+                 {totalAmount}
                 </TableCell>
               </TableRow>
             );

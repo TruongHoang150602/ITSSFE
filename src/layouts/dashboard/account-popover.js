@@ -23,10 +23,11 @@ export const AccountPopover = (props) => {
   const { user, anchorEl, onClose, open, ...other } = props;
   const router = useRouter();
   const auth = useAuth();
-  const handleLogout = () => {
+  const handleLogout = async () => {
       onClose?.();
       auth.signOut();
       router.push('/auth/login');
+      return;
     };
   
   return (
@@ -43,13 +44,13 @@ export const AccountPopover = (props) => {
       {...other}>
       <Box sx={{ p: 2 }}>
         <Typography variant="body1">
-         {user ? user.name : ' '}
+         {user ? `${user.first_name} ${user.last_name}` : ' '}
         </Typography>
         <Typography
           color="text.secondary"
           variant="body2"
         >
-          {user ? user.gmail : ' '}
+          {user ? user.email : ' '}
         </Typography>
       </Box>
       <Divider />

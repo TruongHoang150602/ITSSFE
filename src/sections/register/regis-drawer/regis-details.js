@@ -6,25 +6,11 @@ import {
   Button,
   Stack,
   SvgIcon,
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableRow,
   Typography,
   useMediaQuery
 } from '@mui/material';
 import { PropertyList } from 'src/components/property-list';
 import { PropertyListItem } from 'src/components/property-list-item';
-import { SeverityPill } from 'src/components/severity-pill';
-import { Scrollbar } from 'src/components/scrollbar';
-
-const statusMap = {
-  canceled: 'warning',
-  complete: 'success',
-  pending: 'info',
-  rejected: 'error'
-};
 
 export const RegisDetails = (props) => {
   const { onApprove, onEdit, onReject, regis } = props;
@@ -72,8 +58,8 @@ export const RegisDetails = (props) => {
             align={align}
             disableGutters
             divider
-            label="Number"
-            value={regis.number}
+            label="Created By"
+            value={regis.createdBy}
           />
           <PropertyListItem
             align={align}
@@ -102,6 +88,13 @@ export const RegisDetails = (props) => {
             label="Date"
             value={regis.createdAt}
           />
+           <PropertyListItem
+            align={align}
+            disableGutters
+            divider
+            label="Coach"
+            value={regis.coach}
+          />
           <PropertyListItem
             align={align}
             disableGutters
@@ -115,15 +108,7 @@ export const RegisDetails = (props) => {
             divider
             label="Total Amount"
             value={totalAmount}
-          />
-           <PropertyListItem
-            align={align}
-            disableGutters
-            divider
-            label="Total Amount"
-            value={regis.paymentMethod}
-          />
-         
+          />     
         </PropertyList>
 
       </Stack>

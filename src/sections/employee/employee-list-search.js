@@ -36,11 +36,11 @@ const tabs = [
 const sortOptions = [
   {
     label: 'Name (a - z)',
-    value: 'name|desc'
+    value: 'name|asc'
   },
   {
     label: 'Name (z - a)',
-    value: 'name|asc'
+    value: 'name|desc'
   },
   {
     label: 'Role (highest)',

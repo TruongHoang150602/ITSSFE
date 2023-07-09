@@ -84,6 +84,19 @@ class UsersApi {
     }
   }
 
+  async addProcessById(id, newActivity) {
+    try {
+      console.log(newActivity);
+      let updateProcess = await this.getProcessById(id);
+      updateProcess.process = [newActivity, ... updateProcess.process];
+      const response = await axios.put(`${this.baseUrl}/process/${id}`, updateProcess);
+      return response.data;
+    } catch (error) {
+      console.error(`Error while fetching user with ID ${id}:`, error);
+      return null;
+    }
+  }
+
   async createUser(newUser) {
     try {
       const response = await axios.post(`${this.baseUrl}/users`, newUser);
