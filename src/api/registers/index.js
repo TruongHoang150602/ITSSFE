@@ -21,6 +21,8 @@ class RegistersApi {
       return [];
     }
     data = deepCopy(data);
+
+    data = applySort(data, 'createdAt', 'desc');
     let count = data.length;
 
     if (typeof filters !== 'undefined') {

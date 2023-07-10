@@ -14,11 +14,12 @@ import {
   Switch,
   TextField,
   Typography,
-  Unstable_Grid2 as Grid,
-} from "@mui/material";
-import { paths } from "src/paths";
-import { wait } from "src/utils/wait";
-import employeesApi from "src/api/employees";
+  Unstable_Grid2 as Grid
+} from '@mui/material';
+import { paths } from 'src/paths';
+import { wait } from 'src/utils/wait';
+import employeesApi from 'src/api/employees';
+import { createResourceId } from 'src/utils/create-resource-id';
 
 const ROLE = [
   {
@@ -40,24 +41,23 @@ const ROLE = [
 ];
 
 const initialValues = (employee) => {
-  if (employee)
-    return {
-      address: employee.address || "",
-      gender: employee.gender || "male",
-      birth: employee.birth || new Date().toISOString().slice(0, 10),
-      email: employee.email || "",
-      name: employee.name || "",
-      phone: employee.phone || "",
-      role: "admin",
-      submit: null,
-    };
+  if(employee) return {
+    last_name: employee.last_name || '',
+    first_name: employee.first_name || '',
+    gender: employee.gender || 'male',
+    birthday: employee.birthday.slice(0, 10),
+    email: employee.email || '',
+    phone: employee.phone || '',
+    role: "admin",
+    submit: null
+  }
   return {
-    address: "",
-    gender: "male",
-    birth: new Date().toISOString().slice(0, 10),
-    email: "",
-    name: "",
-    phone: "",
+    first_name: '',
+    last_name: '',
+    gender: 'male',
+    birthday: new Date().toISOString().slice(0, 10),
+    email: '',
+    phone: '',
     role: "admin",
     submit: null,
   };
@@ -70,24 +70,42 @@ export const EmployeeEditForm = (props) => {
     initialValues: initialValues(employee),
     validationSchema: Yup.object({
       gender: Yup.string(),
-      birth: Yup.string(),
-      email: Yup.string().email("Must be a valid email").max(255).required("Email is required"),
-      first_name: Yup.string().max(255).required("Name is required"),
+      birthday: Yup.string(),
+      email: Yup
+        .string()
+        .email('Must be a valid email')
+        .max(255)
+        .required('Email is required'),
+      first_name: Yup
+        .string()
+        .max(255)
+        .required('Name is required'),
       last_name: Yup.string().max(255),
       phone: Yup.string().max(15),
       role: Yup.string().required("Role is required"),
     }),
     onSubmit: async (values, helpers) => {
       try {
-        if (employee) {
-          employeesApi.updateEmployeeById(employee.id, formik.values);
+        if (employee){
+          const updateEmployee = {
+            ... employee,
+            ...values
+          }
+          employeesApi.updateEmployeeById(employee.id, updateEmployee);
           await wait(500);
           helpers.setStatus({ success: true });
           helpers.setSubmitting(false);
           toast.success("Employee updated");
           router.push(paths.employees.index);
-        } else {
-          employeesApi.createEmployee(formik.values);
+        }
+        else{
+          const newEmployee = {
+            createdAt: new Date().toISOString,
+            password: '1234567',
+            id: createResourceId(),
+            ... values
+          }
+          employeesApi.createEmployee(newEmployee);
           await wait(500);
           helpers.setStatus({ success: true });
           helpers.setSubmitting(false);
@@ -183,15 +201,15 @@ export const EmployeeEditForm = (props) => {
             </Grid>
             <Grid xs={12} md={6}>
               <TextField
-                error={!!(formik.touched.birth && formik.errors.birth)}
+                error={!!(formik.touched.birthday && formik.errors.birthday)}
                 fullWidth
-                helperText={formik.touched.birth && formik.errors.birth}
+                helperText={formik.touched.birthday && formik.errors.birthday}
                 label="Birthday"
-                name="birth"
-                type="date"
+                name="birthday"
+                type='date'
                 onBlur={formik.handleBlur}
                 onChange={formik.handleChange}
-                value={formik.values.birth}
+                value={formik.values.birthday}
               />
             </Grid>
 

@@ -20,11 +20,6 @@ import { Scrollbar } from "src/components/scrollbar";
 import { SeverityPill } from "src/components/severity-pill";
 import { paths } from "src/paths";
 
-const statusMap = {
-  pending: "warning",
-  delivered: "success",
-  refunded: "error",
-};
 
 export const OverviewLatestOrders = (props) => {
   const { orders = [], sx } = props;
@@ -37,7 +32,6 @@ export const OverviewLatestOrders = (props) => {
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell>Register</TableCell>
                 <TableCell>Customer</TableCell>
                 <TableCell sortDirection="desc">Date</TableCell>
                 <TableCell>Package</TableCell>
@@ -49,7 +43,6 @@ export const OverviewLatestOrders = (props) => {
 
                 return (
                   <TableRow hover key={order.id}>
-                    <TableCell>{order.ref}</TableCell>
                     <TableCell>{order.customer.name}</TableCell>
                     <TableCell>{createdAt}</TableCell>
                     <TableCell>{order.package}</TableCell>

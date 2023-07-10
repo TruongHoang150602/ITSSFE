@@ -4,17 +4,37 @@ import { PropertyList } from "src/components/property-list";
 import { PropertyListItem } from "src/components/property-list-item";
 
 export const UserBasicDetails = (props) => {
-  const { birth, email, phone, gender, ...other } = props;
-  const mdUp = useMediaQuery((theme) => theme.breakpoints.up("md"));
-  const align = mdUp ? "horizontal" : "vertical";
+  const { birthday, email, phone, gender, ...other } = props;
+  const mdUp = useMediaQuery((theme) => theme.breakpoints.up('md'));
+  const align = mdUp ? 'horizontal' : 'vertical';
   return (
     <Card {...other}>
       <CardHeader title="User Details" />
       <PropertyList>
-        <PropertyListItem align={align} divider label="Gender" value={gender} />
-        <PropertyListItem align={align} divider label="Birthday" value={birth} />
-        <PropertyListItem align={align} divider label="Email" value={email} />
-        <PropertyListItem align={align} divider label="Phone" value={phone} />
+        <PropertyListItem
+            align={align}
+            divider
+            label="Gender"
+            value={gender}
+          />
+        <PropertyListItem
+            align={align}
+            divider
+            label="Birthday"
+            value={birthday}
+          />
+        <PropertyListItem
+          align={align}
+          divider
+          label="Email"
+          value={email}
+        />
+        <PropertyListItem
+          align={align}
+          divider
+          label="Phone"
+          value={phone}
+        />
       </PropertyList>
     </Card>
   );
@@ -22,7 +42,7 @@ export const UserBasicDetails = (props) => {
 
 UserBasicDetails.propTypes = {
   gender: PropTypes.string,
-  birth: PropTypes.string,
+  birthday: PropTypes.string,
   email: PropTypes.string.isRequired,
   phone: PropTypes.string,
 };

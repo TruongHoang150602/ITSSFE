@@ -98,10 +98,12 @@ const Page = () => {
                       height: 64,
                       width: 64,
                     }}
-                  ></Avatar>
+                  >
+                    {getInitials(`${employee.first_name} ${employee.last_name}`)}
+                  </Avatar>
                   <Stack spacing={1}>
                     <Typography variant="h4">
-                      {employee.first_name} {employee.last_name}
+                    {employee.first_name} {employee.last_name}
                     </Typography>
                     <Stack alignItems="center" direction="row" spacing={1}>
                       <Typography variant="subtitle2">employee_id:</Typography>

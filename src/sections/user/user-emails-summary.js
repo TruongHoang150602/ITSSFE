@@ -16,7 +16,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { usersApi } from "src/api/users";
+import { usersApi } from "src/api/customers";
 import { useMounted } from "src/hooks/use-mounted";
 
 const emailOptions = ["Resend last invoice", "Send password reset", "Send verification"];

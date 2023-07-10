@@ -2,11 +2,6 @@ import ChartBarIcon from '@heroicons/react/24/solid/ChartBarIcon';
 import SpaceDashboardRoundedIcon from '@mui/icons-material/SpaceDashboardRounded';
 import FitnessCenterRoundedIcon from '@mui/icons-material/FitnessCenterRounded';
 import PermContactCalendarRoundedIcon from '@mui/icons-material/PermContactCalendarRounded';
-import CogIcon from '@heroicons/react/24/solid/CogIcon';
-import LockClosedIcon from '@heroicons/react/24/solid/LockClosedIcon';
-import ShoppingBagIcon from '@heroicons/react/24/solid/ShoppingBagIcon';
-import UserIcon from '@heroicons/react/24/solid/UserIcon';
-import UserPlusIcon from '@heroicons/react/24/solid/UserPlusIcon';
 import UsersIcon from '@heroicons/react/24/solid/UsersIcon';
 import CardTravelIcon from '@mui/icons-material/CardTravel';
 import FeedIcon from '@mui/icons-material/Feed';
@@ -93,6 +88,15 @@ export const items = {
       )
     },
     {
+      title: 'Users',
+      path: '/users',
+      icon: (
+        <SvgIcon fontSize="small">
+          <UsersIcon />
+        </SvgIcon>
+      )
+    },
+    {
       title: 'Registers',
       path: '/registers',
       icon: (
@@ -132,11 +136,11 @@ export const items = {
       )
     },
     {
-      title: 'Registers',
-      path: '/registers',
+      title: 'Users',
+      path: '/users',
       icon: (
         <SvgIcon fontSize="small">
-          <ReceiptLongIcon />
+          <UsersIcon />
         </SvgIcon>
       )
     },

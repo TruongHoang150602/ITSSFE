@@ -20,7 +20,7 @@ import {
   Typography,
   Unstable_Grid2 as Grid,
 } from "@mui/material";
-import usersApi from "src/api/users";
+import customersApi from "src/api/customers";
 import { useMounted } from "src/hooks/use-mounted";
 import { usePageView } from "src/hooks/use-page-view";
 import { Layout as DashboardLayout } from "src/layouts/dashboard/layout";
@@ -32,24 +32,25 @@ import { UserInvoices } from "src/sections/user/user-invoices";
 import { UserMember } from "src/sections/user/user-member";
 import { UserLogs } from "src/sections/user/user-logs";
 import { getInitials } from "src/utils/get-initials";
+import { useAuth } from "src/hooks/use-auth";
 
 const tabs = [
   { label: "Details", value: "details" },
   { label: "Activity", value: "logs" },
 ];
 
-const useUser = () => {
+const useCustomer = () => {
   const route = useRouter();
   const isMounted = useMounted();
-  const [user, setUser] = useState(null);
+  const [customer, setCustomer] = useState(null);
 
-  const getUser = useCallback(async () => {
+  const getCustomer = useCallback(async () => {
     try {
-      const { userId } = route.query;
-      const response = await usersApi.getUserById(userId);
+      const { customerId } = route.query;
+      const response = await customersApi.getCustomerById(customerId);
 
       if (isMounted()) {
-        setUser(response);
+        setCustomer(response);
       }
     } catch (err) {
       console.error(err);
@@ -58,13 +59,13 @@ const useUser = () => {
 
   useEffect(
     () => {
-      getUser();
+      getCustomer();
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     []
   );
 
-  return user;
+  return customer;
 };
 
 const useLogs = () => {
@@ -74,9 +75,8 @@ const useLogs = () => {
 
   const getLogs = useCallback(async () => {
     try {
-      const { userId } = route.query;
-      const response = await usersApi.getProcessById(userId);
-      console.log(response);
+      const { customerId } = route.query;
+      const response = await customersApi.getProcessById(customerId);
       if (isMounted()) {
         setLogs(response);
       }
@@ -84,6 +84,16 @@ const useLogs = () => {
       console.error(err);
     }
   }, [isMounted]);
+
+  const addLog = useCallback(async (newLog) => {
+    try {
+      const { customerId } = route.query;
+      const response = await customersApi.addProcessById(customerId, newLog);
+      getLogs();
+    } catch (err) {
+      console.error(err);
+    }
+  }, []);
 
   useEffect(
     () => {
@@ -93,13 +103,14 @@ const useLogs = () => {
     []
   );
 
-  return logs;
+  return { logs, addLog };
 };
 
 const Page = () => {
   const [currentTab, setCurrentTab] = useState("details");
-  const user = useUser();
-  const logs = useLogs();
+  const customer = useCustomer();
+  const { logs, addLog } = useLogs();
+  const role = useAuth().customer.role;
 
   usePageView();
 
@@ -107,14 +118,14 @@ const Page = () => {
     setCurrentTab(value);
   }, []);
 
-  if (!user) {
+  if (!customer) {
     return null;
   }
 
   return (
     <>
       <Head>
-        <title>Dashboard: User Details | Devias Kit PRO</title>
+        <title>Dashboard: Customer Details</title>
       </Head>
       <Box
         component="main"
@@ -140,7 +151,7 @@ const Page = () => {
                   <SvgIcon sx={{ mr: 1 }}>
                     <ArrowLeftIcon />
                   </SvgIcon>
-                  <Typography variant="subtitle2">Users</Typography>
+                  <Typography variant="subtitle2">Customers</Typography>
                 </Link>
               </div>
               <Stack
@@ -154,46 +165,40 @@ const Page = () => {
               >
                 <Stack alignItems="center" direction="row" spacing={2}>
                   <Avatar
-                    src={user.avatar}
+                    src={customer.avatar}
                     sx={{
                       height: 64,
                       width: 64,
                     }}
                   >
-                    {getInitials(user.name)}
+                    {getInitials(customer.name)}
                   </Avatar>
                   <Stack spacing={1}>
-                    <Typography variant="h4">{user.email}</Typography>
+                    <Typography variant="h4">
+                      {customer.first_name} {customer.last_name}
+                    </Typography>
                     <Stack alignItems="center" direction="row" spacing={1}>
-                      <Typography variant="subtitle2">user_id:</Typography>
-                      <Chip label={user.id} size="small" />
+                      <Typography variant="subtitle2">customer_id:</Typography>
+                      <Chip label={customer.id} size="small" />
                     </Stack>
                   </Stack>
                 </Stack>
-                <Stack alignItems="center" direction="row" spacing={2}>
-                  <Button
-                    color="inherit"
-                    component={NextLink}
-                    endIcon={
-                      <SvgIcon>
-                        <Edit02Icon />
-                      </SvgIcon>
-                    }
-                    href={paths.users.edit(user.id)}
-                  >
-                    Edit
-                  </Button>
-                  <Button
-                    endIcon={
-                      <SvgIcon>
-                        <ChevronDownIcon />
-                      </SvgIcon>
-                    }
-                    variant="contained"
-                  >
-                    Actions
-                  </Button>
-                </Stack>
+                {role === "admin" && (
+                  <Stack alignItems="center" direction="row" spacing={2}>
+                    <Button
+                      color="inherit"
+                      component={NextLink}
+                      endIcon={
+                        <SvgIcon>
+                          <Edit02Icon />
+                        </SvgIcon>
+                      }
+                      href={paths.users.edit(customer.id)}
+                    >
+                      Edit
+                    </Button>
+                  </Stack>
+                )}
               </Stack>
               <div>
                 <Tabs
@@ -216,22 +221,22 @@ const Page = () => {
               <div>
                 <Stack container spacing={4}>
                   <UserBasicDetails
-                    address={user.address}
-                    gender={user.gender}
-                    birthday={user.birthday}
-                    email={user.email}
-                    phone={user.phone}
-                    role={user.role}
+                    address={customer.address}
+                    gender={customer.gender}
+                    birthday={customer.birthday}
+                    email={customer.email}
+                    phone={customer.phone}
+                    role={customer.role}
                   />
                   <UserMember />
-                  <UserDataManagement id={user.id} />
+                  <UserDataManagement id={customer.id} />
                 </Stack>
               </div>
             )}
             {currentTab === "logs" && (
               <Stack container spacing={4}>
                 <UserCalendar activity={logs} />
-                <UserLogs logs={logs} />
+                <UserLogs logs={logs} addLog={addLog} />
               </Stack>
             )}
           </Stack>

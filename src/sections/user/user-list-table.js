@@ -28,7 +28,7 @@ import {
 import { Scrollbar } from "src/components/scrollbar";
 import { paths } from "src/paths";
 import { getInitials } from "src/utils/get-initials";
-import usersApi from "src/api/users";
+import usersApi from "src/api/customers";
 
 const useSelectionModel = (users) => {
   const userIds = useMemo(() => {
@@ -186,7 +186,7 @@ export const UserListTable = (props) => {
                           width: 42,
                         }}
                       >
-                        {getInitials(user.fisrt_name + " " + user.last_name)}
+                        {getInitials(user.first_name + " " + user.last_name)}
                       </Avatar>
                       <div>
                         <Link
@@ -195,7 +195,7 @@ export const UserListTable = (props) => {
                           href={paths.users.details(user.id)}
                           variant="subtitle2"
                         >
-                          {user.fisrt_name + " " + user.last_name}
+                          {user.first_name} {user.last_name}
                         </Link>
                         <Typography color="text.secondary" variant="body2">
                           {user.email}

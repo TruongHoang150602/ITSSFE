@@ -54,7 +54,6 @@ const useEquipments = (search) => {
     try {
       const { gymId } = route.query;
       const response = await roomsApi.getRoomById(gymId);
-      console.log(response);
       if (isMounted()) {
         setState({
           equipments: response.equipment,
@@ -71,17 +70,31 @@ const useEquipments = (search) => {
       getEquipments();
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [search]
-  );
+  [search]);
 
-  return state;
+  const deleteEquip = useCallback(async (equipId) => {
+    try {
+      let equip = state.equipments;
+      equip = equip.filter((option) => option.id !== equipId);
+      if (isMounted()) {
+        setState({
+          equipments: equip,
+          equipmentsCount: equip.length
+        });
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  }, []);
+
+  
+  return {  equipments: state.equipments, equipmentsCount: state.equipmentsCount , deleteEquip };
 };
 
 const EquipmentList = () => {
   const { gymId } = useRouter().query;
   const { search, updateSearch } = useSearch();
-  const { equipments, equipmentsCount } = useEquipments(search);
-
+  const { equipments, equipmentsCount , deleteEquip } = useEquipments(search);
   usePageView();
 
   const handleFiltersChange = useCallback(
@@ -176,6 +189,7 @@ const EquipmentList = () => {
                 page={search.page}
                 equipments={equipments}
                 equipmentsCount={equipmentsCount}
+                deleteEquip = {deleteEquip}
                 rowsPerPage={search.rowsPerPage}
               />
             </Card>

@@ -14,11 +14,9 @@ import {
   Grid,
   IconButton,
   InputAdornment,
-  LinearProgress,
   MenuItem,
   Stack,
   SvgIcon,
-  Switch,
   Table,
   TableBody,
   TableCell,
@@ -26,36 +24,19 @@ import {
   TablePagination,
   TableRow,
   TextField,
-  Typography,
-} from "@mui/material";
-import { Scrollbar } from "src/components/scrollbar";
-import { SeverityPill } from "src/components/severity-pill";
+  Typography
+} from '@mui/material';
+import { Scrollbar } from 'src/components/scrollbar';
 
 const categoryOptions = [
   {
-    label: "Healthcare",
-    value: "healthcare",
+    label: 'Strength',
+    value: 'Strength'
   },
   {
-    label: "Makeup",
-    value: "makeup",
-  },
-  {
-    label: "Dress",
-    value: "dress",
-  },
-  {
-    label: "Skincare",
-    value: "skincare",
-  },
-  {
-    label: "Jewelry",
-    value: "jewelry",
-  },
-  {
-    label: "Blouse",
-    value: "blouse",
-  },
+    label: 'Cardio',
+    value: 'Cardio'
+  }
 ];
 
 export const EquipmentListTable = (props) => {
@@ -66,16 +47,18 @@ export const EquipmentListTable = (props) => {
     equipments,
     equipmentsCount,
     rowsPerPage,
+    editEquip,
+    deleteEquip,
     ...other
   } = props;
   const [currentEquipment, setCurrentEquipment] = useState(null);
 
   const handleEquipmentToggle = useCallback((equipmentId) => {
+    console.log(currentEquipment);
     setCurrentEquipment((prevEquipmentId) => {
       if (prevEquipmentId === equipmentId) {
         return null;
       }
-
       return equipmentId;
     });
   }, []);
@@ -85,12 +68,15 @@ export const EquipmentListTable = (props) => {
   }, []);
 
   const handleEquipmentUpdate = useCallback(() => {
+
     setCurrentEquipment(null);
     toast.success("Equipment updated");
   }, []);
 
-  const handleEquipmentDelete = useCallback(() => {
-    toast.error("Equipment cannot be deleted");
+  const handleEquipmentDelete = useCallback((equipId) => {
+    deleteEquip(equipId);
+    setCurrentEquipment(null);
+    toast.error('Equipment cannot be deleted');
   }, []);
 
   return (
@@ -323,7 +309,10 @@ export const EquipmentListTable = (props) => {
                             </Button>
                           </Stack>
                           <div>
-                            <Button onClick={handleEquipmentDelete} color="error">
+                            <Button
+                              onClick={() => {handleEquipmentDelete(equipment.id)}}
+                              color="error"
+                            >
                               Delete equipment
                             </Button>
                           </div>

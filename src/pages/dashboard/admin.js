@@ -26,11 +26,27 @@ const Page = () => (
       }}
     >
       <Container maxWidth="xl">
-        <Grid container spacing={3}>
-          <Grid xs={12} sm={6} lg={3}>
-            <OverviewBudget difference={12} positive sx={{ height: "100%" }} value="$24k" />
+        <Grid
+          container
+          spacing={3}
+        >
+          <Grid
+            xs={12}
+            sm={6}
+            lg={4}
+          >
+            <OverviewBudget
+              difference={12}
+              positive
+              sx={{ height: '100%' }}
+              value="$24k"
+            />
           </Grid>
-          <Grid xs={12} sm={6} lg={3}>
+          <Grid
+            xs={12}
+            sm={6}
+            lg={4}
+          >
             <OverviewTotalCustomers
               difference={16}
               positive={false}
@@ -38,13 +54,20 @@ const Page = () => (
               value="1.6k"
             />
           </Grid>
-          <Grid xs={12} sm={6} lg={3}>
-            <OverviewTasksProgress sx={{ height: "100%" }} value={75.5} />
+          <Grid
+            xs={12}
+            sm={6}
+            lg={4}
+          >
+            <OverviewTotalProfit
+              sx={{ height: '100%' }}
+              value="$15k"
+            />
           </Grid>
-          <Grid xs={12} sm={6} lg={3}>
-            <OverviewTotalProfit sx={{ height: "100%" }} value="$15k" />
-          </Grid>
-          <Grid xs={12} lg={8}>
+          <Grid
+            xs={12}
+            lg={12}
+          >
             <OverviewSales
               chartSeries={[
                 {
@@ -56,13 +79,6 @@ const Page = () => (
                   data: [12, 11, 4, 6, 2, 9, 9, 10, 11, 12, 13, 13],
                 },
               ]}
-              sx={{ height: "100%" }}
-            />
-          </Grid>
-          <Grid xs={12} md={6} lg={4}>
-            <OverviewTraffic
-              chartSeries={[63, 15, 22]}
-              labels={["Desktop", "Tablet", "Phone"]}
               sx={{ height: "100%" }}
             />
           </Grid>

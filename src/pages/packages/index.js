@@ -1,15 +1,24 @@
-import { useState, useCallback, useEffect } from "react";
-import Head from "next/head";
-import NextLink from "next/link";
-import PlusIcon from "@untitled-ui/icons-react/build/esm/Plus";
-import { Box, Button, Card, Container, Stack, SvgIcon, Typography } from "@mui/material";
-import packagesApi from "src/api/packages";
-import { useMounted } from "src/hooks/use-mounted";
-import { usePageView } from "src/hooks/use-page-view";
-import { Layout as DashboardLayout } from "src/layouts/dashboard/layout";
-import { paths } from "src/paths";
-import { PackageListSearch } from "src/sections/package/package-list-search";
-import { PackageListTable } from "src/sections/package/package-list-table";
+import { useCallback, useEffect, useState } from 'react';
+import Head from 'next/head';
+import NextLink from 'next/link';
+import PlusIcon from '@untitled-ui/icons-react/build/esm/Plus';
+import {
+  Box,
+  Button,
+  Card,
+  Container,
+  Stack,
+  SvgIcon,
+  Typography
+} from '@mui/material';
+import  packagesApi  from 'src/api/packages';
+import { useMounted } from 'src/hooks/use-mounted';
+import { usePageView } from 'src/hooks/use-page-view';
+import { Layout as DashboardLayout } from 'src/layouts/dashboard/layout';
+import { paths } from 'src/paths';
+import { PackageListSearch } from 'src/sections/package/package-list-search';
+import { PackageListTable } from 'src/sections/package/package-list-table';
+import { useAuth } from 'src/hooks/use-auth';
 
 const useSearch = () => {
   const [search, setSearch] = useState({
@@ -64,7 +73,7 @@ const usePackages = (search) => {
 const PackageList = () => {
   const { search, updateSearch } = useSearch();
   const { packages, packagesCount } = usePackages(search);
-  
+  const role = useAuth().user.role;
   usePageView();
 
   const handleFiltersChange = useCallback(
@@ -115,7 +124,12 @@ const PackageList = () => {
               <Stack spacing={1}>
                 <Typography variant="h4">Packages</Typography>
               </Stack>
-              <Stack alignItems="center" direction="row" spacing={3}>
+              {role === "admin" && (
+              <Stack
+                alignItems="center"
+                direction="row"
+                spacing={3}
+              >
                 <Button
                   component={NextLink}
                   href={paths.packages.create}
@@ -129,6 +143,7 @@ const PackageList = () => {
                   Add
                 </Button>
               </Stack>
+              )}
             </Stack>
             <Card>
               <PackageListSearch onFiltersChange={handleFiltersChange} />

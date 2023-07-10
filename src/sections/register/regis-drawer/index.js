@@ -4,29 +4,31 @@ import XIcon from "@untitled-ui/icons-react/build/esm/X";
 import { Box, Drawer, IconButton, Stack, SvgIcon, Typography, useMediaQuery } from "@mui/material";
 import { RegisDetails } from "./regis-details";
 import { RegisEdit } from "./regis-edit";
+import { createResourceId } from "src/utils/create-resource-id";
+import { useAuth } from "src/hooks/use-auth";
 
 const valueRegis = (regis) => {
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  const user = useAuth().user;
   if (regis) return regis;
   else
     return {
-      createAt: "",
-      id: "",
-      createdAt: "",
+      id: null,
+      createdAt: new Date().toISOString(),
+      createdBy: `${user.first_name} ${user.last_name}`,
       customer: {
-        address: "",
         email: "",
         name: "",
         phone: "",
       },
       package: "",
-      number: "",
-      paymentMethod: "",
+      coach: "",
       totalAmount: 0,
     };
 };
 
 export const RegisDrawer = (props) => {
-  const { container, onClose, open, edit, regis } = props;
+  const { container, onClose, open, edit, regis, createRegis, updateRegis } = props;
   const [isEditing, setIsEditing] = useState(edit);
   const lgUp = useMediaQuery((theme) => theme.breakpoints.up("lg"));
 
@@ -39,7 +41,6 @@ export const RegisDrawer = (props) => {
   }, []);
 
   let content = null;
-
   const register = valueRegis(regis);
 
   content = (
@@ -56,7 +57,13 @@ export const RegisDrawer = (props) => {
         <Typography color="inherit" variant="h6">
           {register.number}
         </Typography>
-        <IconButton color="inherit" onClick={onClose}>
+        <IconButton
+          color="inherit"
+          onClick={() => {
+            setIsEditing(false);
+            onClose();
+          }}
+        >
           <SvgIcon>
             <XIcon />
           </SvgIcon>
@@ -76,7 +83,12 @@ export const RegisDrawer = (props) => {
             regis={register}
           />
         ) : (
-          <RegisEdit onCancel={handleEditCancel} onSave={handleEditCancel} regis={register} />
+          <RegisEdit
+            onCancel={handleEditCancel}
+            regis={register}
+            createRegis={createRegis}
+            updateRegis={updateRegis}
+          />
         )}
       </Box>
     </div>

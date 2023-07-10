@@ -22,8 +22,9 @@ export const UserCalendar = (props) => {
   // const onChange = (selectedDate) => {
   //   // setDate(selectedDate);
   // };
-
-  const markedDates = activity.process.map((item) => item.createdAt.slice(0, 10));
+  let markedDates = [];
+  if(activity && activity.process)
+    markedDates = activity.process.map((item) => item.createdAt.slice(0, 10));
 
   const tileContent = ({ date }) => {
     if (markedDates.includes(date.toISOString().slice(0, 10))) {
@@ -43,12 +44,13 @@ export const UserCalendar = (props) => {
 
   let count = 0;
 
-  activity.process.forEach((item) => {
-    const createdAt = parseISO(item.createdAt);
-    if (isSameMonth(createdAt, date)) {
-      count++;
-    }
-  });
+  if(activity && activity.process)
+    activity.process.forEach((item) => {
+      const createdAt = parseISO(item.createdAt);
+      if (isSameMonth(createdAt, date)) {
+        count++;
+      }
+    });
 
   return (
     <Card {...props}>
