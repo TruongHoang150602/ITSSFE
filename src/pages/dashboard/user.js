@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from "react";
 import Head from "next/head";
 import { Avatar, Box, Button, Chip, Container, Stack, Unstable_Grid2 as Grid } from "@mui/material";
-import usersApi from "src/api/users";
+import usersApi from "src/api/customers";
 import { useMounted } from "src/hooks/use-mounted";
 import { usePageView } from "src/hooks/use-page-view";
 import { Layout as DashboardLayout } from "src/layouts/dashboard/layout";

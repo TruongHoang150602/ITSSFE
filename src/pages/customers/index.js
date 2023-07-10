@@ -4,7 +4,7 @@ import Download01Icon from "@untitled-ui/icons-react/build/esm/Download01";
 import PlusIcon from "@untitled-ui/icons-react/build/esm/Plus";
 import Upload01Icon from "@untitled-ui/icons-react/build/esm/Upload01";
 import { Box, Button, Card, Container, Dialog, Stack, SvgIcon, Typography } from "@mui/material";
-import usersApi from "src/api/users";
+import customersApi from "src/api/customers";
 import { useMounted } from "src/hooks/use-mounted";
 import { usePageView } from "src/hooks/use-page-view";
 import { Layout as DashboardLayout } from "src/layouts/dashboard/layout";
@@ -30,16 +30,16 @@ const useSearch = () => {
   };
 };
 
-const useUsers = (search) => {
+const useCustomers = (search) => {
   const isMounted = useMounted();
   const [state, setState] = useState({
     users: [],
     usersCount: 0,
   });
 
-  const getUsers = useCallback(async () => {
+  const getCustomers = useCallback(async () => {
     try {
-      const response = await usersApi.getUsers(search);
+      const response = await customersApi.getCustomers(search);
 
       if (isMounted()) {
         setState({
@@ -52,32 +52,32 @@ const useUsers = (search) => {
     }
   }, [search, isMounted]);
 
-  const deleteUser = useCallback(
-    async (userId) => {
+  const deleteCustomer = useCallback(
+    async (customerId) => {
       try {
-        await usersApi.deleteUserById(userId);
-        getUsers();
+        await customersApi.deleteCustomerById(customerId);
+        getCustomers();
       } catch (err) {
         console.error(err);
       }
     },
-    [getUsers]
+    [getCustomers]
   );
 
   useEffect(() => {
-    getUsers();
-  }, [search, getUsers]);
+    getCustomers();
+  }, [search, getCustomers]);
 
   return {
     state,
-    deleteUser,
+    deleteCustomer,
   };
 };
 
 const Page = () => {
   const [openModal, setOpenModal] = useState(false);
   const { search, updateSearch } = useSearch();
-  const { state, deleteUser } = useUsers(search);
+  const { state, deleteCustomer } = useCustomers(search);
 
   usePageView();
 
@@ -122,8 +122,8 @@ const Page = () => {
     [updateSearch]
   );
 
-  const handleDeleteUser = (userId) => {
-    deleteUser(userId);
+  const handleDeleteCustomer = (customerId) => {
+    deleteCustomer(customerId);
   };
 
   const onCloseModel = () => {
@@ -133,7 +133,7 @@ const Page = () => {
   return (
     <>
       <Head>
-        <title>Dashboard: Users List | GymCenter</title>
+        <title>Dashboard: Customers List | GymCenter</title>
       </Head>
       <Box
         component="main"
@@ -146,7 +146,7 @@ const Page = () => {
           <Stack spacing={4}>
             <Stack direction="row" justifyContent="space-between" spacing={4}>
               <Stack spacing={1}>
-                <Typography variant="h4">Users</Typography>
+                <Typography variant="h4">Customers</Typography>
                 <Stack alignItems="center" direction="row" spacing={1}>
                   <Button
                     color="inherit"
@@ -202,7 +202,7 @@ const Page = () => {
                 onRowsPerPageChange={handleRowsPerPageChange}
                 rowsPerPage={search.rowsPerPage}
                 page={search.page}
-                handleDeleteUser={handleDeleteUser}
+                handleDeleteUser={handleDeleteCustomer}
               />
             </Card>
           </Stack>
