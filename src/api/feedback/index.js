@@ -14,12 +14,12 @@ class FeedbacksApi {
   }
 
   async getFeedbacks(request = {}) {
-    
+
     let data = null;
     try {
       const response = await axios.get(`${this.baseUrl}/feedbacks`);
 
-      data =  response.data;
+      data = response.data;
     } catch (error) {
       console.error('Error while fetching feedbacks:', error);
       return [];
@@ -36,8 +36,8 @@ class FeedbacksApi {
     });
 
     feedbacks = feedbacks.filter(item => item.parentFeedbackId === null);
-    
-    
+
+
     return feedbacks;
   }
 
@@ -82,7 +82,7 @@ class FeedbacksApi {
   }
 }
 
-const feedbacksApi = new FeedbacksApi('http://localhost:3001');
+const feedbacksApi = new FeedbacksApi('http://localhost:8081');
 
 export default feedbacksApi;
 

@@ -11,8 +11,8 @@ class PackagesApi {
     const { filters, page, rowsPerPage, sortBy, sortDir } = request;
     let data = null;
     try {
-      const response = await axios.get(`${this.baseUrl}/packages`);
-      data =  response.data;
+      const response = await axios.get(`${this.baseUrl}/package/`);
+      data = response.data;
     } catch (error) {
       console.error('Error while fetching packages:', error);
       return [];
@@ -42,7 +42,7 @@ class PackagesApi {
             return false;
           }
         }
-        
+
         return true;
       });
       count = data.length;
@@ -64,7 +64,7 @@ class PackagesApi {
 
   async getPackageById(id) {
     try {
-      const response = await axios.get(`${this.baseUrl}/packages/${id}`);
+      const response = await axios.get(`${this.baseUrl}/package/${id}`);
       return response.data;
     } catch (error) {
       console.error(`Error while fetching package with ID ${id}:`, error);
@@ -74,7 +74,7 @@ class PackagesApi {
 
   async createPackage(newPackage) {
     try {
-      const response = await axios.post(`${this.baseUrl}/packages`, newPackage);
+      const response = await axios.post(`${this.baseUrl}/package`, newPackage);
       return response.data;
     } catch (error) {
       console.error('Error while creating package:', error);
@@ -84,7 +84,7 @@ class PackagesApi {
 
   async updatePackageById(id, updatedPackage) {
     try {
-      const response = await axios.put(`${this.baseUrl}/packages/${id}`, updatedPackage);
+      const response = await axios.patch(`${this.baseUrl}/package/${id}`, updatedPackage);
       return response.data;
     } catch (error) {
       console.error(`Error while updating package with ID ${id}:`, error);
@@ -94,7 +94,7 @@ class PackagesApi {
 
   async deletePackageById(id) {
     try {
-      const response = await axios.delete(`${this.baseUrl}/packages/${id}`);
+      const response = await axios.delete(`${this.baseUrl}/package/${id}`);
       return response.data;
     } catch (error) {
       console.error(`Error while deleting package with ID ${id}:`, error);
@@ -103,6 +103,6 @@ class PackagesApi {
   }
 }
 
-const packagesApi = new PackagesApi('http://localhost:3001');
+const packagesApi = new PackagesApi('http://localhost:8081');
 
 export default packagesApi;

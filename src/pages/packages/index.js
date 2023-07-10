@@ -2,16 +2,8 @@ import { useCallback, useEffect, useState } from 'react';
 import Head from 'next/head';
 import NextLink from 'next/link';
 import PlusIcon from '@untitled-ui/icons-react/build/esm/Plus';
-import {
-  Box,
-  Button,
-  Card,
-  Container,
-  Stack,
-  SvgIcon,
-  Typography
-} from '@mui/material';
-import  packagesApi  from 'src/api/packages';
+import { Box, Button, Card, Container, Stack, SvgIcon, Typography } from '@mui/material';
+import packagesApi from 'src/api/packages';
 import { useMounted } from 'src/hooks/use-mounted';
 import { usePageView } from 'src/hooks/use-page-view';
 import { Layout as DashboardLayout } from 'src/layouts/dashboard/layout';
@@ -125,24 +117,24 @@ const PackageList = () => {
                 <Typography variant="h4">Packages</Typography>
               </Stack>
               {role === "admin" && (
-              <Stack
-                alignItems="center"
-                direction="row"
-                spacing={3}
-              >
-                <Button
-                  component={NextLink}
-                  href={paths.packages.create}
-                  startIcon={
-                    <SvgIcon>
-                      <PlusIcon />
-                    </SvgIcon>
-                  }
-                  variant="contained"
+                <Stack
+                  alignItems="center"
+                  direction="row"
+                  spacing={3}
                 >
-                  Add
-                </Button>
-              </Stack>
+                  <Button
+                    component={NextLink}
+                    href={paths.packages.create}
+                    startIcon={
+                      <SvgIcon>
+                        <PlusIcon />
+                      </SvgIcon>
+                    }
+                    variant="contained"
+                  >
+                    Add
+                  </Button>
+                </Stack>
               )}
             </Stack>
             <Card>

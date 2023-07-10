@@ -82,4 +82,4 @@ class AuthApi {
   }
 }
 
-export const authApi = new AuthApi("http://localhost:8081/user");
+export const authApi = new AuthApi("http://localhost:3001/user");

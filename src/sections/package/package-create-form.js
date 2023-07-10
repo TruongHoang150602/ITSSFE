@@ -57,7 +57,7 @@ export const PackageCreateForm = (props) => {
         <CardContent>
           <Grid container spacing={3}>
             <Grid xs={12} md={4}>
-              <Typography variant="h6">Basic details</Typography>
+              <Typography variant="h6">Package details</Typography>
             </Grid>
             <Grid xs={12} md={8}>
               <Stack spacing={3}>
@@ -99,7 +99,6 @@ export const PackageCreateForm = (props) => {
         </CardContent>
         <CardActions>
           <Stack alignItems="center" direction="row" justifyContent="flex-end" spacing={1}>
-            <Button color="inherit">Cancel</Button>
             <Button type="submit" variant="contained">
               Create
             </Button>
