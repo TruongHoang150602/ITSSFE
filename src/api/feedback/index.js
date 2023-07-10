@@ -15,11 +15,27 @@ class FeedbacksApi {
 
   async getFeedbacks(request = {}) {
 
-    let data = null;
+    let data = [];
     try {
-      const response = await axios.get(`${this.baseUrl}/feedbacks`);
-
-      data = response.data;
+      const response = await axios.get(`${this.baseUrl}/feedback/`);
+      await Promise.all(
+        response.data.map(async (item) => {
+          const author = await axios.get(`${this.baseUrl}/user/${item.user_id}`);
+          var fullName = author.data.first_name + " " + author.data.last_name;
+          var newData = {
+            "id": item.id,
+            "createdAt": item.created_at,
+            "message": item.content,
+            "author": {
+              "id": author.data.id,
+              "avatar": author.data.avatar,
+              "name": fullName
+            },
+            "parentFeedbackId": null
+          }
+          data.push(newData);
+        })
+      );
     } catch (error) {
       console.error('Error while fetching feedbacks:', error);
       return [];
