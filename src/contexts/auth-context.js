@@ -18,7 +18,23 @@ const initialState = {
 
 const handlers = {
   [HANDLERS.INITIALIZE]: (state, action) => {
-    const user = action.payload;
+    // const user = action.payload;
+
+      const user = {
+      "createdAt": "2023-07-03T04:06:35.831Z",
+      "first_name": "Admin",
+      "last_name": "",
+      "avatar": "/assets/avatars/avatar-penjani-inyene.png",
+      "phone": "(652) 200-2231",
+      "gender": "male",
+      "birthday": "1983-08-13T23:16:44.104Z",
+      "role": "admin",
+      "email": "admin@gmail.com",
+      "id": "11111",
+      "password": "admin123"
+      }
+
+
 
     return {
       ...state,
@@ -54,7 +70,6 @@ const handlers = {
     return {
       ...state,
       isAuthenticated: false,
-      user: null
     };
   }
 };
