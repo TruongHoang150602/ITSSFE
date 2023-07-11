@@ -19,7 +19,9 @@ const initialState = {
 const handlers = {
   [HANDLERS.INITIALIZE]: (state, action) => {
     // const user = action.payload;
-    const user = {
+
+
+      const user = {
       "createdAt": "2023-07-03T04:06:35.831Z",
       "first_name": "Admin",
       "last_name": "",
@@ -32,6 +34,7 @@ const handlers = {
       "id": "11111",
       "password": "admin123"
     }
+
 
     return {
       ...state,
@@ -67,7 +70,6 @@ const handlers = {
     return {
       ...state,
       isAuthenticated: false,
-      user: null
     };
   }
 };
