@@ -180,7 +180,7 @@ export const UserListTable = (props) => {
                   <TableCell>
                     <Stack alignItems="center" direction="row" spacing={1}>
                       <Avatar
-                        src={user.avatar}
+                        // src={user.avatar}
                         sx={{
                           height: 42,
                           width: 42,
@@ -192,7 +192,7 @@ export const UserListTable = (props) => {
                         <Link
                           color="inherit"
                           component={NextLink}
-                          href={paths.users.details(user.id)}
+                          href={paths.customers.details(user.id)}
                           variant="subtitle2"
                         >
                           {user.first_name} {user.last_name}
@@ -206,7 +206,7 @@ export const UserListTable = (props) => {
                   <TableCell>{user.gender}</TableCell>
                   <TableCell>{user.phone}</TableCell>
                   <TableCell align="right">
-                    <IconButton component={NextLink} href={paths.users.edit(user.id)}>
+                    <IconButton component={NextLink} href={paths.customers.edit(user.id)}>
                       <SvgIcon>
                         <Edit02Icon />
                       </SvgIcon>

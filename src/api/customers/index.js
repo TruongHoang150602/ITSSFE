@@ -12,15 +12,13 @@ class CustomersApi {
     const { filters, page, rowsPerPage, sortBy, sortDir } = request;
     let data = null;
     try {
-      const response = await axios.get(`${this.baseUrl}/customers`);
+      const response = await axios.get(`${this.baseUrl}/user/customer`);
       data = response.data;
     } catch (error) {
       console.error("Error while fetching customers:", error);
       window.location.href = "/500";
       return null;
     }
-    data = deepCopy(data);
-    data = data.filter((option) => option.role === "customer" || option.role === "member");
     let count = data.length;
 
     if (typeof filters !== "undefined") {
@@ -85,50 +83,50 @@ class CustomersApi {
     }
   }
 
-  async addProcessById(id, newActivity) {
-    try {
-      console.log(newActivity);
-      let updateProcess = await this.getProcessById(id);
-      updateProcess.process = [newActivity, ...updateProcess.process];
-      const response = await axios.put(`${this.baseUrl}/process/${id}`, updateProcess);
-      return response.data;
-    } catch (error) {
-      console.error(`Error while fetching customer with ID ${id}:`, error);
-      return null;
-    }
-  }
+  // async addProcessById(id, newActivity) {
+  //   try {
+  //     console.log(newActivity);
+  //     let updateProcess = await this.getProcessById(id);
+  //     updateProcess.process = [newActivity, ...updateProcess.process];
+  //     const response = await axios.put(`${this.baseUrl}/process/${id}`, updateProcess);
+  //     return response.data;
+  //   } catch (error) {
+  //     console.error(`Error while fetching customer with ID ${id}:`, error);
+  //     return null;
+  //   }
+  // }
 
-  async createCustomer(newCustomer) {
-    try {
-      const response = await axios.post(`${this.baseUrl}/users`, newCustomer);
-      return response.data;
-    } catch (error) {
-      console.error("Error while creating customer:", error);
-      return null;
-    }
-  }
+  // async createCustomer(newCustomer) {
+  //   try {
+  //     const response = await axios.post(`${this.baseUrl}/users`, newCustomer);
+  //     return response.data;
+  //   } catch (error) {
+  //     console.error("Error while creating customer:", error);
+  //     return null;
+  //   }
+  // }
 
-  async updateCustomerById(id, updatedCustomer) {
-    try {
-      const response = await axios.put(`${this.baseUrl}/users/${id}`, updatedCustomer);
-      return response.data;
-    } catch (error) {
-      console.error(`Error while updating customer with ID ${id}:`, error);
-      return null;
-    }
-  }
+  // async updateCustomerById(id, updatedCustomer) {
+  //   try {
+  //     const response = await axios.put(`${this.baseUrl}/${id}`, updatedCustomer);
+  //     return response.data;
+  //   } catch (error) {
+  //     console.error(`Error while updating customer with ID ${id}:`, error);
+  //     return null;
+  //   }
+  // }
 
-  async deleteCustomerById(id) {
-    try {
-      const response = await axios.delete(`${this.baseUrl}/users/${id}`);
-      return response.data;
-    } catch (error) {
-      console.error(`Error while deleting customer with ID ${id}:`, error);
-      return false;
-    }
-  }
+  // async deleteCustomerById(id) {
+  //   try {
+  //     const response = await axios.delete(`${this.baseUrl}/${id}`);
+  //     return response.data;
+  //   } catch (error) {
+  //     console.error(`Error while deleting customer with ID ${id}:`, error);
+  //     return false;
+  //   }
+  // }
 }
 
-const customersApi = new CustomersApi("http://localhost:8081/user");
+const customersApi = new CustomersApi("http://localhost:8081");
 
 export default customersApi;
