@@ -10,7 +10,7 @@ import { usePageView } from "src/hooks/use-page-view";
 import { Layout as DashboardLayout } from "src/layouts/dashboard/layout";
 import { paths } from "src/paths";
 import { EmployeeEditForm } from "src/sections/employee/employee-edit-form";
-import { getInitials } from "src/utils/get-initials";
+// import { getInitials } from "src/utils/get-initials";
 
 const useEmployee = () => {
   const route = useRouter();

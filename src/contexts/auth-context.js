@@ -20,6 +20,7 @@ const handlers = {
   [HANDLERS.INITIALIZE]: (state, action) => {
     // const user = action.payload;
 
+
       const user = {
       "createdAt": "2023-07-03T04:06:35.831Z",
       "first_name": "Admin",
@@ -32,8 +33,7 @@ const handlers = {
       "email": "admin@gmail.com",
       "id": "11111",
       "password": "admin123"
-      }
-
+    }
 
 
     return {
@@ -92,35 +92,35 @@ export const AuthProvider = (props) => {
     if (initialized.current) {
       return;
     }
-  
+
     initialized.current = true;
-  
+
     let isAuthenticated = false;
-  
+
     try {
       isAuthenticated = window.sessionStorage.getItem('authenticated') === 'true';
     } catch (err) {
       console.error(err);
     }
-  
+
     dispatch({
       type: HANDLERS.INITIALIZE
     });
   };
-  
+
   useEffect(() => {
     initialize();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const signIn = async (email, password) => {
-    
-     try {
-      
+
+    try {
+
       const user = await authApi.signIn({ email, password });
       console.log(user)
       window.sessionStorage.setItem('authenticated', 'true');
-      
+
       dispatch({
         type: HANDLERS.SIGN_IN,
         payload: user

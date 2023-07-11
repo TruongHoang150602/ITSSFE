@@ -16,7 +16,7 @@ import {
 } from "@mui/material";
 import { paths } from "src/paths";
 import { wait } from "src/utils/wait";
-import usersApi from "src/api/users";
+import usersApi from "src/api/customers";
 
 const initialValues = (user) => {
   if (user)
@@ -56,14 +56,14 @@ export const UserEditForm = (props) => {
     onSubmit: async (values, helpers) => {
       try {
         if (user) {
-          usersApi.updateUserById(user.id, formik.values);
+          usersApi.updateCustomerById(user.id, formik.values);
           await wait(500);
           helpers.setStatus({ success: true });
           helpers.setSubmitting(false);
           toast.success("User updated");
           router.push(paths.users.index);
         } else {
-          usersApi.createUser(formik.values);
+          usersApi.createCustomer(formik.values);
           await wait(500);
           helpers.setStatus({ success: true });
           helpers.setSubmitting(false);

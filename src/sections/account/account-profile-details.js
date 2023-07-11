@@ -14,7 +14,7 @@ import {
   TextField,
   Unstable_Grid2 as Grid,
 } from "@mui/material";
-import usersApi from "src/api/users";
+import usersApi from "src/api/customers";
 import { useRouter } from "next/navigation";
 
 const initialValues = (user) => {
@@ -56,9 +56,9 @@ export const AccountProfileDetails = (props) => {
       try {
         const updateUser = {
           ...user,
-          ...values
-        }
-        console.log(updateUser)
+          ...values,
+        };
+        console.log(updateUser);
         usersApi.updateUserById(user.id, updateUser);
         helpers.setStatus({ success: true });
         helpers.setSubmitting(false);

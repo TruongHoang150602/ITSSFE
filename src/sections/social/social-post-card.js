@@ -35,7 +35,8 @@ export const SocialPostCard = (props) => {
               <ClockIcon />
             </SvgIcon>
             <Typography color="text.secondary" variant="caption">
-              {formatDistanceToNowStrict(createdAt)} ago
+              {/* {formatDistanceToNowStrict(createdAt)} ago */}
+              {createdAt} ago
             </Typography>
           </Stack>
         }

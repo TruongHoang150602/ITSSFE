@@ -1,8 +1,12 @@
 import axios from 'axios';
 import { deepCopy } from 'src/utils/deep-copy';
 import { applySort } from 'src/utils/apply-sort';
-import { wait } from 'src/utils/wait';
-
+// import { wait } from 'src/utils/wait';
+/* 
+This class has methods to perform HTTP requests such as getting 
+a list of feedbacks, getting feedback by ID, creating new feedback, 
+updating feedback, and deleting feedback.
+*/
 class FeedbacksApi {
 
   constructor(baseUrl) {
@@ -10,12 +14,28 @@ class FeedbacksApi {
   }
 
   async getFeedbacks(request = {}) {
-    
-    let data = null;
-    try {
-      const response = await axios.get(`${this.baseUrl}/feedbacks`);
 
-      data =  response.data;
+    let data = [];
+    try {
+      const response = await axios.get(`${this.baseUrl}/feedback/`);
+      await Promise.all(
+        response.data.map(async (item) => {
+          const author = await axios.get(`${this.baseUrl}/user/${item.user_id}`);
+          var fullName = author.data.first_name + " " + author.data.last_name;
+          var newData = {
+            "id": item.id,
+            "createdAt": item.created_at,
+            "message": item.content,
+            "author": {
+              "id": author.data.id,
+              "avatar": author.data.avatar,
+              "name": fullName
+            },
+            "parentFeedbackId": null
+          }
+          data.push(newData);
+        })
+      );
     } catch (error) {
       console.error('Error while fetching feedbacks:', error);
       return [];
@@ -32,8 +52,8 @@ class FeedbacksApi {
     });
 
     feedbacks = feedbacks.filter(item => item.parentFeedbackId === null);
-    
-    
+
+
     return feedbacks;
   }
 
@@ -78,7 +98,7 @@ class FeedbacksApi {
   }
 }
 
-const feedbacksApi = new FeedbacksApi('http://localhost:3001');
+const feedbacksApi = new FeedbacksApi('http://localhost:8081');
 
 export default feedbacksApi;
 

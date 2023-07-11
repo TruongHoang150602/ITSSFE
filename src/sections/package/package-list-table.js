@@ -41,12 +41,45 @@ export const PackageListTable = (props) => {
   } = props;
   const [currentPackage, setCurrentPackage] = useState(null);
 
+  const [updatedPackage, setUpdatedPackage] = useState({
+    name: '',
+    price: '',
+    description: ''
+  });
+
+  const [name, setName] = useState('');
+  const [price, setPrice] = useState('');
+  const [des, setDes] = useState('');
+
+  const handleName = (event) => {
+    setName(event.target.value);
+    setUpdatedPackage((prevState) => ({
+      ...prevState,
+      name: event.target.value
+    }));
+  }
+
+  const handlePrice = (event) => {
+    setPrice(event.target.value);
+    setUpdatedPackage((prevState) => ({
+      ...prevState,
+      price: event.target.value
+    }));
+  }
+
+  const handleDes = (event) => {
+    setDes(event.target.value);
+    setUpdatedPackage((prevState) => ({
+      ...prevState,
+      description: event.target.value
+    }));
+  }
+
   const handlePackageToggle = useCallback((packageId) => {
     setCurrentPackage((prevPackageId) => {
       if (prevPackageId === packageId) {
         return null;
       }
-
       return packageId;
     });
   }, []);
@@ -56,7 +89,9 @@ export const PackageListTable = (props) => {
   }, []);
 
   const handlePackageUpdate = useCallback((packageId) => {
-    // packagesApi.updatePackageById();
+    // packagesApi.updatePackageById(packageId, updatedPackage);
+    console.log(packageId);
+    // console.log(updatedPackage);
     setCurrentPackage(null);
     toast.success("Package updated");
   }, []);
@@ -156,19 +191,21 @@ export const PackageListTable = (props) => {
                         <CardContent>
                           <Grid container spacing={3}>
                             <Grid item md={12} xs={12}>
-                              <Typography variant="h6">Basic details</Typography>
+                              <Typography variant="h6">Package details</Typography>
                               <Divider sx={{ my: 2 }} />
                             </Grid>
                             <Grid item md={6} xs={12}>
                               <Stack container spacing={3}>
                                 <TextField
                                   defaultValue={pack.name}
+                                  onChange={handleName}
                                   fullWidth
                                   label="Package name"
                                   name="name"
                                 />
                                 <TextField
                                   defaultValue={pack.price}
+                                  onChange={handlePrice}
                                   fullWidth
                                   label="Price"
                                   name="price"
@@ -186,6 +223,7 @@ export const PackageListTable = (props) => {
                             <Grid item md={6} xs={12}>
                               <TextField
                                 defaultValue={pack.description}
+                                onChange={handleDes}
                                 fullWidth
                                 label="Description"
                                 name="description"

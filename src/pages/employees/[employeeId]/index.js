@@ -1,9 +1,9 @@
-import { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import NextLink from "next/link";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import ArrowLeftIcon from "@untitled-ui/icons-react/build/esm/ArrowLeft";
-import ChevronDownIcon from "@untitled-ui/icons-react/build/esm/ChevronDown";
+// import ChevronDownIcon from "@untitled-ui/icons-react/build/esm/ChevronDown";
 import Edit02Icon from "@untitled-ui/icons-react/build/esm/Edit02";
 import { useCallback, useEffect, useState } from "react";
 import NextLink from "next/link";
@@ -21,8 +21,7 @@ import {
   Link,
   Stack,
   SvgIcon,
-  Tab,
-  Tabs,
+  TabProps,
   Typography,
   Unstable_Grid2 as Grid,
 } from "@mui/material";

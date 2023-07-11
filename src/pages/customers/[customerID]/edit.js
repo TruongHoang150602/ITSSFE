@@ -3,8 +3,13 @@ import NextLink from "next/link";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import ArrowLeftIcon from "@untitled-ui/icons-react/build/esm/ArrowLeft";
-import { Avatar, Box, Chip, Container, Link, Stack, SvgIcon, Typography } from "@mui/material";
+<<<<<<< HEAD:src/pages/users/[userId]/edit.js
+import { Avatar, Box, Chip, Container, Link, Stack, SvgIcon, Typography, Dialog } from "@mui/material";
 import usersApi from "src/api/users";
+=======
+import { Avatar, Box, Chip, Container, Link, Stack, SvgIcon, Typography } from "@mui/material";
+import customersApi from "src/api/customers";
+>>>>>>> 7e3026b4720b9fa153bf01586e71d122ef8b3fdb:src/pages/customers/[customerID]/edit.js
 import { useMounted } from "src/hooks/use-mounted";
 import { usePageView } from "src/hooks/use-page-view";
 import { Layout as DashboardLayout } from "src/layouts/dashboard/layout";
@@ -12,18 +17,18 @@ import { paths } from "src/paths";
 import { UserEditForm } from "src/sections/user/user-edit-form";
 import { getInitials } from "src/utils/get-initials";
 
-const useUser = () => {
+const useCustomer = () => {
   const route = useRouter();
   const isMounted = useMounted();
-  const [user, setUser] = useState(null);
+  const [customer, setCustomer] = useState(null);
 
-  const getUser = useCallback(async () => {
+  const getCustomer = useCallback(async () => {
     try {
-      const { userId } = route.query;
-      const response = await usersApi.getUserById(userId);
+      const { customerId } = route.query;
+      const response = await customersApi.getCustomerById(customerId);
 
       if (isMounted()) {
-        setUser(response);
+        setCustomer(response);
       }
     } catch (err) {
       console.error(err);
@@ -32,28 +37,28 @@ const useUser = () => {
 
   useEffect(
     () => {
-      getUser();
+      getCustomer();
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     []
   );
 
-  return user;
+  return customer;
 };
 
 const Page = () => {
-  const user = useUser();
+  const customer = useCustomer();
 
   usePageView();
 
-  if (!user) {
+  if (!customer) {
     return null;
   }
 
   return (
     <>
       <Head>
-        <title>Dashboard: User Edit | Devias Kit PRO</title>
+        <title>Dashboard: Customer Edit | Devias Kit PRO</title>
       </Head>
       <Box
         component="main"
@@ -79,7 +84,7 @@ const Page = () => {
                   <SvgIcon sx={{ mr: 1 }}>
                     <ArrowLeftIcon />
                   </SvgIcon>
-                  <Typography variant="subtitle2">Users</Typography>
+                  <Typography variant="subtitle2">Customers</Typography>
                 </Link>
               </div>
               <Stack
@@ -93,25 +98,25 @@ const Page = () => {
               >
                 <Stack alignItems="center" direction="row" spacing={2}>
                   <Avatar
-                    src={user.avatar}
+                    src={customer.avatar}
                     sx={{
                       height: 64,
                       width: 64,
                     }}
                   >
-                    {getInitials(user.name)}
+                    {getInitials(customer.name)}
                   </Avatar>
                   <Stack spacing={1}>
-                    <Typography variant="h4">{user.email}</Typography>
+                    <Typography variant="h4">{customer.email}</Typography>
                     <Stack alignItems="center" direction="row" spacing={1}>
-                      <Typography variant="subtitle2">user_id:</Typography>
-                      <Chip label={user.id} size="small" />
+                      <Typography variant="subtitle2">customer_id:</Typography>
+                      <Chip label={customer.id} size="small" />
                     </Stack>
                   </Stack>
                 </Stack>
               </Stack>
             </Stack>
-            <UserEditForm user={user} />
+            <UserEditForm user={customer} />
           </Stack>
         </Container>
       </Box>

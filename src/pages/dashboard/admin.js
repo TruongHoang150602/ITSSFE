@@ -11,7 +11,7 @@ import { OverviewTotalCustomers } from "src/sections/overview/overview-total-cus
 import { OverviewTotalProfit } from "src/sections/overview/overview-total-profit";
 import { OverviewTraffic } from "src/sections/overview/overview-traffic";
 
-// const now = new Date();
+const date = new Date();
 
 const Page = () => (
   <>
