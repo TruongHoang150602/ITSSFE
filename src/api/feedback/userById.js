@@ -1,6 +1,7 @@
 import axios from "axios";
 
-const getUserById = async (response, data) => {
+const getUserById = async (response) => {
+    let data = [];
     await Promise.all(
         response.data.map(async (item) => {
             const author = await axios.get(`http://localhost:8081/user/${item.user_id}`);

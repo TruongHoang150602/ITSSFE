@@ -15,7 +15,7 @@ const usePosts = () => {
   const getPosts = useCallback(async () => {
     try {
       const response = await feedbacksApi.getFeedbacks();
-      console.log(response);
+      // console.log(response);
       if (isMounted()) {
         setPosts(response);
       }

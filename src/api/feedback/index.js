@@ -1,6 +1,8 @@
 import axios from 'axios';
 import { deepCopy } from 'src/utils/deep-copy';
 import { applySort } from 'src/utils/apply-sort';
+import getUserById from './userById';
+import { useState } from 'react';
 // import { wait } from 'src/utils/wait';
 /* 
 This class has methods to perform HTTP requests such as getting 
@@ -14,28 +16,11 @@ class FeedbacksApi {
   }
 
   async getFeedbacks(request = {}) {
-
-    let data = [];
+    var data = [];
     try {
       const response = await axios.get(`${this.baseUrl}/feedback/`);
-      await Promise.all(
-        response.data.map(async (item) => {
-          const author = await axios.get(`${this.baseUrl}/user/${item.user_id}`);
-          var fullName = author.data.first_name + " " + author.data.last_name;
-          var newData = {
-            "id": item.id,
-            "createdAt": item.created_at,
-            "message": item.content,
-            "author": {
-              "id": author.data.id,
-              "avatar": author.data.avatar,
-              "name": fullName
-            },
-            "parentFeedbackId": null
-          }
-          data.push(newData);
-        })
-      );
+      const result = await getUserById(response);
+      data = Object.assign([], result);
     } catch (error) {
       console.error('Error while fetching feedbacks:', error);
       return [];
@@ -58,9 +43,12 @@ class FeedbacksApi {
   }
 
   async getFeedbackById(id) {
+    var data = [];
     try {
-      const response = await axios.get(`${this.baseUrl}/feedbacks/${id}`);
-      return response.data;
+      const response = await axios.get(`${this.baseUrl}/feedback/${id}`);
+      const result = await getUserById(response);
+      data = Object.assign([], result);
+      return data;
     } catch (error) {
       console.error(`Error while fetching feedback with ID ${id}:`, error);
       return null;
@@ -69,7 +57,8 @@ class FeedbacksApi {
 
   async createFeedback(newFeedback) {
     try {
-      const response = await axios.post(`${this.baseUrl}/feedbacks`, newFeedback);
+      const response = await axios.post(`${this.baseUrl}/feedback/`, newFeedback);
+      console.log(response.data);
       return response.data;
     } catch (error) {
       console.error('Error while creating feedback:', error);

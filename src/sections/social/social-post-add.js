@@ -18,6 +18,7 @@ import { getInitials } from "src/utils/get-initials";
 import { createResourceId } from "src/utils/create-resource-id";
 
 export const SocialPostAdd = (props) => {
+  const date = new Date();
   const { createPost, ...other } = props;
   const user = useMockedUser();
   const smUp = useMediaQuery((theme) => theme.breakpoints.up("sm"));
@@ -26,15 +27,10 @@ export const SocialPostAdd = (props) => {
     const postContent = document.getElementById("postContent").value;
     if (!postContent) return;
     const post = {
-      id: createResourceId(),
-      author: {
-        id: user.id,
-        avatar: user.avatar,
-        name: `${user.first_name} ${user.last_name}`,
-      },
-      createdAt: new Date().getTime(),
-      parentFeedbackId: null,
-      message: postContent,
+      "user_id": user.id,
+      "created_at": date.toISOString(),
+      "parentFeedbackId": null,
+      "content": postContent,
     };
     createPost(post);
     document.getElementById("postContent").value = "";
