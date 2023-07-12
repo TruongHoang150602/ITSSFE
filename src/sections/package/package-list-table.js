@@ -1,4 +1,4 @@
-import { Fragment, useCallback, useState } from "react";
+import { Fragment, useCallback, useState, useEffect } from "react";
 import numeral from "numeral";
 import PropTypes from "prop-types";
 import { toast } from "react-hot-toast";
@@ -39,7 +39,12 @@ export const PackageListTable = (props) => {
     rowsPerPage,
     ...other
   } = props;
-  const [currentPackage, setCurrentPackage] = useState(null);
+  const [currentPackage, setCurrentPackage] = useState({
+    id: '',
+    name: '',
+    price: '',
+    description: ''
+  });
 
   const [updatedPackage, setUpdatedPackage] = useState({
     name: '',
@@ -47,12 +52,22 @@ export const PackageListTable = (props) => {
     description: ''
   });
 
-  const [name, setName] = useState('');
-  const [price, setPrice] = useState('');
-  const [des, setDes] = useState('');
+  useEffect(() => {
+    setUpdatedPackage({
+      name: currentPackage.name,
+      price: currentPackage.price,
+      description: currentPackage.description
+    });
+  }, [currentPackage]);
+
+  const handleUpdatedPackage = (field, value) => {
+    setUpdatedPackage(prevState => ({
+      ...prevState,
+      [field]: value
+    }));
+  };
 
   const handleName = (event) => {
-    setName(event.target.value);
     setUpdatedPackage((prevState) => ({
       ...prevState,
       name: event.target.value
@@ -60,7 +75,6 @@ export const PackageListTable = (props) => {
   }
 
   const handlePrice = (event) => {
-    setPrice(event.target.value);
     setUpdatedPackage((prevState) => ({
       ...prevState,
       price: event.target.value
@@ -68,38 +82,57 @@ export const PackageListTable = (props) => {
   }
 
   const handleDes = (event) => {
-    setDes(event.target.value);
     setUpdatedPackage((prevState) => ({
       ...prevState,
       description: event.target.value
     }));
   }
 
-  const handlePackageToggle = useCallback((packageId) => {
-    setCurrentPackage((prevPackageId) => {
-      if (prevPackageId === packageId) {
-        return null;
+  const handlePackageToggle = useCallback((pack) => {
+    setCurrentPackage((prevPackage) => {
+      if (prevPackage === pack) {
+        return {
+          id: '',
+          name: '',
+          price: '',
+          description: ''
+        };
       }
-      return packageId;
+      return pack;
     });
   }, []);
 
   const handlePackageClose = useCallback(() => {
-    setCurrentPackage(null);
+    setCurrentPackage({
+      id: '',
+      name: '',
+      price: '',
+      description: ''
+    });
   }, []);
 
   const handlePackageUpdate = useCallback((packageId) => {
-    // packagesApi.updatePackageById(packageId, updatedPackage);
-    console.log(packageId);
-    // console.log(updatedPackage);
-    setCurrentPackage(null);
+    packagesApi.updatePackageById(packageId, updatedPackage);
+    setCurrentPackage({
+      id: '',
+      name: '',
+      price: '',
+      description: ''
+    });
     toast.success("Package updated");
-  }, []);
+    window.location.reload();
+  }, [updatedPackage]);
 
   const handlePackageDelete = useCallback((packageId) => {
     packagesApi.deletePackageById(packageId);
-    setCurrentPackage(null);
+    setCurrentPackage({
+      id: '',
+      name: '',
+      price: '',
+      description: ''
+    });
     toast.error("Package cannot be deleted");
+    window.location.reload();
   }, []);
 
   return (
@@ -116,160 +149,157 @@ export const PackageListTable = (props) => {
           </TableHead>
           <TableBody>
             {packages.map((pack) => {
-              const isCurrent = pack.id === currentPackage;
-              const price = numeral(pack.price).format(`${pack.currency}0,0.00`);
+              if (!pack._deleted) {
+                console.log(pack);
+                const isCurrent = pack.id === currentPackage.id;
+                const price = numeral(pack.price).format(`${pack.currency}0,0.00`);
 
-              return (
-                <Fragment key={pack.id}>
-                  <TableRow hover key={pack.id}>
-                    <TableCell
-                      padding="checkbox"
-                      sx={{
-                        ...(isCurrent && {
-                          position: "relative",
-                          "&:after": {
-                            position: "absolute",
-                            content: '" "',
-                            top: 0,
-                            left: 0,
-                            backgroundColor: "primary.main",
-                            width: 3,
-                            height: "calc(100% + 1px)",
-                          },
-                        }),
-                      }}
-                      width="25%"
-                    >
-                      <IconButton onClick={() => handlePackageToggle(pack.id)}>
-                        <SvgIcon>{isCurrent ? <ChevronDownIcon /> : <ChevronRightIcon />}</SvgIcon>
-                      </IconButton>
-                    </TableCell>
-                    <TableCell width="25%">
-                      <Box
+                return (
+                  <Fragment key={pack.id}>
+                    <TableRow hover key={pack.id}>
+                      <TableCell
+                        padding="checkbox"
                         sx={{
-                          alignItems: "center",
-                          display: "flex",
+                          ...(isCurrent && {
+                            position: "relative",
+                            "&:after": {
+                              position: "absolute",
+                              content: '" "',
+                              top: 0,
+                              left: 0,
+                              backgroundColor: "primary.main",
+                              width: 3,
+                              height: "calc(100% + 1px)",
+                            },
+                          }),
                         }}
+                        width="25%"
                       >
+                        <IconButton onClick={() => handlePackageToggle(pack)}>
+                          <SvgIcon>{isCurrent ? <ChevronDownIcon /> : <ChevronRightIcon />}</SvgIcon>
+                        </IconButton>
+                      </TableCell>
+                      <TableCell width="25%">
                         <Box
                           sx={{
-                            cursor: "pointer",
-                            ml: 2,
+                            alignItems: "center",
+                            display: "flex",
                           }}
                         >
-                          <Typography variant="subtitle2">{pack.name}</Typography>
-                          {/* <Typography
-                            color="text.secondary"
-                            variant="body2"
+                          <Box
+                            sx={{
+                              cursor: "pointer",
+                              ml: 2,
+                            }}
                           >
-                            in {pack.category}
-                          </Typography> */}
+                            <Typography variant="subtitle2">{pack.name}</Typography>
+                          </Box>
                         </Box>
-                      </Box>
-                    </TableCell>
-                    <TableCell>{price}</TableCell>
-                    <TableCell>{pack.description}</TableCell>
-                  </TableRow>
-                  {isCurrent && (
-                    <TableRow>
-                      <TableCell
-                        colSpan={7}
-                        sx={{
-                          p: 0,
-                          position: "relative",
-                          "&:after": {
-                            position: "absolute",
-                            content: '" "',
-                            top: 0,
-                            left: 0,
-                            backgroundColor: "primary.main",
-                            width: 3,
-                            height: "calc(100% + 1px)",
-                          },
-                        }}
-                      >
-                        <CardContent>
-                          <Grid container spacing={3}>
-                            <Grid item md={12} xs={12}>
-                              <Typography variant="h6">Package details</Typography>
-                              <Divider sx={{ my: 2 }} />
-                            </Grid>
-                            <Grid item md={6} xs={12}>
-                              <Stack container spacing={3}>
-                                <TextField
-                                  defaultValue={pack.name}
-                                  onChange={handleName}
-                                  fullWidth
-                                  label="Package name"
-                                  name="name"
-                                />
-                                <TextField
-                                  defaultValue={pack.price}
-                                  onChange={handlePrice}
-                                  fullWidth
-                                  label="Price"
-                                  name="price"
-                                  InputProps={{
-                                    startAdornment: (
-                                      <InputAdornment position="start">
-                                        {pack.currency}
-                                      </InputAdornment>
-                                    ),
-                                  }}
-                                  type="number"
-                                />
-                              </Stack>
-                            </Grid>
-                            <Grid item md={6} xs={12}>
-                              <TextField
-                                defaultValue={pack.description}
-                                onChange={handleDes}
-                                fullWidth
-                                label="Description"
-                                name="description"
-                                multiline
-                                rows={4}
-                              />
-                            </Grid>
-                          </Grid>
-                        </CardContent>
-                        <Divider />
-                        <Stack
-                          alignItems="center"
-                          direction="row"
-                          justifyContent="space-between"
-                          sx={{ p: 2 }}
-                        >
-                          <Stack alignItems="center" direction="row" spacing={2}>
-                            <Button
-                              onClick={() => {
-                                handlePackageUpdate(pack.id);
-                              }}
-                              type="submit"
-                              variant="contained"
-                            >
-                              Update
-                            </Button>
-                            <Button color="inherit" onClick={handlePackageClose}>
-                              Cancel
-                            </Button>
-                          </Stack>
-                          <div>
-                            <Button
-                              onClick={() => {
-                                handlePackageDelete(pack.id);
-                              }}
-                              color="error"
-                            >
-                              Delete package
-                            </Button>
-                          </div>
-                        </Stack>
                       </TableCell>
+                      <TableCell>{price}</TableCell>
+                      <TableCell>{pack.description}</TableCell>
                     </TableRow>
-                  )}
-                </Fragment>
-              );
+                    {isCurrent && (
+                      <TableRow>
+                        <TableCell
+                          colSpan={7}
+                          sx={{
+                            p: 0,
+                            position: "relative",
+                            "&:after": {
+                              position: "absolute",
+                              content: '" "',
+                              top: 0,
+                              left: 0,
+                              backgroundColor: "primary.main",
+                              width: 3,
+                              height: "calc(100% + 1px)",
+                            },
+                          }}
+                        >
+                          <CardContent>
+                            <Grid container spacing={3}>
+                              <Grid item md={12} xs={12}>
+                                <Typography variant="h6">Package details</Typography>
+                                <Divider sx={{ my: 2 }} />
+                              </Grid>
+                              <Grid item md={6} xs={12}>
+                                <Stack container spacing={3}>
+                                  <TextField
+                                    defaultValue={pack.name}
+                                    onChange={handleName}
+                                    fullWidth
+                                    label="Package name"
+                                    name="name"
+                                  />
+                                  <TextField
+                                    defaultValue={pack.price}
+                                    onChange={handlePrice}
+                                    fullWidth
+                                    label="Price"
+                                    name="price"
+                                    InputProps={{
+                                      startAdornment: (
+                                        <InputAdornment position="start">
+                                          {pack.currency}
+                                        </InputAdornment>
+                                      ),
+                                    }}
+                                    type="number"
+                                  />
+                                </Stack>
+                              </Grid>
+                              <Grid item md={6} xs={12}>
+                                <TextField
+                                  defaultValue={pack.description}
+                                  onChange={handleDes}
+                                  fullWidth
+                                  label="Description"
+                                  name="description"
+                                  multiline
+                                  rows={4}
+                                />
+                              </Grid>
+                            </Grid>
+                          </CardContent>
+                          <Divider />
+                          <Stack
+                            alignItems="center"
+                            direction="row"
+                            justifyContent="space-between"
+                            sx={{ p: 2 }}
+                          >
+                            <Stack alignItems="center" direction="row" spacing={2}>
+                              <Button
+                                onClick={() => {
+                                  handlePackageUpdate(pack.id);
+                                }}
+                                type="submit"
+                                variant="contained"
+                              >
+                                Update
+                              </Button>
+                              <Button color="inherit" onClick={handlePackageClose}>
+                                Cancel
+                              </Button>
+                            </Stack>
+                            <div>
+                              <Button
+                                onClick={() => {
+                                  handlePackageDelete(pack.id);
+                                }}
+                                color="error"
+                              >
+                                Delete package
+                              </Button>
+                            </div>
+                          </Stack>
+                        </TableCell>
+                      </TableRow>
+                    )}
+                  </Fragment>
+                );
+              }
             })}
           </TableBody>
         </Table>
