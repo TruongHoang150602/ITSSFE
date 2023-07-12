@@ -106,7 +106,7 @@ const Page = () => {
                 </Stack>
               </Stack>
             </Stack>
-            <UserEditForm user={customer} />
+            <UserEditForm customer={customer} />
           </Stack>
         </Container>
       </Box>

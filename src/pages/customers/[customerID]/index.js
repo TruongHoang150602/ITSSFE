@@ -49,7 +49,6 @@ const useCustomer = () => {
     try {
       const customerId = route.query.customerID;
       const response = await customersApi.getCustomerById(customerId);
-
       setCustomer(response);
     } catch (err) {
       console.error(err);
@@ -208,7 +207,7 @@ const Page = () => {
             </Stack>
             {currentTab === "details" && (
               <div>
-                <Stack container spacing={4}>
+                <Stack spacing={4}>
                   <UserBasicDetails
                     address={customer.address}
                     gender={customer.gender}
@@ -223,7 +222,7 @@ const Page = () => {
               </div>
             )}
             {currentTab === "logs" && (
-              <Stack container spacing={4}>
+              <Stack spacing={4}>
                 <UserCalendar activity={logs} />
                 <UserLogs logs={logs} addLog={addLog} />
               </Stack>

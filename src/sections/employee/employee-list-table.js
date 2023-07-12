@@ -68,8 +68,8 @@ const useSelectionModel = (employees) => {
 
 export const EmployeeListTable = (props) => {
   const {
-    employees,
-    employeesCount,
+    staff,
+    staffCount,
     onPageChange,
     onRowsPerPageChange,
     page,
@@ -77,7 +77,7 @@ export const EmployeeListTable = (props) => {
     rowsPerPage,
     ...other
   } = props;
-  const { deselectAll, selectAll, deselectOne, selectOne, selected } = useSelectionModel(employees);
+  const { deselectAll, selectAll, deselectOne, selectOne, selected } = useSelectionModel(staff);
 
   const handleToggleAll = useCallback(
     (event) => {
@@ -92,8 +92,8 @@ export const EmployeeListTable = (props) => {
     [selectAll, deselectAll]
   );
 
-  const selectedAll = selected.length === employees.length;
-  const selectedSome = selected.length > 0 && selected.length < employees.length;
+  const selectedAll = selected.length === staff.length;
+  const selectedSome = selected.length > 0 && selected.length < staff.length;
   const enableBulkActions = selected.length > 0;
 
   const [open, setOpen] = useState(false);
@@ -158,10 +158,10 @@ export const EmployeeListTable = (props) => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {employees.map((employee) => {
-              const isSelected = selected.includes(employee.id);
+            {staff.map((staff) => {
+              const isSelected = selected.includes(staff.id);
               return (
-                <TableRow hover key={employee.id} selected={isSelected}>
+                <TableRow hover key={staff.id} selected={isSelected}>
                   <TableCell padding="checkbox">
                     <Checkbox
                       checked={isSelected}
@@ -169,9 +169,9 @@ export const EmployeeListTable = (props) => {
                         const { checked } = event.target;
 
                         if (checked) {
-                          selectOne(employee.id);
+                          selectOne(staff.id);
                         } else {
-                          deselectOne(employee.id);
+                          deselectOne(staff.id);
                         }
                       }}
                       value={isSelected}
@@ -180,7 +180,7 @@ export const EmployeeListTable = (props) => {
                   <TableCell>
                     <Stack alignItems="center" direction="row" spacing={1}>
                       <Avatar
-                        src={employee.avatar}
+                        // src={staff.avatar}
                         sx={{
                           height: 42,
                           width: 42,
@@ -190,22 +190,22 @@ export const EmployeeListTable = (props) => {
                         <Link
                           color="inherit"
                           component={NextLink}
-                          href={paths.employees.details(employee.id)}
+                          href={paths.staff.details(staff.id)}
                           variant="subtitle2"
                         >
-                          {employee.first_name} {employee.last_name}
+                          {staff.first_name} {staff.last_name}
                         </Link>
                         <Typography color="text.secondary" variant="body2">
-                          {employee.email}
+                          {staff.email}
                         </Typography>
                       </div>
                     </Stack>
                   </TableCell>
-                  <TableCell>{employee.role}</TableCell>
-                  <TableCell>{employee.gender}</TableCell>
-                  <TableCell>{employee.phone}</TableCell>
+                  <TableCell>{staff.role}</TableCell>
+                  <TableCell>{staff.gender}</TableCell>
+                  <TableCell>{staff.phone}</TableCell>
                   <TableCell align="right">
-                    <IconButton component={NextLink} href={paths.employees.edit(employee.id)}>
+                    <IconButton component={NextLink} href={paths.staff.edit(staff.id)}>
                       <SvgIcon>
                         <Edit02Icon />
                       </SvgIcon>
@@ -219,7 +219,7 @@ export const EmployeeListTable = (props) => {
       </Scrollbar>
       <TablePagination
         component="div"
-        count={employeesCount}
+        count={staffCount}
         onPageChange={onPageChange}
         onRowsPerPageChange={onRowsPerPageChange}
         page={page}
@@ -231,7 +231,7 @@ export const EmployeeListTable = (props) => {
           Delete
         </DialogTitle>
         <DialogContent>
-          <DialogContentText>Are you sure you want to delete this employee?</DialogContentText>
+          <DialogContentText>Are you sure you want to delete this staff?</DialogContentText>
         </DialogContent>
         <DialogActions>
           <Button autoFocus onClick={handleClose}>
@@ -247,8 +247,8 @@ export const EmployeeListTable = (props) => {
 };
 
 EmployeeListTable.propTypes = {
-  employees: PropTypes.array.isRequired,
-  employeesCount: PropTypes.number.isRequired,
+  staff: PropTypes.array.isRequired,
+  staffCount: PropTypes.number.isRequired,
   onPageChange: PropTypes.func.isRequired,
   onRowsPerPageChange: PropTypes.func,
   page: PropTypes.number.isRequired,

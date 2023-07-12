@@ -5,10 +5,10 @@ export const paths = {
     employee: "dashboard/employee",
     user: "dashboard/user",
   },
-  employees: {
-    index: "/employees",
-    details: (id) => `/employees/${id}`,
-    edit: (id) => `/employees/${id}/edit`,
+  staff: {
+    index: "/staff",
+    details: (id) => `/staff/${id}`,
+    edit: (id) => `/staff/${id}/edit`,
   },
   customers: {
     index: "/customers",

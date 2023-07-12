@@ -74,9 +74,6 @@ export const UserLogs = (props) => {
               <TableCell>Coach</TableCell>
               <TableCell>Status</TableCell>
               <TableCell>Date</TableCell>
-              {/* <TableCell>Coach</TableCell>
-              <TableCell>Status</TableCell>
-              <TableCell>Date</TableCell> */}
             </TableRow>
           </TableHead>
           {process && (
@@ -114,7 +111,7 @@ export const UserLogs = (props) => {
         <Card sx={{ width: "400px" }}>
           <CardHeader title="Add activity" />
           <CardContent sx={{ pt: "20px" }}>
-            <TextField fullWidth label="Activity" name="activity" id="activity" />
+            <TextField label="ActivityfullWidth" name="activity" id="activity" />
           </CardContent>
           <Stack
             direction={{

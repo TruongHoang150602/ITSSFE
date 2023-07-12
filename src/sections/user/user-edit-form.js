@@ -2,7 +2,7 @@ import NextLink from "next/link";
 import PropTypes from "prop-types";
 import toast from "react-hot-toast";
 import * as Yup from "yup";
-import { useRouter } from "next/navigation";
+import { useRouter } from "next/router";
 import { useFormik } from "formik";
 import {
   Button,
@@ -18,37 +18,39 @@ import { paths } from "src/paths";
 import { wait } from "src/utils/wait";
 import customersApi from "src/api/customers";
 
-const initialValues = (user) => {
+const initialValues = (customer) => {
   const today = new Date().toISOString().slice(0, 10);
-  if (user) {
-    user.birth = user.birth.slice(0, 10);
+  if (customer) {
+    if (customer.birth) {
+      customer.birth = customer.birth.slice(0, 10);
+    }
     return {
-      first_name: user.first_name || "",
-      last_name: user.last_name || "",
-      gender: user.gender || "male",
-      birth: user.birth || today,
-      gmail: user.gmail || "",
-      phone: user.phone || "",
+      first_name: customer.first_name || "",
+      last_name: customer.last_name || "",
+      gender: customer.gender || "male",
+      birth: customer.birth || today,
+      gmail: customer.gmail || "",
+      phone: customer.phone || "",
       submit: null,
     };
   }
 
   return {
+    first_name: "",
+    last_name: "",
     gender: "male",
     birth: today,
     gmail: "",
-    first_name: "",
-    last_name: "",
     phone: "",
     submit: null,
   };
 };
 
 export const UserEditForm = (props) => {
-  const { user, onClose, ...other } = props;
+  const { customer, onClose, ...other } = props;
   const router = useRouter();
   const formik = useFormik({
-    initialValues: initialValues(user),
+    initialValues: initialValues(customer),
     validationSchema: Yup.object({
       id: props.id,
       first_name: Yup.string().max(255).required("First name is required"),
@@ -60,23 +62,28 @@ export const UserEditForm = (props) => {
     }),
     onSubmit: async (values, helpers) => {
       try {
-        if (user) {
-          const updatedValues = {
-            ...formik.values,
-            id: user.id,
+        if (customer) {
+          const updatedCustomer = {
+            ...customer,
+            ...values,
           };
-          await customersApi.updateCustomerById(updatedValues);
-          await wait(500);
+          customersApi.updateCustomerById(updatedCustomer);
           helpers.setStatus({ success: true });
           helpers.setSubmitting(false);
-          toast.success("User updated");
-          router.push(paths.customers.index);
+          toast.success("Customer updated");
+          router.push(paths.customers.details(customer.id));
         } else {
-          await customersApi.createCustomer(formik.values);
+          const newCustomer = {
+            password: "1234567",
+            role_id: 2,
+            role_name: "CUSTOMER",
+            ...values,
+          };
+          customersApi.createCustomer(newCustomer);
           await wait(500);
           helpers.setStatus({ success: true });
           helpers.setSubmitting(false);
-          toast.success("User created");
+          toast.success("Customer created");
           onClose();
         }
       } catch (err) {
@@ -90,9 +97,9 @@ export const UserEditForm = (props) => {
   });
 
   return (
-    <form onSubmit={formik.onSubmit} {...other}>
+    <form onSubmit={formik.handleSubmit} {...other}>
       <Card>
-        <CardHeader title="Edit User" />
+        <CardHeader title="Edit Customer" />
         <CardContent sx={{ pt: 0 }}>
           <Grid container spacing={3}>
             <Grid xs={12} md={6}>
@@ -193,18 +200,18 @@ export const UserEditForm = (props) => {
         >
           <Button
             // onClick={formik.onSubmit}
-            disabled={formik.isSubmitting}
+            // disabled={formik.isSubmitting}
             type="submit"
             variant="contained"
           >
             Save Changes
           </Button>
-          {user ? (
+          {customer ? (
             <Button
               color="inherit"
               component={NextLink}
               disabled={formik.isSubmitting}
-              href={paths.customers.details(user.id)}
+              href={paths.customers.details(customer.id)}
             >
               Cancel
             </Button>
@@ -220,6 +227,6 @@ export const UserEditForm = (props) => {
 };
 
 UserEditForm.propTypes = {
-  user: PropTypes.object,
+  customer: PropTypes.object,
   onClose: PropTypes.func,
 };
