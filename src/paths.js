@@ -10,10 +10,10 @@ export const paths = {
     details: (id) => `/employees/${id}`,
     edit: (id) => `/employees/${id}/edit`,
   },
-  users: {
-    index: "/users",
-    details: (id) => `/users/${id}`,
-    edit: (id) => `/users/${id}/edit`,
+  customers: {
+    index: "/customers",
+    details: (id) => `/customers/${id}`,
+    edit: (id) => `/customers/${id}/edit`,
   },
   gyms: {
     index: "/gyms",

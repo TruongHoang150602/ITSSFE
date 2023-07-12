@@ -21,10 +21,11 @@ import usersApi from "src/api/customers";
 const initialValues = (user) => {
   if (user)
     return {
+      first_name: user.first_name || "",
       last_name: user.last_name || "",
       gender: user.gender || "male",
       birth: user.birth || new Date().toISOString().slice(0, 10),
-      email: user.email || "",
+      gmail: user.gmail || "",
       first_name: user.first_name || "",
       phone: user.phone || "",
       submit: null,
@@ -32,7 +33,7 @@ const initialValues = (user) => {
   return {
     gender: "male",
     birth: new Date().toISOString().slice(0, 10),
-    email: "",
+    gmail: "",
     first_name: "",
     last_name: "",
     phone: "",
@@ -96,7 +97,7 @@ export const UserEditForm = (props) => {
                 onBlur={formik.handleBlur}
                 onChange={formik.handleChange}
                 required
-                value={formik.values.fisrt_name}
+                value={formik.values.first_name}
               />
             </Grid>
             <Grid xs={12} md={6}>
@@ -121,7 +122,7 @@ export const UserEditForm = (props) => {
                 onBlur={formik.handleBlur}
                 onChange={formik.handleChange}
                 required
-                value={formik.values.email}
+                value={formik.values.gmail}
               />
             </Grid>
 
@@ -191,7 +192,7 @@ export const UserEditForm = (props) => {
               color="inherit"
               component={NextLink}
               disabled={formik.isSubmitting}
-              href={paths.users.details(user.id)}
+              href={paths.customers.details(user.id)}
             >
               Cancel
             </Button>

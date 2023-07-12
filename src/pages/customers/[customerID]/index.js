@@ -33,6 +33,7 @@ import { UserMember } from "src/sections/user/user-member";
 import { UserLogs } from "src/sections/user/user-logs";
 import { getInitials } from "src/utils/get-initials";
 import { useAuth } from "src/hooks/use-auth";
+import { ConstructionOutlined } from "@mui/icons-material";
 
 const tabs = [
   { label: "Details", value: "details" },
@@ -46,24 +47,20 @@ const useCustomer = () => {
 
   const getCustomer = useCallback(async () => {
     try {
-      const { customerId } = route.query;
+      const customerId = route.query.customerID;
       const response = await customersApi.getCustomerById(customerId);
 
-      if (isMounted()) {
-        setCustomer(response);
-      }
+      // if (isMounted()) {
+      setCustomer(response);
+      // }
     } catch (err) {
       console.error(err);
     }
-  }, [isMounted]);
+  }, []);
 
-  useEffect(
-    () => {
-      getCustomer();
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    []
-  );
+  useEffect(() => {
+    getCustomer();
+  });
 
   return customer;
 };
@@ -75,7 +72,7 @@ const useLogs = () => {
 
   const getLogs = useCallback(async () => {
     try {
-      const { customerId } = route.query;
+      const customerId = route.query.customerID;
       const response = await customersApi.getProcessById(customerId);
       if (isMounted()) {
         setLogs(response);
@@ -110,7 +107,8 @@ const Page = () => {
   const [currentTab, setCurrentTab] = useState("details");
   const customer = useCustomer();
   const { logs, addLog } = useLogs();
-  const role = useAuth().customer.role;
+
+  const role = "ADMIN";
 
   usePageView();
 
@@ -141,7 +139,7 @@ const Page = () => {
                 <Link
                   color="text.primary"
                   component={NextLink}
-                  href={paths.users.index}
+                  href={paths.customers.index}
                   sx={{
                     alignItems: "center",
                     display: "inline-flex",
@@ -171,19 +169,15 @@ const Page = () => {
                       width: 64,
                     }}
                   >
-                    {getInitials(customer.name)}
+                    {getInitials(customer.first_name + " " + customer.last_name)}
                   </Avatar>
                   <Stack spacing={1}>
                     <Typography variant="h4">
                       {customer.first_name} {customer.last_name}
                     </Typography>
-                    <Stack alignItems="center" direction="row" spacing={1}>
-                      <Typography variant="subtitle2">customer_id:</Typography>
-                      <Chip label={customer.id} size="small" />
-                    </Stack>
                   </Stack>
                 </Stack>
-                {role === "admin" && (
+                {role === "ADMIN" && (
                   <Stack alignItems="center" direction="row" spacing={2}>
                     <Button
                       color="inherit"
@@ -193,7 +187,7 @@ const Page = () => {
                           <Edit02Icon />
                         </SvgIcon>
                       }
-                      href={paths.users.edit(customer.id)}
+                      href={paths.customers.edit(customer.id)}
                     >
                       Edit
                     </Button>
@@ -223,8 +217,8 @@ const Page = () => {
                   <UserBasicDetails
                     address={customer.address}
                     gender={customer.gender}
-                    birthday={customer.birthday}
-                    email={customer.email}
+                    birthday={customer.birth}
+                    email={customer.gmail}
                     phone={customer.phone}
                     role={customer.role}
                   />

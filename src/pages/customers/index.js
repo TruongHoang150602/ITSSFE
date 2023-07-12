@@ -39,8 +39,7 @@ const useCustomers = (search) => {
 
   const getCustomers = useCallback(async () => {
     try {
-      const response = await customersApi.getCustomers(search);
-
+      const response = await customersApi.getCustomers();
       if (isMounted()) {
         setState({
           users: response.data,
@@ -55,7 +54,7 @@ const useCustomers = (search) => {
   const deleteCustomer = useCallback(
     async (customerId) => {
       try {
-        await customersApi.deleteCustomerById(customerId);
+        const response = await customersApi.deleteCustomerById(customerId);
         getCustomers();
       } catch (err) {
         console.error(err);
@@ -133,7 +132,7 @@ const Page = () => {
   return (
     <>
       <Head>
-        <title>Dashboard: Customers List | GymCenter</title>
+        <title>Customers | GymCenter</title>
       </Head>
       <Box
         component="main"
