@@ -1,7 +1,7 @@
-import axios from 'axios';
-import { applyPagination } from 'src/utils/apply-pagination';
-import { applySort } from 'src/utils/apply-sort';
-import { deepCopy } from 'src/utils/deep-copy';
+import axios from "axios";
+import { applyPagination } from "src/utils/apply-pagination";
+import { applySort } from "src/utils/apply-sort";
+import { deepCopy } from "src/utils/deep-copy";
 class EmployeesApi {
   constructor(baseUrl) {
     this.baseUrl = baseUrl;
@@ -11,100 +11,100 @@ class EmployeesApi {
     const { filters, page, rowsPerPage, sortBy, sortDir } = request;
     let data = null;
     try {
-      const response = await axios.get(`${this.baseUrl}/employees`);
-      data =  response.data;
+      const response = await axios.get(`${this.baseUrl}/user/staff`);
+      data = response.data;
     } catch (error) {
-      console.error('Error while fetching employees:', error);
-      window.location.href = '/500';
+      console.error("Error while fetching employees:", error);
+      window.location.href = "/500";
       return null;
     }
-    data = deepCopy(data);
-    data = data.filter((option) => option.role !== 'user' && option.role !== 'member' );
+    // data = deepCopy(data);
+    // data = data.filter((option) => option.role !== "user" && option.role !== "member");
     let count = data.length;
 
-    if (typeof filters !== 'undefined') {
-      data = data.filter((user) => {
-        if (typeof filters.query !== 'undefined' && filters.query !== '') {
-          let queryMatched = false;
-          const properties = ['email', 'first_name', 'last_name'];
+    // if (typeof filters !== "undefined") {
+    //   data = data.filter((user) => {
+    //     if (typeof filters.query !== "undefined" && filters.query !== "") {
+    //       let queryMatched = false;
+    //       const properties = ["email", "first_name", "last_name"];
 
-          properties.forEach((property) => {
-            if ((user[property]).toLowerCase().includes(filters.query.toLowerCase())) {
-              queryMatched = true;
-            }
-          });
+    //       properties.forEach((property) => {
+    //         if (user[property].toLowerCase().includes(filters.query.toLowerCase())) {
+    //           queryMatched = true;
+    //         }
+    //       });
 
-          if (!queryMatched) {
-            return false;
-          }
-        }
+    //       if (!queryMatched) {
+    //         return false;
+    //       }
+    //     }
 
-        if (typeof filters.role !== 'undefined') {
-          if (user.role !== filters.role) {
-            return false;
-          }
-        }
-        
-        return true;
-      });
-      count = data.length;
-    }
+    //     if (typeof filters.role !== "undefined") {
+    //       if (user.role !== filters.role) {
+    //         return false;
+    //       }
+    //     }
 
-    if (typeof sortBy !== 'undefined' && typeof sortDir !== 'undefined') {
-      data = applySort(data, sortBy, sortDir);
-    }
+    //     return true;
+    //   });
+    //   count = data.length;
+    // }
 
-    if (typeof page !== 'undefined' && typeof rowsPerPage !== 'undefined') {
-      data = applyPagination(data, page, rowsPerPage);
-    }
+    // if (typeof sortBy !== "undefined" && typeof sortDir !== "undefined") {
+    //   data = applySort(data, sortBy, sortDir);
+    // }
+
+    // if (typeof page !== "undefined" && typeof rowsPerPage !== "undefined") {
+    //   data = applyPagination(data, page, rowsPerPage);
+    // }
 
     return Promise.resolve({
       data,
-      count
+      count,
     });
   }
 
-  async getEmployeeById(id) {
-    try {
-      const response = await axios.get(`${this.baseUrl}/employees/${id}`);
-      return response.data;
-    } catch (error) {
-      console.error(`Error while fetching employee with ID ${id}:`, error);
-      return null;
-    }
-  }
+  // async getEmployeeById(id) {
+  //   try {
+  //     const response = await axios.get(`${this.baseUrl}/employees/${id}`);
+  //     return response.data;
+  //   } catch (error) {
+  //     console.error(`Error while fetching employee with ID ${id}:`, error);
+  //     return null;
+  //   }
+  // }
 
-  async createEmployee(newEmployee) {
-    try {
-      const response = await axios.post(`${this.baseUrl}/employees`, newEmployee);
-      return response.data;
-    } catch (error) {
-      console.error('Error while creating employee:', error);
-      return null;
-    }
-  }
+  // async createEmployee(newEmployee) {
+  //   try {
+  //     const response = await axios.post(`${this.baseUrl}/employees`, newEmployee);
+  //     return response.data;
+  //   } catch (error) {
+  //     console.error('Error while creating employee:', error);
+  //     return null;
+  //   }
+  // }
 
-  async updateEmployeeById(id, updatedEmployee) {
-    try {
-      const response = await axios.put(`${this.baseUrl}/employees/${id}`, updatedEmployee);
-      return response.data;
-    } catch (error) {
-      console.error(`Error while updating employee with ID ${id}:`, error);
-      return null;
-    }
-  }
+  // async updateEmployeeById(id, updatedEmployee) {
+  //   try {
+  //     const response = await axios.put(`${this.baseUrl}/employees/${id}`, updatedEmployee);
+  //     return response.data;
+  //   } catch (error) {
+  //     console.error(`Error while updating employee with ID ${id}:`, error);
+  //     return null;
+  //   }
+  // }
 
-  async deleteEmployeeById(id) {
-    try {
-      const response = await axios.delete(`${this.baseUrl}/employees/${id}`);
-      return response.data;
-    } catch (error) {
-      console.error(`Error while deleting employee with ID ${id}:`, error);
-      return false;
-    }
-  }
+  // async deleteEmployeeById(id) {
+  //   try {
+  //     const response = await axios.delete(`${this.baseUrl}/employees/${id}`);
+  //     return response.data;
+  //   } catch (error) {
+  //     console.error(`Error while deleting employee with ID ${id}:`, error);
+  //     return false;
+  //   }
+  // }
 }
 
-const employeesApi = new EmployeesApi('http://localhost:3001/user');
+const employeesApi = new EmployeesApi("http://localhost:8081");
 
 export default employeesApi;

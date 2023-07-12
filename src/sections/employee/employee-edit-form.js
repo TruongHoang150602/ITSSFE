@@ -14,12 +14,12 @@ import {
   Switch,
   TextField,
   Typography,
-  Unstable_Grid2 as Grid
-} from '@mui/material';
-import { paths } from 'src/paths';
-import { wait } from 'src/utils/wait';
-import employeesApi from 'src/api/employees';
-import { createResourceId } from 'src/utils/create-resource-id';
+  Unstable_Grid2 as Grid,
+} from "@mui/material";
+import { paths } from "src/paths";
+import { wait } from "src/utils/wait";
+import employeesApi from "src/api/employees";
+import { createResourceId } from "src/utils/create-resource-id";
 
 const ROLE = [
   {
@@ -41,23 +41,24 @@ const ROLE = [
 ];
 
 const initialValues = (employee) => {
-  if(employee) return {
-    last_name: employee.last_name || '',
-    first_name: employee.first_name || '',
-    gender: employee.gender || 'male',
-    birthday: employee.birthday.slice(0, 10),
-    email: employee.email || '',
-    phone: employee.phone || '',
-    role: "admin",
-    submit: null
-  }
+  if (employee)
+    return {
+      last_name: employee.last_name || "",
+      first_name: employee.first_name || "",
+      gender: employee.gender || "male",
+      birthday: employee.birthday.slice(0, 10),
+      email: employee.email || "",
+      phone: employee.phone || "",
+      role: "admin",
+      submit: null,
+    };
   return {
-    first_name: '',
-    last_name: '',
-    gender: 'male',
+    first_name: "",
+    last_name: "",
+    gender: "male",
     birthday: new Date().toISOString().slice(0, 10),
-    email: '',
-    phone: '',
+    email: "",
+    phone: "",
     role: "admin",
     submit: null,
   };
@@ -71,40 +72,32 @@ export const EmployeeEditForm = (props) => {
     validationSchema: Yup.object({
       gender: Yup.string(),
       birthday: Yup.string(),
-      email: Yup
-        .string()
-        .email('Must be a valid email')
-        .max(255)
-        .required('Email is required'),
-      first_name: Yup
-        .string()
-        .max(255)
-        .required('Name is required'),
+      email: Yup.string().email("Must be a valid email").max(255).required("Email is required"),
+      first_name: Yup.string().max(255).required("Name is required"),
       last_name: Yup.string().max(255),
       phone: Yup.string().max(15),
       role: Yup.string().required("Role is required"),
     }),
     onSubmit: async (values, helpers) => {
       try {
-        if (employee){
+        if (employee) {
           const updateEmployee = {
-            ... employee,
-            ...values
-          }
-          employeesApi.updateEmployeeById(employee.id, updateEmployee);
+            ...employee,
+            ...values,
+          };
+          employeesApi.updateEmployeeById(updateEmployee);
           await wait(500);
           helpers.setStatus({ success: true });
           helpers.setSubmitting(false);
           toast.success("Employee updated");
           router.push(paths.employees.index);
-        }
-        else{
+        } else {
           const newEmployee = {
             createdAt: new Date().toISOString,
-            password: '1234567',
+            password: "1234567",
             id: createResourceId(),
-            ... values
-          }
+            ...values,
+          };
           employeesApi.createEmployee(newEmployee);
           await wait(500);
           helpers.setStatus({ success: true });
@@ -206,7 +199,7 @@ export const EmployeeEditForm = (props) => {
                 helperText={formik.touched.birthday && formik.errors.birthday}
                 label="Birthday"
                 name="birthday"
-                type='date'
+                type="date"
                 onBlur={formik.handleBlur}
                 onChange={formik.handleChange}
                 value={formik.values.birthday}

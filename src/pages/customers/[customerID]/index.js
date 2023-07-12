@@ -50,17 +50,15 @@ const useCustomer = () => {
       const customerId = route.query.customerID;
       const response = await customersApi.getCustomerById(customerId);
 
-      // if (isMounted()) {
       setCustomer(response);
-      // }
     } catch (err) {
       console.error(err);
     }
-  }, []);
+  }, [route.query.customerID]);
 
   useEffect(() => {
     getCustomer();
-  });
+  }, [getCustomer]);
 
   return customer;
 };
@@ -80,25 +78,22 @@ const useLogs = () => {
     } catch (err) {
       console.error(err);
     }
-  }, [isMounted]);
+  }, [isMounted, route.query.customerID]);
 
   const addLog = useCallback(async (newLog) => {
     try {
       const { customerId } = route.query;
       const response = await customersApi.addProcessById(customerId, newLog);
+      console.log(response);
       getLogs();
     } catch (err) {
       console.error(err);
     }
   }, []);
 
-  useEffect(
-    () => {
-      getLogs();
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    []
-  );
+  useEffect(() => {
+    getLogs();
+  }, [getLogs]);
 
   return { logs, addLog };
 };

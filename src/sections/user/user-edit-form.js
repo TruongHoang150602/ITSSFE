@@ -16,23 +16,26 @@ import {
 } from "@mui/material";
 import { paths } from "src/paths";
 import { wait } from "src/utils/wait";
-import usersApi from "src/api/customers";
+import customersApi from "src/api/customers";
 
 const initialValues = (user) => {
-  if (user)
+  const today = new Date().toISOString().slice(0, 10);
+  if (user) {
+    user.birth = user.birth.slice(0, 10);
     return {
       first_name: user.first_name || "",
       last_name: user.last_name || "",
       gender: user.gender || "male",
-      birth: user.birth || new Date().toISOString().slice(0, 10),
+      birth: user.birth || today,
       gmail: user.gmail || "",
-      first_name: user.first_name || "",
       phone: user.phone || "",
       submit: null,
     };
+  }
+
   return {
     gender: "male",
-    birth: new Date().toISOString().slice(0, 10),
+    birth: today,
     gmail: "",
     first_name: "",
     last_name: "",
@@ -47,24 +50,29 @@ export const UserEditForm = (props) => {
   const formik = useFormik({
     initialValues: initialValues(user),
     validationSchema: Yup.object({
-      address: Yup.string().max(255),
+      id: props.id,
+      first_name: Yup.string().max(255).required("First name is required"),
+      last_name: Yup.string().max(255).required("Last name is required"),
       gender: Yup.string(),
       birth: Yup.string(),
-      email: Yup.string().email("Must be a valid email").max(255).required("Email is required"),
-      name: Yup.string().max(255).required("Name is required"),
+      gmail: Yup.string().email("Must be a valid email").max(255).required("Email is required"),
       phone: Yup.string().max(15),
     }),
     onSubmit: async (values, helpers) => {
       try {
         if (user) {
-          usersApi.updateCustomerById(user.id, formik.values);
+          const updatedValues = {
+            ...formik.values,
+            id: user.id,
+          };
+          await customersApi.updateCustomerById(updatedValues);
           await wait(500);
           helpers.setStatus({ success: true });
           helpers.setSubmitting(false);
           toast.success("User updated");
-          router.push(paths.users.index);
+          router.push(paths.customers.index);
         } else {
-          usersApi.createCustomer(formik.values);
+          await customersApi.createCustomer(formik.values);
           await wait(500);
           helpers.setStatus({ success: true });
           helpers.setSubmitting(false);
@@ -82,7 +90,7 @@ export const UserEditForm = (props) => {
   });
 
   return (
-    <form onSubmit={formik.handleSubmit} {...other}>
+    <form onSubmit={formik.onSubmit} {...other}>
       <Card>
         <CardHeader title="Edit User" />
         <CardContent sx={{ pt: 0 }}>
@@ -93,10 +101,9 @@ export const UserEditForm = (props) => {
                 fullWidth
                 helperText={formik.touched.first_name && formik.errors.first_name}
                 label="First name"
-                name="fisrt_name"
+                name="first_name"
                 onBlur={formik.handleBlur}
                 onChange={formik.handleChange}
-                required
                 value={formik.values.first_name}
               />
             </Grid>
@@ -118,7 +125,7 @@ export const UserEditForm = (props) => {
                 fullWidth
                 helperText={formik.touched.email && formik.errors.email}
                 label="Email address"
-                name="email"
+                name="gmail"
                 onBlur={formik.handleBlur}
                 onChange={formik.handleChange}
                 required
@@ -184,7 +191,12 @@ export const UserEditForm = (props) => {
           spacing={3}
           sx={{ p: 3 }}
         >
-          <Button disabled={formik.isSubmitting} type="submit" variant="contained">
+          <Button
+            // onClick={formik.onSubmit}
+            disabled={formik.isSubmitting}
+            type="submit"
+            variant="contained"
+          >
             Save Changes
           </Button>
           {user ? (

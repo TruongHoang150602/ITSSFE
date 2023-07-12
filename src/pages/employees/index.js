@@ -40,7 +40,6 @@ const useEmployees = (search) => {
   const getEmployees = useCallback(async () => {
     try {
       const response = await employeesApi.getEmployees(search);
-      console.log(response);
 
       if (isMounted()) {
         setState({

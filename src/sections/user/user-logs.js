@@ -22,13 +22,13 @@ import {
 import { MoreMenu } from "src/components/more-menu";
 import { Scrollbar } from "src/components/scrollbar";
 import AddIcon from "@mui/icons-material/Add";
-import { useAuth } from "src/hooks/use-auth";
+// import { useAuth } from "src/hooks/use-auth";
 import { createResourceId } from "src/utils/create-resource-id";
 
 export const UserLogs = (props) => {
-  const { logs = [], addLog ,...other } = props;
+  const { logs = [], addLog, ...other } = props;
   const [openModal, setOpenModal] = useState(false);
-  const role = useAuth().user.role;
+  const role = "ADMIN";
   let process = null;
   if (logs && logs.process) process = logs.process;
 
@@ -38,20 +38,27 @@ export const UserLogs = (props) => {
 
   const onClickAdd = () => {
     const newLog = {
-      id : createResourceId(),
-      content: document.getElementById('activity').value,
-      createdAt: new Date().toISOString()
-    }
+      id: createResourceId(),
+      created_at: new Date().toISOString(),
+      content: document.getElementById("activity").value,
+      register_id: 0,
+    };
     addLog(newLog);
     setOpenModal(false);
-  }
+  };
   return (
     <Card {...other}>
       <CardHeader
         action={
           <Grid container spacing={2}>
-            {role === "admin" && (
-              <IconButton aria-label="delete" color="primary" onClick={() => {setOpenModal(true)}}>
+            {role === "ADMIN" && (
+              <IconButton
+                aria-label="delete"
+                color="primary"
+                onClick={() => {
+                  setOpenModal(true);
+                }}
+              >
                 <AddIcon />
               </IconButton>
             )}
@@ -67,9 +74,9 @@ export const UserLogs = (props) => {
               <TableCell>Coach</TableCell>
               <TableCell>Status</TableCell>
               <TableCell>Date</TableCell>
-              <TableCell>Coach</TableCell>
+              {/* <TableCell>Coach</TableCell>
               <TableCell>Status</TableCell>
-              <TableCell>Date</TableCell>
+              <TableCell>Date</TableCell> */}
             </TableRow>
           </TableHead>
           {process && (
@@ -104,10 +111,10 @@ export const UserLogs = (props) => {
         rowsPerPageOptions={[5, 10, 25]}
       />
       <Dialog open={openModal} onClose={onCloseModel}>
-        <Card sx={{width : '400px'}}>
+        <Card sx={{ width: "400px" }}>
           <CardHeader title="Add activity" />
-          <CardContent sx={{ pt: '20px' }}>
-              <TextField fullWidth label="Activity" name="activity" id="activity" />
+          <CardContent sx={{ pt: "20px" }}>
+            <TextField fullWidth label="Activity" name="activity" id="activity" />
           </CardContent>
           <Stack
             direction={{
@@ -118,7 +125,9 @@ export const UserLogs = (props) => {
             spacing={3}
             sx={{ p: 3 }}
           >
-            <Button variant="contained" onClick={onClickAdd}>Add</Button>
+            <Button variant="contained" onClick={onClickAdd}>
+              Add
+            </Button>
             <Button color="inherit" onClick={onCloseModel}>
               Cancel
             </Button>

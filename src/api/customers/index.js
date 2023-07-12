@@ -83,18 +83,18 @@ class CustomersApi {
     }
   }
 
-  // async addProcessById(id, newActivity) {
-  //   try {
-  //     console.log(newActivity);
-  //     let updateProcess = await this.getProcessById(id);
-  //     updateProcess.process = [newActivity, ...updateProcess.process];
-  //     const response = await axios.put(`${this.baseUrl}/process/${id}`, updateProcess);
-  //     return response.data;
-  //   } catch (error) {
-  //     console.error(`Error while fetching customer with ID ${id}:`, error);
-  //     return null;
-  //   }
-  // }
+  async addProcessById(id, newActivity) {
+    try {
+      // let updateProcess = await this.getProcessById(id);
+      // updateProcess.process = [newActivity, ...updateProcess.process];
+      console.log(newActivity);
+      const response = await axios.put(`${this.baseUrl}/process`, newActivity);
+      return response.data;
+    } catch (error) {
+      console.error(`Error while fetching customer with ID ${id}:`, error);
+      return null;
+    }
+  }
 
   // async createCustomer(newCustomer) {
   //   try {
@@ -106,15 +106,16 @@ class CustomersApi {
   //   }
   // }
 
-  // async updateCustomerById(id, updatedCustomer) {
-  //   try {
-  //     const response = await axios.put(`${this.baseUrl}/${id}`, updatedCustomer);
-  //     return response.data;
-  //   } catch (error) {
-  //     console.error(`Error while updating customer with ID ${id}:`, error);
-  //     return null;
-  //   }
-  // }
+  async updateCustomerById(updatedCustomer) {
+    try {
+      console.log(updatedCustomer);
+      const response = await axios.patch(`${this.baseUrl}/`, updatedCustomer);
+      return response.data;
+    } catch (error) {
+      console.error(`Error while updating customer:`, error);
+      return null;
+    }
+  }
 
   // async deleteCustomerById(id) {
   //   try {
