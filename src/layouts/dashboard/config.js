@@ -21,8 +21,8 @@ export const items = {
       ),
     },
     {
-      title: "Employees",
-      path: "/employees",
+      title: "Staff",
+      path: "/staff",
       icon: (
         <SvgIcon fontSize="small">
           <PermContactCalendarRoundedIcon />

@@ -49,18 +49,15 @@ const useCustomer = () => {
     try {
       const customerId = route.query.customerID;
       const response = await customersApi.getCustomerById(customerId);
-
-      // if (isMounted()) {
       setCustomer(response);
-      // }
     } catch (err) {
       console.error(err);
     }
-  }, []);
+  }, [route.query.customerID]);
 
   useEffect(() => {
     getCustomer();
-  });
+  }, [getCustomer]);
 
   return customer;
 };
@@ -74,13 +71,12 @@ const useLogs = () => {
     try {
       const customerId = route.query.customerID;
       const response = await customersApi.getProcessById(customerId);
-      if (isMounted()) {
-        setLogs(response);
-      }
+
+      setLogs(response);
     } catch (err) {
       console.error(err);
     }
-  }, [isMounted]);
+  }, [isMounted, route.query.customerID]);
 
   const addLog = useCallback(async (newLog) => {
     try {
@@ -92,22 +88,39 @@ const useLogs = () => {
     }
   }, []);
 
-  useEffect(
-    () => {
-      getLogs();
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    []
-  );
+  useEffect(() => {
+    getLogs();
+  }, [getLogs]);
 
   return { logs, addLog };
+};
+
+const useRegister = () => {
+  const route = useRouter();
+  const [register, setRegister] = useState(null);
+
+  const getRegister = useCallback(async () => {
+    try {
+      const customerId = route.query.customerID;
+      const response = await customersApi.getRegisterById(customerId);
+      setRegister(response);
+    } catch (err) {
+      console.error(err);
+    }
+  }, [route.query.customerID]);
+
+  useEffect(() => {
+    getRegister();
+  }, [getRegister]);
+
+  return register;
 };
 
 const Page = () => {
   const [currentTab, setCurrentTab] = useState("details");
   const customer = useCustomer();
+  const register = useRegister();
   const { logs, addLog } = useLogs();
-
   const role = "ADMIN";
 
   usePageView();
@@ -213,24 +226,24 @@ const Page = () => {
             </Stack>
             {currentTab === "details" && (
               <div>
-                <Stack container spacing={4}>
+                <Stack spacing={4}>
                   <UserBasicDetails
                     address={customer.address}
                     gender={customer.gender}
-                    birthday={customer.birth}
+                    birthday={customer.birth.slice(0, 10)}
                     email={customer.gmail}
                     phone={customer.phone}
                     role={customer.role}
                   />
-                  <UserMember />
+                  <UserMember register={register} />
                   <UserDataManagement id={customer.id} />
                 </Stack>
               </div>
             )}
             {currentTab === "logs" && (
-              <Stack container spacing={4}>
+              <Stack spacing={4}>
                 <UserCalendar activity={logs} />
-                <UserLogs logs={logs} addLog={addLog} />
+                <UserLogs register={register} logs={logs} addLog={addLog} />
               </Stack>
             )}
           </Stack>

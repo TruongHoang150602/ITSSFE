@@ -13,7 +13,7 @@ import {
 } from "@mui/material";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import employeesApi from "src/api/employees";
+import employeesApi from "src/api/staff";
 import { paths } from "src/paths";
 
 export const EmployeeDataManagement = (props) => {

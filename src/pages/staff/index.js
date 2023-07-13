@@ -4,7 +4,7 @@ import Download01Icon from "@untitled-ui/icons-react/build/esm/Download01";
 import PlusIcon from "@untitled-ui/icons-react/build/esm/Plus";
 import Upload01Icon from "@untitled-ui/icons-react/build/esm/Upload01";
 import { Box, Button, Card, Container, Dialog, Stack, SvgIcon, Typography } from "@mui/material";
-import employeesApi from "src/api/employees";
+import staffApi from "src/api/staff";
 import { useMounted } from "src/hooks/use-mounted";
 import { usePageView } from "src/hooks/use-page-view";
 import { Layout as DashboardLayout } from "src/layouts/dashboard/layout";
@@ -30,22 +30,21 @@ const useSearch = () => {
   };
 };
 
-const useEmployees = (search) => {
+const useStaff = (search) => {
   const isMounted = useMounted();
   const [state, setState] = useState({
-    employees: [],
-    employeesCount: 0,
+    staff: [],
+    staffCount: 0,
   });
 
-  const getEmployees = useCallback(async () => {
+  const getStaff = useCallback(async () => {
     try {
-      const response = await employeesApi.getEmployees(search);
-      console.log(response);
+      const response = await staffApi.getStaff(search);
 
       if (isMounted()) {
         setState({
-          employees: response.data,
-          employeesCount: response.count,
+          staff: response.data,
+          staffCount: response.count,
         });
       }
     } catch (err) {
@@ -53,33 +52,32 @@ const useEmployees = (search) => {
     }
   }, [search, isMounted]);
 
-  const deleteEmployee = useCallback(
-    async (employeeId) => {
+  const deleteStaff = useCallback(
+    async (staffId) => {
       try {
-        await employeesApi.deleteEmployeeById(employeeId);
-        // Refresh the employee list
-        getEmployees();
+        await staffApi.deleteStaffById(staffId);
+        getStaff();
       } catch (err) {
         console.error(err);
       }
     },
-    [getEmployees]
+    [getStaff]
   );
 
   useEffect(() => {
-    getEmployees();
+    getStaff();
   }, [search]);
 
   return {
     state,
-    deleteEmployee,
+    deleteStaff,
   };
 };
 
 const Page = () => {
   const [openModal, setOpenModal] = useState(false);
   const { search, updateSearch } = useSearch();
-  const { state, deleteEmployee } = useEmployees(search);
+  const { state, deleteStaff } = useStaff(search);
 
   usePageView();
 
@@ -124,8 +122,8 @@ const Page = () => {
     [updateSearch]
   );
 
-  const handleDeleteEmployee = (employeeId) => {
-    deleteEmployee(employeeId);
+  const handleDeleteStaff = (staffId) => {
+    deleteStaff(staffId);
   };
 
   const onCloseModel = () => {
@@ -135,7 +133,7 @@ const Page = () => {
   return (
     <>
       <Head>
-        <title>Dashboard: Employees List | GymCenter</title>
+        <title>Staff | GymCenter</title>
       </Head>
       <Box
         component="main"
@@ -148,7 +146,7 @@ const Page = () => {
           <Stack spacing={4}>
             <Stack direction="row" justifyContent="space-between" spacing={4}>
               <Stack spacing={1}>
-                <Typography variant="h4">Employees</Typography>
+                <Typography variant="h4">Staff</Typography>
                 <Stack alignItems="center" direction="row" spacing={1}>
                   <Button
                     color="inherit"
@@ -197,15 +195,15 @@ const Page = () => {
                 sortBy={search.sortBy}
                 sortDir={search.sortDir}
               />
-              {state.employees && (
+              {state.staff && (
                 <EmployeeListTable
-                  employees={state.employees}
-                  employeesCount={state.employeesCount}
+                  staff={state.staff}
+                  staffCount={state.staffCount}
                   onPageChange={handlePageChange}
                   onRowsPerPageChange={handleRowsPerPageChange}
                   rowsPerPage={search.rowsPerPage}
                   page={search.page}
-                  handleDeleteEmployee={handleDeleteEmployee}
+                  handleDeleteEmployee={handleDeleteStaff}
                 />
               )}
             </Card>

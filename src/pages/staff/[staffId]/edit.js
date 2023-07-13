@@ -4,56 +4,52 @@ import Head from "next/head";
 import { useRouter } from "next/router";
 import ArrowLeftIcon from "@untitled-ui/icons-react/build/esm/ArrowLeft";
 import { Avatar, Box, Chip, Container, Link, Stack, SvgIcon, Typography } from "@mui/material";
-import employeesApi from "src/api/employees";
+import staffApi from "src/api/staff";
 import { useMounted } from "src/hooks/use-mounted";
 import { usePageView } from "src/hooks/use-page-view";
 import { Layout as DashboardLayout } from "src/layouts/dashboard/layout";
 import { paths } from "src/paths";
 import { EmployeeEditForm } from "src/sections/employee/employee-edit-form";
-// import { getInitials } from "src/utils/get-initials";
+import { getInitials } from "src/utils/get-initials";
 
-const useEmployee = () => {
+const useStaff = () => {
   const route = useRouter();
   const isMounted = useMounted();
-  const [employee, setEmployee] = useState(null);
+  const [staff, setStaff] = useState(null);
 
-  const getEmployee = useCallback(async () => {
+  const getStaff = useCallback(async () => {
     try {
-      const { employeeId } = route.query;
-      const response = await employeesApi.getEmployeeById(employeeId);
+      const staffId = route.query.staffId;
+      const response = await staffApi.getStaffById(staffId);
 
       if (isMounted()) {
-        setEmployee(response);
+        setStaff(response);
       }
     } catch (err) {
       console.error(err);
     }
   }, [isMounted]);
 
-  useEffect(
-    () => {
-      getEmployee();
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    []
-  );
+  useEffect(() => {
+    getStaff();
+  }, []);
 
-  return employee;
+  return staff;
 };
 
 const Page = () => {
-  const employee = useEmployee();
+  const staff = useStaff();
 
   usePageView();
 
-  if (!employee) {
+  if (!staff) {
     return null;
   }
 
   return (
     <>
       <Head>
-        <title>Dashboard: Employee Edit | Devias Kit PRO</title>
+        <title>Staff Edit</title>
       </Head>
       <Box
         component="main"
@@ -69,7 +65,7 @@ const Page = () => {
                 <Link
                   color="text.primary"
                   component={NextLink}
-                  href={paths.employees.index}
+                  href={paths.staff.index}
                   sx={{
                     alignItems: "center",
                     display: "inline-flex",
@@ -79,7 +75,7 @@ const Page = () => {
                   <SvgIcon sx={{ mr: 1 }}>
                     <ArrowLeftIcon />
                   </SvgIcon>
-                  <Typography variant="subtitle2">Employees</Typography>
+                  <Typography variant="subtitle2">Staff</Typography>
                 </Link>
               </div>
               <Stack
@@ -93,27 +89,23 @@ const Page = () => {
               >
                 <Stack alignItems="center" direction="row" spacing={2}>
                   <Avatar
-                    src={employee.avatar}
+                    // src={staff.avatar}
                     sx={{
                       height: 64,
                       width: 64,
                     }}
                   >
-                    {getInitials(`${employee.first_name} ${employee.last_name}`)}
+                    {getInitials(`${staff.first_name} ${staff.last_name}`)}
                   </Avatar>
                   <Stack spacing={1}>
                     <Typography variant="h4">
-                    {employee.first_name} {employee.last_name}
+                      {staff.first_name} {staff.last_name}
                     </Typography>
-                    <Stack alignItems="center" direction="row" spacing={1}>
-                      <Typography variant="subtitle2">employee_id:</Typography>
-                      <Chip label={employee.id} size="small" />
-                    </Stack>
                   </Stack>
                 </Stack>
               </Stack>
             </Stack>
-            <EmployeeEditForm employee={employee} />
+            <EmployeeEditForm staff={staff} />
           </Stack>
         </Container>
       </Box>

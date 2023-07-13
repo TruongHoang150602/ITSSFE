@@ -14,17 +14,6 @@ import {
 } from "@mui/material";
 import { useUpdateEffect } from "src/hooks/use-update-effect";
 
-const tabs = [
-  {
-    label: "All",
-    value: "all",
-  },
-  {
-    label: "Member",
-    value: "member",
-  },
-];
-
 const sortOptions = [
   {
     label: "Last update (newest)",
@@ -36,8 +25,14 @@ const sortOptions = [
   },
 ];
 
-export const UserListSearch = (props) => {
-  const { onFiltersChange, onSortChange, sortBy, sortDir } = props;
+export const UserListSearch = ({
+  onFiltersChange,
+  onSortChange,
+  sortBy,
+  sortDir,
+  handleQueryChange,
+}) => {
+  // const { onFiltersChange, onSortChange, sortBy, sortDir, handleQueryChange } = props;
   const queryRef = useRef(null);
   const [currentTab, setCurrentTab] = useState("all");
   const [filters, setFilters] = useState({});
@@ -66,13 +61,14 @@ export const UserListSearch = (props) => {
     });
   }, []);
 
-  const handleQueryChange = useCallback((event) => {
-    event.preventDefault();
+  const updateQuery = useCallback(() => {
+    const query = queryRef.current?.value;
     setFilters((prevState) => ({
       ...prevState,
-      query: queryRef.current?.value,
+      query,
     }));
-  }, []);
+    handleQueryChange?.(query); // Call the callback function to update the search query
+  }, [handleQueryChange]);
 
   const handleSortChange = useCallback(
     (event) => {
@@ -88,22 +84,8 @@ export const UserListSearch = (props) => {
 
   return (
     <>
-      <Tabs
-        indicatorColor="primary"
-        onChange={handleTabsChange}
-        scrollButtons="auto"
-        sx={{ px: 3 }}
-        textColor="primary"
-        value={currentTab}
-        variant="scrollable"
-      >
-        {tabs.map((tab) => (
-          <Tab key={tab.value} label={tab.label} value={tab.value} />
-        ))}
-      </Tabs>
-      <Divider />
       <Stack alignItems="center" direction="row" flexWrap="wrap" spacing={3} sx={{ p: 3 }}>
-        <Box component="form" onSubmit={handleQueryChange} sx={{ flexGrow: 1 }}>
+        <Box component="form" onSubmit={updateQuery} sx={{ flexGrow: 1 }}>
           <OutlinedInput
             defaultValue=""
             fullWidth
@@ -116,6 +98,7 @@ export const UserListSearch = (props) => {
                 </SvgIcon>
               </InputAdornment>
             }
+            onChange={updateQuery} // Change this line
           />
         </Box>
         <TextField
