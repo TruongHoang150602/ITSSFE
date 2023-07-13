@@ -26,11 +26,12 @@ import AddIcon from "@mui/icons-material/Add";
 import { createResourceId } from "src/utils/create-resource-id";
 
 export const UserLogs = (props) => {
-  const { logs = [], addLog, ...other } = props;
+  const { register, logs, addLog, ...other } = props;
   const [openModal, setOpenModal] = useState(false);
   const role = "ADMIN";
-  let process = null;
-  if (logs && logs.process) process = logs.process;
+
+  const trainer = register[0].trainer_name;
+  const activityLogs = logs.map((log) => ({ ...log, trainer_name: trainer }));
 
   const onCloseModel = () => {
     setOpenModal(false);
@@ -53,7 +54,7 @@ export const UserLogs = (props) => {
           <Grid container spacing={2}>
             {role === "ADMIN" && (
               <IconButton
-                aria-label="delete"
+                aria-label="add"
                 color="primary"
                 onClick={() => {
                   setOpenModal(true);
@@ -71,26 +72,23 @@ export const UserLogs = (props) => {
         <Table sx={{ minWidth: 700 }}>
           <TableHead>
             <TableRow>
-              <TableCell>Coach</TableCell>
-              <TableCell>Status</TableCell>
+              <TableCell>Trainer</TableCell>
+              <TableCell>Content</TableCell>
               <TableCell>Date</TableCell>
             </TableRow>
           </TableHead>
-          {process && (
+          {activityLogs && (
             <TableBody>
-              {process.map((option) => {
-                const tmp = parseISO(option.createdAt);
-                const createdAt = format(tmp, "yyyy/MM/dd HH:mm:ss");
-
+              {activityLogs.map((log) => {
                 return (
-                  <TableRow key={option.id}>
+                  <TableRow key={log.id}>
                     <TableCell>
-                      <Typography>{logs.coach.name}</Typography>
+                      <Typography>{log.trainer_name}</Typography>
                     </TableCell>
                     <TableCell>
-                      <Typography>{option.content}</Typography>
+                      <Typography>{log.content}</Typography>
                     </TableCell>
-                    <TableCell>{createdAt}</TableCell>
+                    <TableCell>{log.created_at.slice(0, 10)}</TableCell>
                   </TableRow>
                 );
               })}
@@ -98,7 +96,7 @@ export const UserLogs = (props) => {
           )}
         </Table>
       </Scrollbar>
-      <TablePagination
+      {/* <TablePagination
         component="div"
         count={process ? process.length : 0}
         onPageChange={() => {}}
@@ -106,12 +104,15 @@ export const UserLogs = (props) => {
         page={0}
         rowsPerPage={10}
         rowsPerPageOptions={[5, 10, 25]}
-      />
+      /> */}
       <Dialog open={openModal} onClose={onCloseModel}>
         <Card sx={{ width: "400px" }}>
           <CardHeader title="Add activity" />
-          <CardContent sx={{ pt: "20px" }}>
-            <TextField label="ActivityfullWidth" name="activity" id="activity" />
+          <CardContent sx={{ pt: "0px" }}>
+            <TextField label="Activity" name="activity" id="activity" />
+          </CardContent>
+          <CardContent sx={{ pt: "0px", justifyContent: "flex-end " }}>
+            <TextField label="Date" name="date" id="date" />
           </CardContent>
           <Stack
             direction={{

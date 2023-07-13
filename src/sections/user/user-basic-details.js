@@ -7,17 +7,13 @@ export const UserBasicDetails = (props) => {
   const { birthday, email, phone, gender, ...other } = props;
   const mdUp = useMediaQuery((theme) => theme.breakpoints.up("md"));
   const align = mdUp ? "horizontal" : "vertical";
-  let newBirthday = "";
-  if (birthday) {
-    newBirthday = birthday.slice(0, 10);
-  }
 
   return (
     <Card {...other}>
       <CardHeader title="Customer Details" />
       <PropertyList>
         <PropertyListItem align={align} divider label="Gender" value={gender} />
-        <PropertyListItem align={align} divider label="Birthday" value={birthday || newBirthday} />
+        <PropertyListItem align={align} divider label="Birthday" value={birthday} />
         <PropertyListItem align={align} divider label="Email" value={email} />
         <PropertyListItem align={align} divider label="Phone" value={phone} />
       </PropertyList>

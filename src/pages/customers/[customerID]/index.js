@@ -71,9 +71,8 @@ const useLogs = () => {
     try {
       const customerId = route.query.customerID;
       const response = await customersApi.getProcessById(customerId);
-      if (isMounted()) {
-        setLogs(response);
-      }
+
+      setLogs(response);
     } catch (err) {
       console.error(err);
     }
@@ -83,7 +82,6 @@ const useLogs = () => {
     try {
       const { customerId } = route.query;
       const response = await customersApi.addProcessById(customerId, newLog);
-      console.log(response);
       getLogs();
     } catch (err) {
       console.error(err);
@@ -97,11 +95,32 @@ const useLogs = () => {
   return { logs, addLog };
 };
 
+const useRegister = () => {
+  const route = useRouter();
+  const [register, setRegister] = useState(null);
+
+  const getRegister = useCallback(async () => {
+    try {
+      const customerId = route.query.customerID;
+      const response = await customersApi.getRegisterById(customerId);
+      setRegister(response);
+    } catch (err) {
+      console.error(err);
+    }
+  }, [route.query.customerID]);
+
+  useEffect(() => {
+    getRegister();
+  }, [getRegister]);
+
+  return register;
+};
+
 const Page = () => {
   const [currentTab, setCurrentTab] = useState("details");
   const customer = useCustomer();
+  const register = useRegister();
   const { logs, addLog } = useLogs();
-
   const role = "ADMIN";
 
   usePageView();
@@ -211,12 +230,12 @@ const Page = () => {
                   <UserBasicDetails
                     address={customer.address}
                     gender={customer.gender}
-                    birthday={customer.birth}
+                    birthday={customer.birth.slice(0, 10)}
                     email={customer.gmail}
                     phone={customer.phone}
                     role={customer.role}
                   />
-                  <UserMember />
+                  <UserMember register={register} />
                   <UserDataManagement id={customer.id} />
                 </Stack>
               </div>
@@ -224,7 +243,7 @@ const Page = () => {
             {currentTab === "logs" && (
               <Stack spacing={4}>
                 <UserCalendar activity={logs} />
-                <UserLogs logs={logs} addLog={addLog} />
+                <UserLogs register={register} logs={logs} addLog={addLog} />
               </Stack>
             )}
           </Stack>

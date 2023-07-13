@@ -75,7 +75,19 @@ class CustomersApi {
 
   async getProcessById(id) {
     try {
-      const response = await axios.get(`${this.baseUrl}/process/${id}`);
+      const customerRegister = await axios.get(`${this.baseUrl}/register/customer/${id}`);
+      const registerId = customerRegister.data[0].id;
+      const response = await axios.get(`${this.baseUrl}/process/${registerId}`);
+      return response.data;
+    } catch (error) {
+      console.error(`Error while fetching customer with ID ${id}:`, error);
+      return null;
+    }
+  }
+
+  async getRegisterById(id) {
+    try {
+      const response = await axios.get(`${this.baseUrl}/register/customer/${id}`);
       return response.data;
     } catch (error) {
       console.error(`Error while fetching customer with ID ${id}:`, error);
