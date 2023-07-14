@@ -37,7 +37,7 @@ const useSearch = () => {
   return {
     search,
     updateSearch: setSearch,
-    handleQueryChange, 
+    handleQueryChange,
   };
 };
 
