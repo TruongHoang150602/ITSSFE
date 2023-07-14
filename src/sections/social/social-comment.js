@@ -5,7 +5,7 @@ import { Avatar, Box, Link, Stack, Typography } from "@mui/material";
 export const SocialComment = (props) => {
   const { authorAvatar, authorName, createdAt, message, ...other } = props;
 
-  const ago = formatDistanceToNowStrict(createdAt);
+  const ago = createdAt;
 
   return (
     <Stack alignItems="flex-start" direction="row" spacing={2} {...other}>

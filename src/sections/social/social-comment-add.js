@@ -3,6 +3,7 @@ import Link01Icon from "@untitled-ui/icons-react/build/esm/Link01";
 import Attachment01Icon from "@untitled-ui/icons-react/build/esm/Attachment01";
 import PlusIcon from "@untitled-ui/icons-react/build/esm/Plus";
 import Image01Icon from "@untitled-ui/icons-react/build/esm/Image01";
+import { useState } from "react";
 import {
   Avatar,
   Button,
@@ -14,30 +15,28 @@ import {
 } from "@mui/material";
 import { useMockedUser } from "src/hooks/use-mocked-user";
 import { getInitials } from "src/utils/get-initials";
-import { createResourceId } from "src/utils/create-resource-id";
 
 export const SocialCommentAdd = (props) => {
   const { parentId, createPost, ...other } = props;
   const smUp = useMediaQuery((theme) => theme.breakpoints.up("sm"));
   const user = useMockedUser();
 
-  const onClickSend = () => {
-    const postContent = document.getElementById("sendContent").value;
+
+  const [value, setValue] = useState("");
+  const handleChange = (event) => {
+    setValue(event.target.value);
+  }
+  const onClickSend = async () => {
+    const postContent = value;
     if (!postContent) return;
     const post = {
-      id: createResourceId(),
-      author: {
-        id: user.id,
-        avatar: user.avatar,
-        name: `${user.first_name} ${user.last_name}`,
-      },
-      createdAt: new Date().getTime(),
-      parentFeedbackId: parentId,
-      message: postContent,
+      "content": postContent,
+      "created_at": new Date().toISOString(),
+      "parent_feedback_id": parentId,
+      "user_id": user.id
     };
-    console.log("sent");
     createPost(post);
-    document.getElementById("sendContent").value = "";
+    await setValue("");
   };
 
   return (
@@ -56,10 +55,11 @@ export const SocialCommentAdd = (props) => {
           <TextField
             fullWidth
             multiline
+            value={value}
             placeholder="Type your reply"
             rows={3}
             variant="outlined"
-            id="sendContent"
+            onChange={handleChange}
           />
           <Stack alignItems="center" direction="row" justifyContent="space-between" spacing={3}>
             <Stack alignItems="center" direction="row" spacing={1}>
