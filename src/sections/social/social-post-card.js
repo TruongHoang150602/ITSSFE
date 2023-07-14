@@ -45,7 +45,7 @@ export const SocialPostCard = (props) => {
             <Link color="text.primary" href="#" variant="subtitle2">
               {authorName}
             </Link>
-            <Typography variant="body2">updated her status</Typography>
+            <Typography variant="body2">updated status</Typography>
           </Stack>
         }
       />
