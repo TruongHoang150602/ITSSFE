@@ -1,8 +1,7 @@
 import axios from "axios";
 import { applyPagination } from "src/utils/apply-pagination";
 import { applySort } from "src/utils/apply-sort";
-import { deepCopy } from "src/utils/deep-copy";
-class EmployeesApi {
+class StaffApi {
   constructor(baseUrl) {
     this.baseUrl = baseUrl;
   }
@@ -94,17 +93,17 @@ class EmployeesApi {
     }
   }
 
-  // async deleteStaffById(id) {
-  //   try {
-  //     const response = await axios.delete(`${this.baseUrl}/employees/${id}`);
-  //     return response.data;
-  //   } catch (error) {
-  //     console.error(`Error while deleting employee with ID ${id}:`, error);
-  //     return false;
-  //   }
-  // }
+  async deleteStaffById(id) {
+    try {
+      const response = await axios.delete(`${this.baseUrl}/user/${id}`);
+      return response.data;
+    } catch (error) {
+      console.error(`Error while deleting staff with ID ${id}:`, error);
+      return false;
+    }
+  }
 }
 
-const staffApi = new EmployeesApi("http://localhost:8081");
+const staffApi = new StaffApi("http://localhost:8081");
 
 export default staffApi;
