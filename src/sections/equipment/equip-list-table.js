@@ -4,7 +4,6 @@ import PropTypes from "prop-types";
 import { toast } from "react-hot-toast";
 import ChevronDownIcon from "@untitled-ui/icons-react/build/esm/ChevronDown";
 import ChevronRightIcon from "@untitled-ui/icons-react/build/esm/ChevronRight";
-import DotsHorizontalIcon from "@untitled-ui/icons-react/build/esm/DotsHorizontal";
 import Image01Icon from "@untitled-ui/icons-react/build/esm/Image01";
 import {
   Box,
@@ -18,25 +17,30 @@ import {
   Stack,
   SvgIcon,
   Table,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  DialogContentText,
   TableBody,
   TableCell,
   TableHead,
   TablePagination,
   TableRow,
   TextField,
-  Typography
-} from '@mui/material';
-import { Scrollbar } from 'src/components/scrollbar';
+  Typography,
+} from "@mui/material";
+import { Scrollbar } from "src/components/scrollbar";
 
 const categoryOptions = [
   {
-    label: 'Strength',
-    value: 'Strength'
+    label: "Strength",
+    value: "Strength",
   },
   {
-    label: 'Cardio',
-    value: 'Cardio'
-  }
+    label: "Cardio",
+    value: "Cardio",
+  },
 ];
 
 export const EquipmentListTable = (props) => {
@@ -47,36 +51,56 @@ export const EquipmentListTable = (props) => {
     equipments,
     equipmentsCount,
     rowsPerPage,
-    editEquip,
     deleteEquip,
+    updateEquip,
     ...other
   } = props;
   const [currentEquipment, setCurrentEquipment] = useState(null);
+  const [openModal, setOpenModal] = useState(false);
+
+  const handleClodeModal = () => {
+    setOpenModal(false);
+  }
 
   const handleEquipmentToggle = useCallback((equipmentId) => {
-    console.log(currentEquipment);
     setCurrentEquipment((prevEquipmentId) => {
       if (prevEquipmentId === equipmentId) {
         return null;
       }
       return equipmentId;
     });
+    console.log(currentEquipment);
   }, []);
 
   const handleEquipmentClose = useCallback(() => {
     setCurrentEquipment(null);
   }, []);
 
-  const handleEquipmentUpdate = useCallback(() => {
-
+  const handleEquipmentUpdate = (equipment) => {
+    let updatedEquipments = equipment;
+    try{
+      updatedEquipments = {
+      ...equipment,
+      name: document.getElementById('name').value,
+      category_name: document.getElementById('category_name').value,
+      price: document.getElementById('price').value,
+      purchase_date: document.getElementById('purchase_date').value,
+      warranty_period: document.getElementById('warranty_period').value
+    }
+    updateEquip(equipment.id, updatedEquipments);
     setCurrentEquipment(null);
     toast.success("Equipment updated");
-  }, []);
+    }catch {
+      setCurrentEquipment(null);
+      toast.error("Error updated");
+    }
+  };
 
   const handleEquipmentDelete = useCallback((equipId) => {
     deleteEquip(equipId);
+    setOpenModal(false);
     setCurrentEquipment(null);
-    toast.error('Equipment cannot be deleted');
+    toast.error("Equipment cannot be deleted");
   }, []);
 
   return (
@@ -95,7 +119,7 @@ export const EquipmentListTable = (props) => {
           <TableBody>
             {equipments.map((equipment) => {
               const isCurrent = equipment.id === currentEquipment;
-              const price = numeral(equipment.price).format(`${equipment.currency}0,0.00`);
+              const price = numeral(equipment.price).format(`0,0.00 $`);
               return (
                 <Fragment key={equipment.id}>
                   <TableRow hover key={equipment.id}>
@@ -173,7 +197,7 @@ export const EquipmentListTable = (props) => {
                         </Box>
                       </Box>
                     </TableCell>
-                    <TableCell>{` ${equipment.price} $`}</TableCell>
+                    <TableCell>{price}</TableCell>
                     <TableCell>{new Date().toISOString().slice(0, 10)}</TableCell>
                     <TableCell>{` ${equipment.warranty_period} month`}</TableCell>
                   </TableRow>
@@ -209,6 +233,7 @@ export const EquipmentListTable = (props) => {
                               <Grid container spacing={3}>
                                 <Grid item md={6} xs={12}>
                                   <TextField
+                                    id="name"
                                     defaultValue={equipment.name}
                                     fullWidth
                                     label="Equipment name"
@@ -218,6 +243,7 @@ export const EquipmentListTable = (props) => {
 
                                 <Grid item md={6} xs={12}>
                                   <TextField
+                                    id="category_name"
                                     defaultValue={equipment.category_name}
                                     fullWidth
                                     label="Category"
@@ -238,17 +264,14 @@ export const EquipmentListTable = (props) => {
                               <Grid container spacing={3}>
                                 <Grid item md={6} xs={12}>
                                   <TextField
-                                    defaultValue={
-                                      equipment.price
-                                    }
+                                    id="price"
+                                    defaultValue={equipment.price}
                                     fullWidth
                                     label="Price"
                                     name="price"
                                     InputProps={{
                                       startAdornment: (
-                                        <InputAdornment position="start">
-                                          {"$"}
-                                        </InputAdornment>
+                                        <InputAdornment position="start">{"$"}</InputAdornment>
                                       ),
                                     }}
                                     type="number"
@@ -256,7 +279,8 @@ export const EquipmentListTable = (props) => {
                                 </Grid>
                                 <Grid item md={6} xs={12}>
                                   <TextField
-                                    defaultValue={equipment.purchase_date.slice(0,10)}
+                                    id="purchase_date"
+                                    defaultValue={equipment.purchase_date.slice(0, 10)}
                                     fullWidth
                                     label="Purchase Date"
                                     name="purchase_date"
@@ -273,6 +297,7 @@ export const EquipmentListTable = (props) => {
                                   }}
                                 >
                                   <TextField
+                                    id="warranty_period"
                                     defaultValue={equipment.warranty_period}
                                     fullWidth
                                     label="warranty Period"
@@ -298,7 +323,7 @@ export const EquipmentListTable = (props) => {
                         >
                           <Stack alignItems="center" direction="row" spacing={2}>
                             <Button
-                              onClick={handleEquipmentUpdate}
+                              onClick={() => {handleEquipmentUpdate(equipment)}}
                               type="submit"
                               variant="contained"
                             >
@@ -310,13 +335,40 @@ export const EquipmentListTable = (props) => {
                           </Stack>
                           <div>
                             <Button
-                              onClick={() => {handleEquipmentDelete(equipment.id)}}
+                              onClick={() => {
+                                setOpenModal(true);
+                              }}
                               color="error"
                             >
                               Delete equipment
                             </Button>
                           </div>
                         </Stack>
+                        <Dialog
+                          open={openModal}
+                          onClose={handleClodeModal}
+                          aria-labelledby="draggable-dialog-title"
+                        >
+                          <DialogTitle
+                            style={{ cursor: "move", color: "red" }}
+                            id="draggable-dialog-title"
+                          >
+                            Delete
+                          </DialogTitle>
+                          <DialogContent>
+                            <DialogContentText>
+                              Are you sure you want to delete this equipment
+                            </DialogContentText>
+                          </DialogContent>
+                          <DialogActions>
+                            <Button autoFocus onClick={handleClodeModal}>
+                              Cancel
+                            </Button>
+                            <Button onClick={() => {handleEquipmentDelete(equipment.id)}} color="error">
+                              Delete
+                            </Button>
+                          </DialogActions>
+                        </Dialog>
                       </TableCell>
                     </TableRow>
                   )}

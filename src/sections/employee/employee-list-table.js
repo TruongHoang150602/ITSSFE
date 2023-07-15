@@ -27,7 +27,6 @@ import {
 } from "@mui/material";
 import { Scrollbar } from "src/components/scrollbar";
 import { paths } from "src/paths";
-import { getInitials } from "src/utils/get-initials";
 
 const useSelectionModel = (employees) => {
   const employeeIds = useMemo(() => {
