@@ -59,6 +59,7 @@ const usePackages = (search) => {
   const deletePackage = useCallback(async (packageId) => {
     try {
       if (isMounted()) {
+        packagesApi.deletePackageById(packageId);
         setState((prevState) => {
           const updatedPackages = prevState.packages.filter((pkg) => pkg.id !== packageId);
           return {
@@ -76,6 +77,7 @@ const usePackages = (search) => {
   const updatePackage = useCallback(async (packageId, updatedData) => {
     try {
       if (isMounted()) {
+        packagesApi.updatePackageById(packageId, updatedData);
         setState((prevState) => {
           const updatedPackages = prevState.packages.map((pkg) =>
             pkg.id === packageId ? { ...pkg, ...updatedData } : pkg
