@@ -42,7 +42,6 @@ const tabs = [
 
 const useCustomer = () => {
   const route = useRouter();
-  const isMounted = useMounted();
   const [customer, setCustomer] = useState(null);
 
   const getCustomer = useCallback(async () => {
@@ -71,7 +70,6 @@ const useLogs = () => {
     try {
       const customerId = route.query.customerID;
       const response = await customersApi.getProcessById(customerId);
-
       setLogs(response);
     } catch (err) {
       console.error(err);
@@ -125,7 +123,7 @@ const Page = () => {
 
   usePageView();
 
-  const handleTabsChange = useCallback((event, value) => {
+  const handleTabsChange = useCallback((value) => {
     setCurrentTab(value);
   }, []);
 
