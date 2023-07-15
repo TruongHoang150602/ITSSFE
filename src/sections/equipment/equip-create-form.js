@@ -14,7 +14,6 @@ import {
   Unstable_Grid2 as Grid,
 } from "@mui/material";
 // import { FileDropzone } from 'src/components/file-dropzone';
-import { QuillEditor } from "src/components/quill-editor";
 import { paths } from "src/paths";
 import roomsApi from "src/api/rooms";
 
@@ -31,12 +30,10 @@ const categoryOptions = [
 
 const initialValues = {
   name: "",
-  category: "",
-  description: "",
-  images: "",
+  category_name: "",
   price: 0,
-  purchaseDate: new Date().toISOString().slice(0, 10),
-  warrantyPeriod: 0,
+  purchase_date: new Date().toISOString().slice(0, 10),
+  warranty_period: 0,
   submit: null,
 };
 
@@ -45,9 +42,9 @@ const validationSchema = Yup.object({
   description: Yup.string().max(5000),
   images: Yup.string(),
   price: Yup.number().min(0),
-  purchaseDate: Yup.string(),
-  warrantyPeriod: Yup.number().min(0),
-  category: Yup.string().max(255),
+  purchase_date: Yup.string(),
+  warranty_period: Yup.number().min(0),
+  category_name: Yup.string().max(255),
 });
 
 export const EquipmentCreateForm = (props) => {
@@ -59,7 +56,7 @@ export const EquipmentCreateForm = (props) => {
     validationSchema,
     onSubmit: async (values, helpers) => {
       try {
-        roomsApi.addEquipToRoomById(gymId, formik.values);
+        roomsApi.addEquipToRoomById(values);
         toast.success("Equipment created");
         router.push(paths.gyms.details(gymId));
       } catch (err) {
@@ -155,24 +152,24 @@ export const EquipmentCreateForm = (props) => {
                     value={formik.values.price}
                   />
                   <TextField
-                    error={!!(formik.touched.purchaseDate && formik.errors.purchaseDate)}
+                    error={!!(formik.touched.purchase_date && formik.errors.purchase_date)}
                     fullWidth
                     label="Purchase Date"
-                    name="purchaseDate"
+                    name="purchase_date"
                     onBlur={formik.handleBlur}
                     onChange={formik.handleChange}
                     type="date"
-                    value={formik.values.purchaseDate}
+                    value={formik.values.purchase_date}
                   />
                   <TextField
-                    error={!!(formik.touched.warrantyPeriod && formik.errors.warrantyPeriod)}
+                    error={!!(formik.touched.warranty_period && formik.errors.warranty_period)}
                     fullWidth
                     label="Warranty Period"
-                    name="warrantyPeriod"
+                    name="warranty_period"
                     onBlur={formik.handleBlur}
                     onChange={formik.handleChange}
                     type="number"
-                    value={formik.values.warrantyPeriod}
+                    value={formik.values.warranty_period}
                   />
                 </Stack>
               </Grid>
@@ -188,14 +185,14 @@ export const EquipmentCreateForm = (props) => {
               <Grid xs={12} md={8}>
                 <Stack spacing={3}>
                   <TextField
-                    error={!!(formik.touched.category && formik.errors.category)}
+                    error={!!(formik.touched.category_name && formik.errors.category_name)}
                     fullWidth
                     label="Category"
-                    name="category"
+                    name="category_name"
                     onBlur={formik.handleBlur}
                     onChange={formik.handleChange}
                     select
-                    value={formik.values.category}
+                    value={formik.values.category_name}
                   >
                     {categoryOptions.map((option) => (
                       <MenuItem key={option.value} value={option.value}>

@@ -48,15 +48,12 @@ class RoomsApi {
     }
   }
 
-  async addEquipToRoomById(id, equipment) {
+  async addEquipToRoomById(newEquipment) {
     try {
-      let updatedRoom = await this.getRoomById(id);
-      console.log(updatedRoom);
-      updatedRoom.equipment.push(equipment);
-      const response = await axios.put(`${this.baseUrl}/room/${id}`, updatedRoom);
+      const response = await axios.post(`${this.baseUrl}/equipment/`, newEquipment);
       return response.data;
     } catch (error) {
-      console.error(`Error while updating room with ID ${id}:`, error);
+      console.error(`Error while updating room with ID :`, error);
       return null;
     }
   }

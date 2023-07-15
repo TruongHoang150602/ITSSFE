@@ -76,7 +76,7 @@ const useLogs = () => {
     } catch (err) {
       console.error(err);
     }
-  }, [isMounted, route.query.customerID]);
+  }, [route.query.customerID]);
 
   const addLog = useCallback(async (newLog) => {
     try {
