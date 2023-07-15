@@ -65,7 +65,7 @@ const usePackages = (search) => {
 const PackageList = () => {
   const { search, updateSearch } = useSearch();
   const { packages, packagesCount } = usePackages(search);
-  const role = useAuth().user.role;
+  const role_name = useAuth().user.role_name;
   usePageView();
 
   const handleFiltersChange = useCallback(
@@ -116,7 +116,7 @@ const PackageList = () => {
               <Stack spacing={1}>
                 <Typography variant="h4">Packages</Typography>
               </Stack>
-              {role === "admin" && (
+              {role_name === "admin" && (
                 <Stack
                   alignItems="center"
                   direction="row"

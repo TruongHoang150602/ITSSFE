@@ -18,27 +18,14 @@ const initialState = {
 
 const handlers = {
   [HANDLERS.INITIALIZE]: (state, action) => {
-    // const user = action.payload;
-      const user = {
-      "createdAt": "2023-07-03T04:06:35.831Z",
-      "first_name": "Admin",
-      "last_name": "",
-      "avatar": "/assets/avatars/avatar-penjani-inyene.png",
-      "phone": "(652) 200-2231",
-      "gender": "male",
-      "birthday": "1983-08-13T23:16:44.104Z",
-      "role": "admin",
-      "email": "admin@gmail.com",
-      "id": "2",
-      "password": "admin123"
-    }
+    const user = action.payload;
     return {
       ...state,
       ...(
         // if payload (user) is provided, then is authenticated
         user
           ? ({
-            isAuthenticated: true,
+            isAuthenticated: false,
             isLoading: false,
             user
           })
@@ -109,11 +96,11 @@ export const AuthProvider = (props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const signIn = async (email, password) => {
+  const signIn = async (gmail, password) => {
 
     try {
 
-      const user = await authApi.signIn({ email, password });
+      const user = await authApi.signIn({ gmail, password });
       console.log(user)
       window.sessionStorage.setItem('authenticated', 'true');
 
@@ -123,14 +110,14 @@ export const AuthProvider = (props) => {
       });
     } catch (error) {
       console.error('[Auth Api - Sign In]:', error);
-      throw new Error('Please check your email and password');
+      throw new Error('Please check your gmail and password');
     }
   };
 
-  const signUp = async (email, name, password) => {
+  const signUp = async (gmail, name, password) => {
     try {
       console.log("Done")
-      await authApi.signUp({ email, name, password });
+      await authApi.signUp({ gmail, name, password });
       dispatch({
         type: HANDLERS.SIGN_UP,
       });

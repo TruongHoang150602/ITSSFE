@@ -26,7 +26,7 @@ const sortOptions = [
 ];
 
 export const RegisListSearch = (props) => {
-  const { onFiltersChange, onSortChange, sortBy = "createdAt", sortDir = "asc" } = props;
+  const { onFiltersChange, onSortChange, sortBy = "created_at", sortDir} = props;
   const queryRef = useRef(null);
   const [filters, setFilters] = useState({
     query: undefined,
@@ -68,7 +68,7 @@ export const RegisListSearch = (props) => {
             fullWidth
             inputProps={{ ref: queryRef }}
             name="regisNumber"
-            placeholder="Search by register number"
+            placeholder="Search by customer name"
             startAdornment={
               <InputAdornment position="start">
                 <SvgIcon>

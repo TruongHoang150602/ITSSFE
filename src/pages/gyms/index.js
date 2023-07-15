@@ -42,7 +42,7 @@ const useRooms = () => {
       try {
         const response = await roomsApi.createRoom(newRoom);
         if (isMounted()) {
-          setRooms([...rooms, response]);
+          setRooms([...rooms, newRoom]);
         }
       } catch (err) {
         console.error(err);
@@ -176,8 +176,8 @@ const Page = () => {
                 lg: 4,
               }}
             >
-              {rooms.map((room) => (
-                <Grid key={room.id} xs={12} md={4}>
+              {rooms.map((room,index) => (
+                <Grid key={index} xs={12} md={4}>
                   <RoomCard room={room} onClickEdit={onClickEdit} onClickDelete={onClickDelete} />
                 </Grid>
               ))}

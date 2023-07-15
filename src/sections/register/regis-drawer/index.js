@@ -4,31 +4,23 @@ import XIcon from "@untitled-ui/icons-react/build/esm/X";
 import { Box, Drawer, IconButton, Stack, SvgIcon, Typography, useMediaQuery } from "@mui/material";
 import { RegisDetails } from "./regis-details";
 import { RegisEdit } from "./regis-edit";
-import { createResourceId } from "src/utils/create-resource-id";
 import { useAuth } from "src/hooks/use-auth";
 
-const valueRegis = (regis) => {
+const valueRegis = (regis, regissCount) => {
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const user = useAuth().user;
   if (regis) return regis;
   else
     return {
       id: null,
-      createdAt: new Date().toISOString(),
-      createdBy: `${user.first_name} ${user.last_name}`,
-      customer: {
-        email: "",
-        name: "",
-        phone: "",
-      },
-      package: "",
-      coach: "",
-      totalAmount: 0,
+      created_at: new Date().toISOString(),
+      register_by_name: `${user.first_name} ${user.last_name}`,
+      register_by_id: user.id,
     };
 };
 
 export const RegisDrawer = (props) => {
-  const { container, onClose, open, edit, regis, createRegis, updateRegis } = props;
+  const { container, onClose, open, edit, regis, createRegis, updateRegis, regisCount } = props;
   const [isEditing, setIsEditing] = useState(edit);
   const lgUp = useMediaQuery((theme) => theme.breakpoints.up("lg"));
 
@@ -41,7 +33,7 @@ export const RegisDrawer = (props) => {
   }, []);
 
   let content = null;
-  const register = valueRegis(regis);
+  const register = valueRegis(regis,regisCount);
 
   content = (
     <div>
@@ -54,9 +46,6 @@ export const RegisDrawer = (props) => {
           py: 2,
         }}
       >
-        <Typography color="inherit" variant="h6">
-          {register.number}
-        </Typography>
         <IconButton
           color="inherit"
           onClick={() => {

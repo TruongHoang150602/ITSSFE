@@ -9,9 +9,9 @@ export const RoomCard = (props) => {
   return (
     <Card variant="outlined">
       <CardMedia
-        image={room.media || "/assets/rooms/room-1.pmg"}
+        image={"/assets/rooms/room-1.png"}
         component={NextLink}
-        href={paths.gyms.details(room.id)}
+        href={paths.gyms.details(room.id || 1)}
         sx={{ height: 180 }}
       />
       <CardContent>
@@ -20,7 +20,7 @@ export const RoomCard = (props) => {
           underline="none"
           variant="subtitle1"
           component={NextLink}
-          href={paths.gyms.details(room.id)}
+          href={paths.gyms.details(room.id || 1)}
         >
           {room.name}
         </Link>

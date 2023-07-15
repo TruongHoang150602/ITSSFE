@@ -23,16 +23,16 @@ const initialValues = (user) => {
       first_name: user.first_name,
       last_name: user.last_name,
       gender: user.gender,
-      birthday: user.birthday,
-      email: user.email,
+      birth: user.birth.slice(0, 10),
+      gmail: user.gmail,
       phone: user.phone,
       submit: null,
     };
   return {
     first_name: "",
     gender: "male",
-    birthday: new Date().toISOString().slice(0, 10),
-    email: "",
+    birth: new Date().toISOString().slice(0, 10),
+    gmail: "",
     last_name: "",
     phone: "",
     submit: null,
@@ -47,8 +47,8 @@ export const AccountProfileDetails = (props) => {
     validationSchema: Yup.object({
       first_name: Yup.string().max(255),
       gender: Yup.string(),
-      birthday: Yup.string(),
-      email: Yup.string().email("Must be a valid email").max(255).required("Email is required"),
+      birth: Yup.string(),
+      gmail: Yup.string().email("Must be a valid gmail").max(255).required("Email is required"),
       last_name: Yup.string().max(255),
       phone: Yup.string().max(15),
     }),
@@ -108,15 +108,15 @@ export const AccountProfileDetails = (props) => {
               </Grid>
               <Grid xs={12} md={6}>
                 <TextField
-                  error={!!(formik.touched.email && formik.errors.email)}
+                  error={!!(formik.touched.gmail && formik.errors.gmail)}
                   fullWidth
-                  helperText={formik.touched.email && formik.errors.email}
+                  helperText={formik.touched.gmail && formik.errors.gmail}
                   label="Email address"
-                  name="email"
+                  name="gmail"
                   onBlur={formik.handleBlur}
                   onChange={formik.handleChange}
                   required
-                  value={formik.values.email}
+                  value={formik.values.gmail}
                 />
               </Grid>
               <Grid xs={12} md={6}>
@@ -153,15 +153,15 @@ export const AccountProfileDetails = (props) => {
               </Grid>
               <Grid xs={12} md={6}>
                 <TextField
-                  error={!!(formik.touched.birthday && formik.errors.birthday)}
+                  error={!!(formik.touched.birth && formik.errors.birth)}
                   fullWidth
-                  helperText={formik.touched.birthday && formik.errors.birthday}
+                  helperText={formik.touched.birth && formik.errors.birth}
                   label="Birthday"
-                  name="birthday"
+                  name="birth"
                   type="date"
                   onBlur={formik.handleBlur}
                   onChange={formik.handleChange}
-                  value={formik.values.birthday}
+                  value={formik.values.birth}
                 />
               </Grid>
             </Grid>

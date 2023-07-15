@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useRef } from "react";
+import React, { useCallback, useEffect, useState, useMemo, useRef } from "react";
 import Head from "next/head";
 import PlusIcon from "@untitled-ui/icons-react/build/esm/Plus";
 import { Box, Button, Divider, Stack, SvgIcon, Typography } from "@mui/material";
@@ -16,19 +16,15 @@ const useSearch = () => {
     filters: {
       query: undefined,
       status: undefined,
-      status: undefined,
     },
     page: 0,
     rowsPerPage: 5,
-    sortBy: "createdAt",
-    sortDir: "desc",
     sortBy: "createdAt",
     sortDir: "desc",
   });
 
   return {
     search,
-    updateSearch: setSearch,
     updateSearch: setSearch,
   };
 };
@@ -38,18 +34,15 @@ const useRegiss = (search) => {
   const [state, setState] = React.useState({
     regiss: [],
     regissCount: 0,
-    regissCount: 0,
   });
 
   const getRegiss = useCallback(async () => {
     try {
       const response = await registersApi.getRegisters(search);
       console.log(response);
-      console.log(response);
       if (isMounted()) {
         setState({
           regiss: response.data,
-          regissCount: response.count,
           regissCount: response.count,
         });
       }
@@ -64,7 +57,11 @@ const useRegiss = (search) => {
         const response = await registersApi.createRegister(regissData);
         console.log(response);
         if (isMounted()) {
-          getRegiss();
+          setState((prevState) => ({
+            ...prevState,
+            regiss: [regissData, ...prevState.regiss],
+            regissCount: prevState.regissCount + 1,
+          }));
         }
       } catch (err) {
         console.error(err);
@@ -80,8 +77,15 @@ const useRegiss = (search) => {
         const response = await registersApi.updateRegisterById(regissId, regissData);
         console.log(response);
         if (isMounted()) {
-          // Update the state with the updated regiss
-          getRegiss();
+          setState((prevState) => {
+            const updatedRegiss = prevState.regiss.map((regiss) =>
+              regiss.id === regissId ? { ...regiss, ...regissData } : regiss
+            );
+            return {
+              ...prevState,
+              regiss: updatedRegiss,
+            };
+          });
         }
       } catch (err) {
         console.error(err);
@@ -92,7 +96,7 @@ const useRegiss = (search) => {
 
   useEffect(() => {
     getRegiss();
-  }, [search]);
+  }, [search, createRegis, updateRegis]);
 
   return {
     ...state,
@@ -109,9 +113,8 @@ const Page = () => {
     isOpen: false,
     isEdit: false,
     data: undefined,
-    data: undefined,
   });
-  
+
   const currentRegis = useMemo(() => {
     if (!drawer.data) {
       return undefined;
@@ -151,6 +154,24 @@ const Page = () => {
     [updateSearch]
   );
 
+  const handleRowsPerPageChange = useCallback(
+    (event) => {
+      updateSearch((prevState) => ({
+        ...prevState,
+        rowsPerPage: parseInt(event.target.value, 10),
+      }));
+    },
+    [updateSearch]
+  );
+
+  const handleClickAdd = () => {
+    setDrawer({
+      isOpen: true,
+      isEdit: true,
+      data: undefined,
+    });
+  };
+
   const handleRegisOpen = useCallback(
     (regisId) => {
       // Close drawer if is the same regis
@@ -181,14 +202,12 @@ const Page = () => {
     setDrawer({
       isOpen: false,
       data: undefined,
-      data: undefined,
     });
   }, []);
 
   return (
     <>
       <Head>
-        <title>Register List</title>
         <title>Register List</title>
       </Head>
       <Divider />
@@ -200,10 +219,6 @@ const Page = () => {
           flex: "1 1 auto",
           overflow: "hidden",
           position: "relative",
-          display: "flex",
-          flex: "1 1 auto",
-          overflow: "hidden",
-          position: "relative",
         }}
       >
         <Box
@@ -211,12 +226,9 @@ const Page = () => {
           sx={{
             bottom: 0,
             display: "flex",
-            display: "flex",
             left: 0,
             position: "absolute",
-            position: "absolute",
             right: 0,
-            top: 0,
             top: 0,
           }}
         >
@@ -230,19 +242,16 @@ const Page = () => {
               >
                 <div>
                   <Typography variant="h4">Registers</Typography>
-                  <Typography variant="h4">Registers</Typography>
                 </div>
                 <div>
                   <Button
-          
                     startIcon={
                       <SvgIcon>
                         <PlusIcon />
                       </SvgIcon>
                     }
-                    
                     variant="contained"
-                    onClick={handleRegisOpen}
+                    onClick={handleClickAdd}
                   >
                     Add
                   </Button>
@@ -273,6 +282,7 @@ const Page = () => {
             open={drawer.isOpen}
             edit={drawer.isEdit}
             regis={currentRegis}
+            regissCount={regissCount}
             createRegis={createRegis}
             updateRegis={updateRegis}
           />

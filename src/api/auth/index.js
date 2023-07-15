@@ -9,36 +9,23 @@ class AuthApi {
     this.baseUrl = baseUrl;
   }
   async signIn(request) {
-    const { email, password } = request;
-
+    const {gmail, password} = request;
     return new Promise(async (resolve, reject) => {
-      try {
-        let data = null;
         try {
-          const response = await axios.get(`${this.baseUrl}`);
-          data = response.data;
-          console.log(data);
+          const response = await axios.post(`${this.baseUrl}/login` , {gmail,password});
+          console.log(response);
+          resolve(response.data);
         } catch (error) {
           console.error("Error while fetching users:", error);
-          window.location.href = "/500";
+          // window.location.href = "/500";
           return null;
         }
-        const user = data.find((user) => user.email === email);
-        if (!user || user.password !== password) {
-          reject(new Error("Please check your email and password"));
-          return;
-        }
-
-        resolve(user);
-      } catch (err) {
-        console.error("[Auth Api]: ", err);
-        reject(new Error("Internal server error"));
-      }
+        
     });
   }
 
   async signUp(request) {
-    const { name, email, password } = request;
+    const { name, gmail, password } = request;
 
     return new Promise(async (resolve, reject) => {
       try {
@@ -48,10 +35,10 @@ class AuthApi {
           data = response.data;
         } catch (error) {
           console.error("Error while fetching users:", error);
-          window.location.href = "/500";
+          // window.location.href = "/500";
           return null;
         }
-        let user = data.find((user) => user.email === email);
+        let user = data.find((user) => user.gmail === gmail);
 
         if (user) {
           reject(new Error("User already exists"));
@@ -61,7 +48,7 @@ class AuthApi {
         user = {
           id: createResourceId(),
           avatar: undefined,
-          email,
+          gmail,
           name,
           password,
           role: "user",
@@ -82,4 +69,4 @@ class AuthApi {
   }
 }
 
-export const authApi = new AuthApi("http://localhost:3001/user");
+export const authApi = new AuthApi("http://localhost:8081/user");
