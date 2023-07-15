@@ -10,7 +10,7 @@ class RoomsApi {
   async getRooms() {
    
     try {
-      const response = await axios.get(`${this.baseUrl}/rooms`);
+      const response = await axios.get(`${this.baseUrl}/room/`);
       return response.data;
     } catch (error) {
       console.error('Error while fetching rooms:', error);
@@ -20,7 +20,7 @@ class RoomsApi {
 
   async getRoomById(id) {
     try {
-      const response = await axios.get(`${this.baseUrl}/rooms/${id}`);
+      const response = await axios.get(`${this.baseUrl}/equipment/`);
       return response.data;
     } catch (error) {
       console.error(`Error while fetching room with ID ${id}:`, error);
@@ -30,7 +30,7 @@ class RoomsApi {
 
   async createRoom(newRoom) {
     try {
-      const response = await axios.post(`${this.baseUrl}/rooms`, newRoom);
+      const response = await axios.post(`${this.baseUrl}/room`, newRoom);
       return response.data;
     } catch (error) {
       console.error('Error while creating room:', error);
@@ -40,7 +40,7 @@ class RoomsApi {
 
   async updateRoomById(id, updatedRoom) {
     try {
-      const response = await axios.put(`${this.baseUrl}/rooms/${id}`, updatedRoom);
+      const response = await axios.put(`${this.baseUrl}/room/${id}`, updatedRoom);
       return response.data;
     } catch (error) {
       console.error(`Error while updating room with ID ${id}:`, error);
@@ -53,7 +53,7 @@ class RoomsApi {
       let updatedRoom = await this.getRoomById(id);
       console.log(updatedRoom);
       updatedRoom.equipment.push(equipment);
-      const response = await axios.put(`${this.baseUrl}/rooms/${id}`, updatedRoom);
+      const response = await axios.put(`${this.baseUrl}/room/${id}`, updatedRoom);
       return response.data;
     } catch (error) {
       console.error(`Error while updating room with ID ${id}:`, error);
@@ -63,7 +63,7 @@ class RoomsApi {
 
   async deleteRoomById(id) {
     try {
-      const response = await axios.delete(`${this.baseUrl}/rooms/${id}`);
+      const response = await axios.delete(`${this.baseUrl}/room/${id}`);
       return response.data;
     } catch (error) {
       console.error(`Error while deleting room with ID ${id}:`, error);
@@ -72,6 +72,6 @@ class RoomsApi {
   }
 }
 
-const roomsApi = new RoomsApi('http://localhost:3001');
+const roomsApi = new RoomsApi('http://localhost:8081');
 
 export default roomsApi;

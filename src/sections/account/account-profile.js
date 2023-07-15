@@ -9,33 +9,8 @@ import {
   Typography,
 } from "@mui/material";
 
-const initialValues = (user) => {
-  if (user)
-    return {
-      address: user.address,
-      gender: user.gender,
-      birthday: user.birthday,
-      email: user.email,
-      name: user.name,
-      phone: user.phone,
-      avatar: user.avatar,
-      role: user.role,
-    };
-  return {
-    address: "",
-    gender: "",
-    birthday: "",
-    email: "",
-    name: "",
-    phone: "",
-    avatar: "",
-    role: "",
-  };
-};
-
 export const AccountProfile = (props) => {
   const { user, ...other } = props;
-  const initUser = initialValues(user);
   return (
     <Card>
       <CardContent>
@@ -47,7 +22,7 @@ export const AccountProfile = (props) => {
           }}
         >
           <Avatar
-            src={initUser.avatar}
+            src={user.avatar}
             sx={{
               height: 80,
               mb: 2,
@@ -55,13 +30,13 @@ export const AccountProfile = (props) => {
             }}
           />
           <Typography gutterBottom variant="h5">
-            {initUser.name}
+            {user.first_name} {user.last_name}
           </Typography>
           <Typography color="text.secondary" variant="body2">
-            {initUser.email}
+            {user.gmail}
           </Typography>
           <Typography color="text.secondary" variant="body2">
-            {initUser.role}
+            {user.role_name}
           </Typography>
         </Box>
       </CardContent>

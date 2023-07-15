@@ -1,6 +1,5 @@
 import PropTypes from "prop-types";
 import { useCallback, useState, useEffect } from "react";
-import { format } from "date-fns";
 import { Button, Stack, TextField, Typography, Autocomplete, Box } from "@mui/material";
 import { useFormik } from "formik";
 import * as Yup from "yup";
@@ -10,7 +9,7 @@ import packagesApi from "src/api/packages";
 import { toast } from "react-hot-toast";
 import { createResourceId } from "src/utils/create-resource-id";
 
-const useCoach = (coachName) => {
+const useCoach =  (coachId) => {
   const isMounted = useMounted();
   const [state, setState] = useState({
     coachSelect: [],
@@ -19,27 +18,25 @@ const useCoach = (coachName) => {
 
   const getEmployees = useCallback(async () => {
     try {
-      const response = await employeesApi.getEmployees({
-        filters: {
-          query: undefined,
-          role: "coach",
-        },
-        page: 0,
-        rowsPerPage: 5,
-        sortBy: "updatedAt",
-        sortDir: "desc",
-      });
-      console.log(coachName);
+      const response = await employeesApi.getEmployees(
+      //   {
+      //   filters: {
+      //     query: undefined,
+      //     role: "TRAINER",
+      //   },
+      //   page: 0,
+      //   rowsPerPage: 5,
+      //   sortBy: "updatedAt",
+      //   sortDir: "desc",
+      // }
+      );
+      console.log(coachId);
 
       if (isMounted()) {
         const coachSelect = response.data;
-        let filteredCoach = null;
-        if (coachName) {
-          coachSelect.filter((item) =>{
-            if(coachName.toLowerCase().includes(item.first_name.toLowerCase()))
-              filteredCoach = item;
-        });
-        }
+        console.log(coachSelect);
+        const filteredCoach = coachSelect.find((item) => item.id === 8);
+        console.log(filteredCoach);
         const result = { coachSelect: coachSelect, coach: filteredCoach };
         setState(result);
       }
@@ -55,16 +52,24 @@ const useCoach = (coachName) => {
   return state;
 };
 
-const usePackages = () => {
+const usePackages = (packId) => {
   const isMounted = useMounted();
-  const [state, setState] = useState();
+  const [state, setState] = useState({
+    packSelect: [],
+    pack: null,
+  });
 
   const getPackages = useCallback(async () => {
     try {
       const response = await packagesApi.getPackages();
 
       if (isMounted()) {
-        setState(response.data);
+        const packSelect = response.data;
+        console.log(packSelect);
+        const filteredPack = packSelect.find((item) => item.id === packId);
+        console.log(filteredPack);
+        const result = { packSelect: packSelect, pack: filteredPack };
+        setState(result);
       }
     } catch (err) {
       console.error(err);
@@ -78,27 +83,19 @@ const usePackages = () => {
   return state;
 };
 
-const validationSchema = Yup.object().shape({
-  customer: {
-    name: Yup.string(),
-    email: Yup.string(),
-  },
-  totalAmount: Yup.number(),
-});
 
 export const RegisEdit = (props) => {
   const { onCancel, regis, setIsEditing, createRegis, updateRegis } = props;
-  const { coachSelect, coach } = useCoach(regis.coach);
-  console.log(coach);
-  const pack = usePackages();
+
+  const { coachSelect, coach } = useCoach(regis.trainer_id);
+  const { packSelect, pack } = usePackages(regis.my_package_id);
 
   const formik = useFormik({
     initialValues: {
-      customer: {
-        name: regis.customer.name,
-        email: regis.customer.email,
-      },
-      totalAmount: regis.totalAmount,
+      customer_name: regis.customer_name,
+      gmail: regis.gmail,
+      trainer: coach,
+      pack: pack
     },
     // validationSchema: validationSchema,
     onSubmit: async (values, helpers) => {
@@ -106,10 +103,11 @@ export const RegisEdit = (props) => {
         if (regis.id !== null) {
           const updateRegister = {
             ...regis,
-            ...values,
-            coach: document.getElementById("coachSelect").value,
-            package: document.getElementById("packSelect").value,
-            // totalAmount: document.getElementById('totalAmountField').value,
+            trainer_id: values.trainer ? values.trainer.id : null,
+            trainer_name: values.trainer ? `${values.trainer.first_name} ${values.trainer.last_name}` : null,
+            my_package_id: values.pack.id,
+            my_package_name: values.pack.name,
+            price: values.pack.price
           };
           updateRegis(regis.id, updateRegister);
           await wait(500);
@@ -118,12 +116,14 @@ export const RegisEdit = (props) => {
           toast.success("Register updated");
         } else {
           const newRegis = {
-            ...regis,
-            ...values,
-            id: createResourceId(),
-            coach: document.getElementById("coachSelect").value,
-            package: document.getElementById("packSelect").value,
-            // totalAmount: document.getElementById('totalAmountField').value,
+            ... regis,
+            customer_name: values.customer_name,
+            gmail: values.gmail,
+            trainer_id: values.trainer ? values.trainer.id : null,
+            trainer_name: values.trainer ? `${values.trainer.first_name} ${values.trainer.last_name}` : null,
+            my_package_id: values.pack.id,
+            my_package_name: values.pack.name,
+            price: values.pack.price
           };
           createRegis(newRegis);
           await wait(500);
@@ -142,6 +142,8 @@ export const RegisEdit = (props) => {
     },
   });
 
+ 
+
   const onChangePackage = (value) => {
     if (value) document.getElementById("totalAmountField").value = value.price;
     return;
@@ -152,20 +154,19 @@ export const RegisEdit = (props) => {
       <Stack spacing={3}>
         <Typography variant="h6">{(regis.id && "Edits") || "New register"}</Typography>
         <Stack spacing={3}>
-          <TextField disabled fullWidth label="ID" name="id" value={regis.id} />
           <TextField
             disabled
             fullWidth
             label="Created By"
-            name="createdBy"
-            value={regis.createdBy}
+            name="register_by_name"
+            value={regis.register_by_name}
           />
-          <TextField disabled fullWidth label="Date" name="date" value={regis.createdAt} />
+          <TextField disabled fullWidth label="Date" name="date" value={regis.created_at} />
           <TextField
             fullWidth
             label="Customer name"
-            name="customer.name"
-            value={formik.values.customer.name}
+            name="customer_name"
+            value={formik.values.customer_name}
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
             error={formik.touched.customer?.name && formik.errors.customer?.name}
@@ -174,8 +175,8 @@ export const RegisEdit = (props) => {
           <TextField
             fullWidth
             label="Email"
-            name="customer.email"
-            value={formik.values.customer.email}
+            name="gmail"
+            value={formik.values.gmail}
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
             error={formik.touched.customer?.email && formik.errors.customer?.email}
@@ -185,8 +186,9 @@ export const RegisEdit = (props) => {
             id="coachSelect"
             fullWidth
             options={coachSelect}
-            defaultValue={coach}
+            value={formik.values.trainer}
             autoHighlight
+            onChange={(event, value) => formik.setFieldValue('trainer', value)}
             getOptionLabel={(option) => `${option.first_name} ${option.last_name}`}
             renderOption={(props, option) => (
               <Box
@@ -203,11 +205,11 @@ export const RegisEdit = (props) => {
           <Autocomplete
             id="packSelect"
             fullWidth
-            options={pack}
+            options={packSelect}
+            value={formik.values.pack}
             autoHighlight
             getOptionLabel={(option) => option.name}
-            onChange={(event, value) => onChangePackage(value)}
-            // onBlur={formik.handleBlur}
+            onChange={(event, value) => {formik.setFieldValue('pack', value);onChangePackage(value)}}
             renderOption={(props, option) => (
               <Box
                 component="li"
@@ -217,28 +219,18 @@ export const RegisEdit = (props) => {
                 {option.name}
               </Box>
             )}
-            renderInput={(params) => (
-              <TextField
-                {...params}
-                label="Package"
-                // error={formik.touched.package && formik.errors.package}
-                // helperText={formik.touched.package && formik.errors.package}
-              />
-            )}
+            renderInput={(params) => <TextField {...params} label="Package" />}
           />
           <TextField
             id="totalAmountField"
             fullWidth
+            autoHighlight
             label="Total Amount"
             name="totalAmount"
             InputProps={{
               readOnly: true,
             }}
-            value={formik.values.totalAmount}
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-            error={formik.touched.totalAmount && formik.errors.totalAmount}
-            helperText={formik.touched.totalAmount && formik.errors.totalAmount}
+            defaultValue={regis.price}
           />
         </Stack>
         <Stack alignItems="center" direction="row" flexWrap="wrap" spacing={2}>

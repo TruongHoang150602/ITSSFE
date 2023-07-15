@@ -11,7 +11,7 @@ class EmployeesApi {
     const { filters, page, rowsPerPage, sortBy, sortDir } = request;
     let data = null;
     try {
-      const response = await axios.get(`${this.baseUrl}/employees`);
+      const response = await axios.get(`${this.baseUrl}/staff`);
       data =  response.data;
     } catch (error) {
       console.error('Error while fetching employees:', error);
@@ -40,7 +40,7 @@ class EmployeesApi {
         }
 
         if (typeof filters.role !== 'undefined') {
-          if (user.role !== filters.role) {
+          if (user.role_name !== filters.role) {
             return false;
           }
         }
@@ -105,6 +105,6 @@ class EmployeesApi {
   }
 }
 
-const employeesApi = new EmployeesApi('http://localhost:3001/user');
+const employeesApi = new EmployeesApi('http://localhost:8081/user');
 
 export default employeesApi;

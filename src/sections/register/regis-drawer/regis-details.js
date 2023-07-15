@@ -17,9 +17,15 @@ export const RegisDetails = (props) => {
   const lgUp = useMediaQuery((theme) => theme.breakpoints.up('lg'));
 
   const align = lgUp ? 'horizontal' : 'vertical';
-  // const created = parseISO(regis.createdAt);
-  // const createdAt = format(created, 'dd/MM/yyyy HH:mm');
-  const totalAmount = numeral(regis.totalAmount).format(`${regis.currency}0,0.00`);
+
+  const createdDate = parseISO(regis.created_at);
+  const currentDate = new Date();
+  createdDate.setDate(createdDate.getDate() + 7);
+  const editable = createdDate >= currentDate;
+
+  const totalAmount = numeral(regis.price).format(`0,0.00 $`);
+
+
 
   return (
     <Stack spacing={6}>
@@ -33,6 +39,7 @@ export const RegisDetails = (props) => {
           <Typography variant="h6">
             Details
           </Typography>
+          {editable && (
           <Button
             color="inherit"
             onClick={onEdit}
@@ -45,21 +52,15 @@ export const RegisDetails = (props) => {
           >
             Edit
           </Button>
+          )}
         </Stack>
         <PropertyList>
           <PropertyListItem
             align={align}
             disableGutters
             divider
-            label="ID"
-            value={regis.id}
-          />
-          <PropertyListItem
-            align={align}
-            disableGutters
-            divider
             label="Created By"
-            value={regis.createdBy}
+            value={regis.register_by_name}
           />
           <PropertyListItem
             align={align}
@@ -71,13 +72,13 @@ export const RegisDetails = (props) => {
               color="text.secondary"
               variant="body2"
             >
-              {regis.customer.name}
+              {regis.customer_name}
             </Typography>
             <Typography
               color="text.secondary"
               variant="body2"
             >
-              {regis.customer.email}
+              {regis.gmail}
             </Typography>
             
           </PropertyListItem>
@@ -86,21 +87,21 @@ export const RegisDetails = (props) => {
             disableGutters
             divider
             label="Date"
-            value={regis.createdAt}
+            value={regis.created_at}
           />
            <PropertyListItem
             align={align}
             disableGutters
             divider
             label="Coach"
-            value={regis.coach}
+            value={regis.trainer_name}
           />
           <PropertyListItem
             align={align}
             disableGutters
             divider
             label="Package"
-            value={regis.package}
+            value={regis.my_package_name}
           />
           <PropertyListItem
             align={align}
