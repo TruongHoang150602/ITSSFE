@@ -9,10 +9,10 @@ export const EmployeeBasicDetails = (props) => {
   const align = mdUp ? "horizontal" : "vertical";
   return (
     <Card {...other}>
-      <CardHeader title="Employee Details" />
+      <CardHeader title="Staff Details" />
       <PropertyList>
         <PropertyListItem align={align} divider label="Gender" value={gender} />
-        <PropertyListItem align={align} divider label="Birthday" value={birthday} />
+        <PropertyListItem align={align} divider label="Birthday" value={birthday.slice(0, 10)} />
         <PropertyListItem align={align} divider label="Email" value={email} />
         <PropertyListItem align={align} divider label="Phone" value={phone} />
         <PropertyListItem align={align} divider label="Role" value={role} />

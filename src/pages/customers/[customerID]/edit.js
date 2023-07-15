@@ -32,7 +32,7 @@ const useCustomer = () => {
 
   useEffect(() => {
     getCustomer();
-  });
+  }, []);
 
   return customer;
 };
@@ -89,7 +89,7 @@ const Page = () => {
               >
                 <Stack alignItems="center" direction="row" spacing={2}>
                   <Avatar
-                    src={customer.avatar}
+                    // src={customer.avatar}
                     sx={{
                       height: 64,
                       width: 64,
@@ -106,7 +106,7 @@ const Page = () => {
                 </Stack>
               </Stack>
             </Stack>
-            <UserEditForm user={customer} />
+            <UserEditForm customer={customer} />
           </Stack>
         </Container>
       </Box>

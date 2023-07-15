@@ -15,7 +15,7 @@ const getUserById = async (response) => {
                     "avatar": author.data.avatar,
                     "name": fullName
                 },
-                "parentFeedbackId": null
+                "parentFeedbackId": item.parent_feedback_id
             }
             data.push(newData);
         })

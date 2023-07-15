@@ -2,7 +2,7 @@ import NextLink from "next/link";
 import PropTypes from "prop-types";
 import toast from "react-hot-toast";
 import * as Yup from "yup";
-import { useRouter } from "next/navigation";
+import { useRouter } from "next/router";
 import { useFormik } from "formik";
 import {
   Button,
@@ -16,59 +16,74 @@ import {
 } from "@mui/material";
 import { paths } from "src/paths";
 import { wait } from "src/utils/wait";
-import usersApi from "src/api/customers";
+import customersApi from "src/api/customers";
 
-const initialValues = (user) => {
-  if (user)
+const initialValues = (customer) => {
+  const today = new Date().toISOString().slice(0, 10);
+  if (customer) {
+    if (customer.birth) {
+      customer.birth = customer.birth.slice(0, 10);
+    }
     return {
-      first_name: user.first_name || "",
-      last_name: user.last_name || "",
-      gender: user.gender || "male",
-      birth: user.birth || new Date().toISOString().slice(0, 10),
-      gmail: user.gmail || "",
-      first_name: user.first_name || "",
-      phone: user.phone || "",
+      first_name: customer.first_name || "",
+      last_name: customer.last_name || "",
+      gender: customer.gender || "male",
+      birth: customer.birth || today,
+      gmail: customer.gmail || "",
+      phone: customer.phone || "",
       submit: null,
     };
+  }
+
   return {
-    gender: "male",
-    birth: new Date().toISOString().slice(0, 10),
-    gmail: "",
     first_name: "",
     last_name: "",
+    gender: "male",
+    birth: today,
+    gmail: "",
     phone: "",
     submit: null,
   };
 };
 
 export const UserEditForm = (props) => {
-  const { user, onClose, ...other } = props;
+  const { customer, onClose, ...other } = props;
   const router = useRouter();
   const formik = useFormik({
-    initialValues: initialValues(user),
+    initialValues: initialValues(customer),
     validationSchema: Yup.object({
-      address: Yup.string().max(255),
+      id: props.id,
+      first_name: Yup.string().max(255).required("First name is required"),
+      last_name: Yup.string().max(255).required("Last name is required"),
       gender: Yup.string(),
       birth: Yup.string(),
-      email: Yup.string().email("Must be a valid email").max(255).required("Email is required"),
-      name: Yup.string().max(255).required("Name is required"),
+      gmail: Yup.string().email("Must be a valid email").max(255).required("Email is required"),
       phone: Yup.string().max(15),
     }),
     onSubmit: async (values, helpers) => {
       try {
-        if (user) {
-          usersApi.updateCustomerById(user.id, formik.values);
-          await wait(500);
+        if (customer) {
+          const updatedCustomer = {
+            ...customer,
+            ...values,
+          };
+          customersApi.updateCustomerById(updatedCustomer);
           helpers.setStatus({ success: true });
           helpers.setSubmitting(false);
-          toast.success("User updated");
-          router.push(paths.users.index);
+          toast.success("Customer updated");
+          router.push(paths.customers.details(customer.id));
         } else {
-          usersApi.createCustomer(formik.values);
+          const newCustomer = {
+            password: "1234567",
+            role_id: 2,
+            role_name: "CUSTOMER",
+            ...values,
+          };
+          customersApi.createCustomer(newCustomer);
           await wait(500);
           helpers.setStatus({ success: true });
           helpers.setSubmitting(false);
-          toast.success("User created");
+          toast.success("Customer created");
           onClose();
         }
       } catch (err) {
@@ -84,7 +99,7 @@ export const UserEditForm = (props) => {
   return (
     <form onSubmit={formik.handleSubmit} {...other}>
       <Card>
-        <CardHeader title="Edit User" />
+        <CardHeader title="Edit Customer" />
         <CardContent sx={{ pt: 0 }}>
           <Grid container spacing={3}>
             <Grid xs={12} md={6}>
@@ -93,10 +108,9 @@ export const UserEditForm = (props) => {
                 fullWidth
                 helperText={formik.touched.first_name && formik.errors.first_name}
                 label="First name"
-                name="fisrt_name"
+                name="first_name"
                 onBlur={formik.handleBlur}
                 onChange={formik.handleChange}
-                required
                 value={formik.values.first_name}
               />
             </Grid>
@@ -118,7 +132,7 @@ export const UserEditForm = (props) => {
                 fullWidth
                 helperText={formik.touched.email && formik.errors.email}
                 label="Email address"
-                name="email"
+                name="gmail"
                 onBlur={formik.handleBlur}
                 onChange={formik.handleChange}
                 required
@@ -184,15 +198,20 @@ export const UserEditForm = (props) => {
           spacing={3}
           sx={{ p: 3 }}
         >
-          <Button disabled={formik.isSubmitting} type="submit" variant="contained">
+          <Button
+            // onClick={formik.onSubmit}
+            // disabled={formik.isSubmitting}
+            type="submit"
+            variant="contained"
+          >
             Save Changes
           </Button>
-          {user ? (
+          {customer ? (
             <Button
               color="inherit"
               component={NextLink}
               disabled={formik.isSubmitting}
-              href={paths.customers.details(user.id)}
+              href={paths.customers.details(customer.id)}
             >
               Cancel
             </Button>
@@ -208,6 +227,6 @@ export const UserEditForm = (props) => {
 };
 
 UserEditForm.propTypes = {
-  user: PropTypes.object,
+  customer: PropTypes.object,
   onClose: PropTypes.func,
 };

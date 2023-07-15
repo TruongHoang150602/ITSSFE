@@ -25,6 +25,7 @@ class FeedbacksApi {
       console.error('Error while fetching feedbacks:', error);
       return [];
     }
+    // console.log(data);
     data = deepCopy(data);
     data = applySort(data, 'createdAt', 'desc');
     let feedbacks = data.map(feedback => {
@@ -36,7 +37,7 @@ class FeedbacksApi {
       };
     });
 
-    feedbacks = feedbacks.filter(item => item.parentFeedbackId === null);
+    feedbacks = feedbacks.filter(item => item.parentFeedbackId === 0);
 
 
     return feedbacks;
@@ -58,7 +59,6 @@ class FeedbacksApi {
   async createFeedback(newFeedback) {
     try {
       const response = await axios.post(`${this.baseUrl}/feedback/`, newFeedback);
-      console.log(response.data);
       return response.data;
     } catch (error) {
       console.error('Error while creating feedback:', error);

@@ -24,9 +24,20 @@ const useSearch = () => {
     sortDir: "desc",
   });
 
+  const handleQueryChange = useCallback((query) => {
+    setSearch((prevState) => ({
+      ...prevState,
+      filters: {
+        ...prevState.filters,
+        query,
+      },
+    }));
+  }, []);
+
   return {
     search,
     updateSearch: setSearch,
+    handleQueryChange,
   };
 };
 
@@ -54,7 +65,7 @@ const useCustomers = (search) => {
   const deleteCustomer = useCallback(
     async (customerId) => {
       try {
-        const response = await customersApi.deleteCustomerById(customerId);
+        await customersApi.deleteCustomerById(customerId);
         getCustomers();
       } catch (err) {
         console.error(err);
@@ -77,7 +88,6 @@ const Page = () => {
   const [openModal, setOpenModal] = useState(false);
   const { search, updateSearch } = useSearch();
   const { state, deleteCustomer } = useCustomers(search);
-
   usePageView();
 
   const handleFiltersChange = useCallback(
@@ -193,7 +203,9 @@ const Page = () => {
                 onSortChange={handleSortChange}
                 sortBy={search.sortBy}
                 sortDir={search.sortDir}
+                updateQuery={search.handleQueryChange} // Change prop name here
               />
+
               <UserListTable
                 users={state.users}
                 usersCount={state.usersCount}

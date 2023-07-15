@@ -67,17 +67,26 @@ const useSelectionModel = (users) => {
   };
 };
 
-export const UserListTable = (props) => {
-  const {
-    users,
-    usersCount,
-    onPageChange,
-    onRowsPerPageChange,
-    page,
-    handleDeleteUser,
-    rowsPerPage,
-    ...other
-  } = props;
+export const UserListTable = ({
+  users,
+  usersCount,
+  onPageChange,
+  onRowsPerPageChange,
+  page,
+  handleDeleteUser,
+  rowsPerPage,
+  ...other
+}) => {
+  // const {
+  //   users,
+  //   usersCount,
+  //   onPageChange,
+  //   onRowsPerPageChange,
+  //   page,
+  //   handleDeleteUser,
+  //   rowsPerPage,
+  //   ...other
+  // } = props;
   const { deselectAll, selectAll, deselectOne, selectOne, selected } = useSelectionModel(users);
 
   const handleToggleAll = useCallback(
@@ -228,7 +237,7 @@ export const UserListTable = (props) => {
         rowsPerPageOptions={[5, 10, 25]}
       />
       <Dialog open={open} onClose={handleClose} aria-labelledby="draggable-dialog-title">
-        <DialogTitle style={{ cursor: "move", color: "red" }} id="draggable-dialog-title">
+        <DialogTitle style={{ color: "red" }} id="draggable-dialog-title">
           Delete
         </DialogTitle>
         <DialogContent>

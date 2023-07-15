@@ -14,102 +14,99 @@ import {
   Switch,
   TextField,
   Typography,
-  Unstable_Grid2 as Grid
-} from '@mui/material';
-import { paths } from 'src/paths';
-import { wait } from 'src/utils/wait';
-import employeesApi from 'src/api/employees';
-import { createResourceId } from 'src/utils/create-resource-id';
+  Unstable_Grid2 as Grid,
+} from "@mui/material";
+import { paths } from "src/paths";
+import { wait } from "src/utils/wait";
+import staffApi from "src/api/staff";
+import { createResourceId } from "src/utils/create-resource-id";
 
 const ROLE = [
   {
-    label: "Admin",
-    value: "admin",
+    label: "Manager",
+    value: "MANAGER",
   },
   {
     label: "Customer Care",
-    value: "caring",
+    value: "CARING",
   },
   {
-    label: "Train",
-    value: "train",
+    label: "Trainer",
+    value: "TRAINER",
   },
   {
     label: "Sale",
-    value: "sale",
+    value: "SALE",
   },
 ];
 
-const initialValues = (employee) => {
-  if(employee) return {
-    last_name: employee.last_name || '',
-    first_name: employee.first_name || '',
-    gender: employee.gender || 'male',
-    birthday: employee.birthday.slice(0, 10),
-    email: employee.email || '',
-    phone: employee.phone || '',
-    role: "admin",
-    submit: null
+const initialValues = (staff) => {
+  const today = new Date().toISOString().slice(0, 10);
+  if (staff) {
+    staff.birth = staff.birth.slice(0, 10);
+    return {
+      last_name: staff.last_name || "",
+      first_name: staff.first_name || "",
+      gender: staff.gender || "male",
+      birth: staff.birth || today,
+      gmail: staff.gmail || "",
+      phone: staff.phone || "",
+      role_name: staff.role_name || "",
+      submit: null,
+    };
   }
+
   return {
-    first_name: '',
-    last_name: '',
-    gender: 'male',
-    birthday: new Date().toISOString().slice(0, 10),
-    email: '',
-    phone: '',
-    role: "admin",
+    first_name: "",
+    last_name: "",
+    gender: "male",
+    birth: today,
+    gmail: "",
+    phone: "",
+    role_name: "MANAGER",
     submit: null,
   };
 };
 
 export const EmployeeEditForm = (props) => {
-  const { employee, onClose, ...other } = props;
+  const { staff, onClose, ...other } = props;
   const router = useRouter();
   const formik = useFormik({
-    initialValues: initialValues(employee),
+    initialValues: initialValues(staff),
     validationSchema: Yup.object({
       gender: Yup.string(),
-      birthday: Yup.string(),
-      email: Yup
-        .string()
-        .email('Must be a valid email')
-        .max(255)
-        .required('Email is required'),
-      first_name: Yup
-        .string()
-        .max(255)
-        .required('Name is required'),
+      birth: Yup.string(),
+      gmail: Yup.string().email("Must be a valid email").max(255).required("Email is required"),
+      first_name: Yup.string().max(255).required("Name is required"),
       last_name: Yup.string().max(255),
       phone: Yup.string().max(15),
-      role: Yup.string().required("Role is required"),
+      role_name: Yup.string().required("Role is required"),
     }),
     onSubmit: async (values, helpers) => {
       try {
-        if (employee){
-          const updateEmployee = {
-            ... employee,
-            ...values
-          }
-          employeesApi.updateEmployeeById(employee.id, updateEmployee);
+        if (staff) {
+          const updateStaff = {
+            ...staff,
+            ...values,
+          };
+          staffApi.updateStaffById(updateStaff);
           await wait(500);
           helpers.setStatus({ success: true });
           helpers.setSubmitting(false);
-          toast.success("Employee updated");
-          router.push(paths.employees.index);
-        }
-        else{
-          const newEmployee = {
-            createdAt: new Date().toISOString,
-            password: '1234567',
-            id: createResourceId(),
-            ... values
-          }
-          employeesApi.createEmployee(newEmployee);
+          toast.success("Staff updated");
+          router.push(paths.staff.details(staff.id));
+        } else {
+          const newStaff = {
+            password: "1234567",
+            role_id: 1,
+            role_name: "MANAGER",
+            ...values,
+          };
+          staffApi.createStaff(newStaff);
           await wait(500);
           helpers.setStatus({ success: true });
           helpers.setSubmitting(false);
-          toast.success("Employee created");
+          toast.success("Staff created");
           onClose();
         }
       } catch (err) {
@@ -125,7 +122,7 @@ export const EmployeeEditForm = (props) => {
   return (
     <form onSubmit={formik.handleSubmit} {...other}>
       <Card>
-        <CardHeader title="Edit Employee" />
+        <CardHeader title="Edit Staff" />
         <CardContent sx={{ pt: 0 }}>
           <Grid container spacing={3}>
             <Grid xs={12} md={6}>
@@ -137,7 +134,6 @@ export const EmployeeEditForm = (props) => {
                 name="first_name"
                 onBlur={formik.handleBlur}
                 onChange={formik.handleChange}
-                required
                 value={formik.values.first_name}
               />
             </Grid>
@@ -159,11 +155,11 @@ export const EmployeeEditForm = (props) => {
                 fullWidth
                 helperText={formik.touched.email && formik.errors.email}
                 label="Email address"
-                name="email"
+                name="gmail"
                 onBlur={formik.handleBlur}
                 onChange={formik.handleChange}
                 required
-                value={formik.values.email}
+                value={formik.values.gmail}
               />
             </Grid>
 
@@ -201,15 +197,15 @@ export const EmployeeEditForm = (props) => {
             </Grid>
             <Grid xs={12} md={6}>
               <TextField
-                error={!!(formik.touched.birthday && formik.errors.birthday)}
+                error={!!(formik.touched.birth && formik.errors.birth)}
                 fullWidth
-                helperText={formik.touched.birthday && formik.errors.birthday}
+                helperText={formik.touched.birth && formik.errors.birth}
                 label="Birthday"
                 name="birthday"
-                type='date'
+                type="date"
                 onBlur={formik.handleBlur}
                 onChange={formik.handleChange}
-                value={formik.values.birthday}
+                value={formik.values.birth}
               />
             </Grid>
 
@@ -221,14 +217,15 @@ export const EmployeeEditForm = (props) => {
                 name="role"
                 label="Role"
                 value={formik.values.role}
-                onChange={formik.handleChange}
+                // onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
                 error={formik.touched.role && Boolean(formik.errors.role)}
                 helperText={formik.touched.role && formik.errors.role}
+                defaultValue={formik.initialValues.role_name}
               >
                 {ROLE.map((option) => (
-                  <MenuItem key={option.value} value={option.value}>
-                    {option.label}
+                  <MenuItem key={option.label} value={option.value}>
+                    {option.value}
                   </MenuItem>
                 ))}
               </TextField>
@@ -247,12 +244,12 @@ export const EmployeeEditForm = (props) => {
           <Button disabled={formik.isSubmitting} type="submit" variant="contained">
             Save Changes
           </Button>
-          {employee ? (
+          {staff ? (
             <Button
               color="inherit"
               component={NextLink}
               disabled={formik.isSubmitting}
-              href={paths.employees.details(employee.id)}
+              href={paths.staff.details(staff.id)}
             >
               Cancel
             </Button>
@@ -268,6 +265,6 @@ export const EmployeeEditForm = (props) => {
 };
 
 EmployeeEditForm.propTypes = {
-  employee: PropTypes.object,
+  staff: PropTypes.object,
   onClose: PropTypes.func,
 };

@@ -4,7 +4,7 @@ import { Button, Stack, TextField, Typography, Autocomplete, Box } from "@mui/ma
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { useMounted } from "src/hooks/use-mounted";
-import employeesApi from "src/api/employees";
+import employeesApi from "src/api/staff";
 import packagesApi from "src/api/packages";
 import { toast } from "react-hot-toast";
 import { createResourceId } from "src/utils/create-resource-id";

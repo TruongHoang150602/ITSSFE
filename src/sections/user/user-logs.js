@@ -22,15 +22,16 @@ import {
 import { MoreMenu } from "src/components/more-menu";
 import { Scrollbar } from "src/components/scrollbar";
 import AddIcon from "@mui/icons-material/Add";
-import { useAuth } from "src/hooks/use-auth";
+// import { useAuth } from "src/hooks/use-auth";
 import { createResourceId } from "src/utils/create-resource-id";
 
 export const UserLogs = (props) => {
-  const { logs = [], addLog ,...other } = props;
+  const { register, logs, addLog, ...other } = props;
   const [openModal, setOpenModal] = useState(false);
-  const role = useAuth().user.role;
-  let process = null;
-  if (logs && logs.process) process = logs.process;
+  const role = "ADMIN";
+
+  const trainer = register[0].trainer_name;
+  const activityLogs = logs.map((log) => ({ ...log, trainer_name: trainer }));
 
   const onCloseModel = () => {
     setOpenModal(false);
@@ -38,20 +39,27 @@ export const UserLogs = (props) => {
 
   const onClickAdd = () => {
     const newLog = {
-      id : createResourceId(),
-      content: document.getElementById('activity').value,
-      createdAt: new Date().toISOString()
-    }
+      id: createResourceId(),
+      created_at: new Date().toISOString(),
+      content: document.getElementById("activity").value,
+      register_id: 0,
+    };
     addLog(newLog);
     setOpenModal(false);
-  }
+  };
   return (
     <Card {...other}>
       <CardHeader
         action={
           <Grid container spacing={2}>
-            {role === "admin" && (
-              <IconButton aria-label="delete" color="primary" onClick={() => {setOpenModal(true)}}>
+            {role === "ADMIN" && (
+              <IconButton
+                aria-label="add"
+                color="primary"
+                onClick={() => {
+                  setOpenModal(true);
+                }}
+              >
                 <AddIcon />
               </IconButton>
             )}
@@ -64,29 +72,23 @@ export const UserLogs = (props) => {
         <Table sx={{ minWidth: 700 }}>
           <TableHead>
             <TableRow>
-              <TableCell>Coach</TableCell>
-              <TableCell>Status</TableCell>
-              <TableCell>Date</TableCell>
-              <TableCell>Coach</TableCell>
-              <TableCell>Status</TableCell>
+              <TableCell>Trainer</TableCell>
+              <TableCell>Content</TableCell>
               <TableCell>Date</TableCell>
             </TableRow>
           </TableHead>
-          {process && (
+          {activityLogs && (
             <TableBody>
-              {process.map((option) => {
-                const tmp = parseISO(option.createdAt);
-                const createdAt = format(tmp, "yyyy/MM/dd HH:mm:ss");
-
+              {activityLogs.map((log) => {
                 return (
-                  <TableRow key={option.id}>
+                  <TableRow key={log.id}>
                     <TableCell>
-                      <Typography>{logs.coach.name}</Typography>
+                      <Typography>{log.trainer_name}</Typography>
                     </TableCell>
                     <TableCell>
-                      <Typography>{option.content}</Typography>
+                      <Typography>{log.content}</Typography>
                     </TableCell>
-                    <TableCell>{createdAt}</TableCell>
+                    <TableCell>{log.created_at.slice(0, 10)}</TableCell>
                   </TableRow>
                 );
               })}
@@ -94,7 +96,7 @@ export const UserLogs = (props) => {
           )}
         </Table>
       </Scrollbar>
-      <TablePagination
+      {/* <TablePagination
         component="div"
         count={process ? process.length : 0}
         onPageChange={() => {}}
@@ -102,12 +104,15 @@ export const UserLogs = (props) => {
         page={0}
         rowsPerPage={10}
         rowsPerPageOptions={[5, 10, 25]}
-      />
+      /> */}
       <Dialog open={openModal} onClose={onCloseModel}>
-        <Card sx={{width : '400px'}}>
+        <Card sx={{ width: "400px" }}>
           <CardHeader title="Add activity" />
-          <CardContent sx={{ pt: '20px' }}>
-              <TextField fullWidth label="Activity" name="activity" id="activity" />
+          <CardContent sx={{ pt: "0px" }}>
+            <TextField label="Activity" name="activity" id="activity" />
+          </CardContent>
+          <CardContent sx={{ pt: "0px", justifyContent: "flex-end " }}>
+            <TextField label="Date" name="date" id="date" />
           </CardContent>
           <Stack
             direction={{
@@ -118,7 +123,9 @@ export const UserLogs = (props) => {
             spacing={3}
             sx={{ p: 3 }}
           >
-            <Button variant="contained" onClick={onClickAdd}>Add</Button>
+            <Button variant="contained" onClick={onClickAdd}>
+              Add
+            </Button>
             <Button color="inherit" onClick={onCloseModel}>
               Cancel
             </Button>
