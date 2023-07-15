@@ -23,14 +23,14 @@ import { Layout as AuthLayout } from "src/layouts/auth/layout";
 // import { paths } from "src/paths";
 
 const initialValues = {
-  email: "admin@gmail.com",
+  gmail: "admin@gmail.com",
   password: "admin123",
   submit: null,
 };
 
 // Validate credentials
 const validationSchema = Yup.object({
-  email: Yup.string().email("Must be a valid email").max(255).required("Email is required"),
+  gmail: Yup.string().email("Must be a valid gmail").max(255).required("Email is required"),
   password: Yup.string().max(255).required("Password is required"),
 });
 
@@ -44,7 +44,7 @@ const Page = () => {
     validationSchema: validationSchema,
     onSubmit: async (values, helpers) => {
       try {
-        await auth.signIn(values.email, values.password);
+        await auth.signIn(values.gmail, values.password);
         router.push("/");
       } catch (err) {
         helpers.setStatus({ success: false });
@@ -60,7 +60,7 @@ const Page = () => {
       <CardHeader
         subheader={
           <Typography color="text.secondary" variant="body2">
-            Don't have an account yet?
+            Don`&lsquot have an account yet?
             <Link href="/auth/register" underline="hover" variant="subtitle2">
               {" "}
               Register
@@ -76,15 +76,15 @@ const Page = () => {
         <form noValidate onSubmit={formik.handleSubmit}>
           <Stack spacing={3}>
             <TextField
-              error={!!(formik.touched.email && formik.errors.email)}
+              error={!!(formik.touched.gmail && formik.errors.gmail)}
               fullWidth
-              helperText={formik.touched.email && formik.errors.email}
+              helperText={formik.touched.gmail && formik.errors.gmail}
               label="Email Address"
-              name="email"
+              name="gmail"
               onBlur={formik.handleBlur}
               onChange={formik.handleChange}
-              type="email"
-              value={formik.values.email}
+              type="gmail"
+              value={formik.values.gmail}
             />
             <TextField
               error={!!(formik.touched.password && formik.errors.password)}

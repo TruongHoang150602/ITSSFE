@@ -13,7 +13,7 @@ class RegistersApi {
     const { filters, page, rowsPerPage, sortBy, sortDir } = request;
     let data = null;
     try {
-      const response = await axios.get(`${this.baseUrl}/registers`);
+      const response = await axios.get(`${this.baseUrl}/register/`);
 
       data =  response.data;
     } catch (error) {
@@ -22,7 +22,7 @@ class RegistersApi {
     }
     data = deepCopy(data);
 
-    data = applySort(data, 'createdAt', 'desc');
+    data = applySort(data, 'created_at', 'desc');
     let count = data.length;
 
     if (typeof filters !== 'undefined') {
@@ -30,19 +30,11 @@ class RegistersApi {
         if (typeof filters.query !== 'undefined' && filters.query !== '') {
           // Checks only the register number, but can be extended to support other fields, such as customer
           // name, email, etc.
-          const containsQuery = (register.number || '')
+          const containsQuery = (register.customer_name || '')
             .toLowerCase()
             .includes(filters.query.toLowerCase());
 
           if (!containsQuery) {
-            return false;
-          }
-        }
-
-        if (typeof filters.status !== 'undefined') {
-          const statusMatched = register.status === filters.status;
-
-          if (!statusMatched) {
             return false;
           }
         }
@@ -68,7 +60,7 @@ class RegistersApi {
 
   async getRegisterById(id) {
     try {
-      const response = await axios.get(`${this.baseUrl}/registers/${id}`);
+      const response = await axios.get(`${this.baseUrl}/register/${id}`);
       return response.data;
     } catch (error) {
       console.error(`Error while fetching register with ID ${id}:`, error);
@@ -78,7 +70,7 @@ class RegistersApi {
 
   async createRegister(newRegister) {
     try {
-      const response = await axios.post(`${this.baseUrl}/registers`, newRegister);
+      const response = await axios.post(`${this.baseUrl}/register`, newRegister);
       return response.data;
     } catch (error) {
       console.error('Error while creating register:', error);
@@ -88,7 +80,7 @@ class RegistersApi {
 
   async updateRegisterById(id, updatedRegister) {
     try {
-      const response = await axios.put(`${this.baseUrl}/registers/${id}`, updatedRegister);
+      const response = await axios.put(`${this.baseUrl}/register/${id}`, updatedRegister);
       return response.data;
     } catch (error) {
       console.error(`Error while updating register with ID ${id}:`, error);
@@ -98,7 +90,7 @@ class RegistersApi {
 
   async deleteRegisterById(id) {
     try {
-      const response = await axios.delete(`${this.baseUrl}/registers/${id}`);
+      const response = await axios.delete(`${this.baseUrl}/register/${id}`);
       return response.data;
     } catch (error) {
       console.error(`Error while deleting register with ID ${id}:`, error);
@@ -107,7 +99,7 @@ class RegistersApi {
   }
 }
 
-const registersApi = new RegistersApi('http://localhost:3001');
+const registersApi = new RegistersApi('http://localhost:8081');
 
 export default registersApi;
 

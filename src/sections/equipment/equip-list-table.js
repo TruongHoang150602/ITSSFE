@@ -168,14 +168,14 @@ export const EquipmentListTable = (props) => {
                         >
                           <Typography variant="subtitle2">{equipment.name}</Typography>
                           <Typography color="text.secondary" variant="body2">
-                            in {equipment.category}
+                            in {equipment.category_name}
                           </Typography>
                         </Box>
                       </Box>
                     </TableCell>
-                    <TableCell>{price}</TableCell>
+                    <TableCell>{` ${equipment.price} $`}</TableCell>
                     <TableCell>{new Date().toISOString().slice(0, 10)}</TableCell>
-                    <TableCell>{` ${equipment.warrantyPeriod} year`}</TableCell>
+                    <TableCell>{` ${equipment.warranty_period} month`}</TableCell>
                   </TableRow>
                   {isCurrent && (
                     <TableRow>
@@ -218,7 +218,7 @@ export const EquipmentListTable = (props) => {
 
                                 <Grid item md={6} xs={12}>
                                   <TextField
-                                    defaultValue={equipment.category}
+                                    defaultValue={equipment.category_name}
                                     fullWidth
                                     label="Category"
                                     select
@@ -239,7 +239,7 @@ export const EquipmentListTable = (props) => {
                                 <Grid item md={6} xs={12}>
                                   <TextField
                                     defaultValue={
-                                      equipment.price || new Date().toISOString().slice(0, 10)
+                                      equipment.price
                                     }
                                     fullWidth
                                     label="Price"
@@ -247,7 +247,7 @@ export const EquipmentListTable = (props) => {
                                     InputProps={{
                                       startAdornment: (
                                         <InputAdornment position="start">
-                                          {equipment.currency}
+                                          {"$"}
                                         </InputAdornment>
                                       ),
                                     }}
@@ -256,10 +256,10 @@ export const EquipmentListTable = (props) => {
                                 </Grid>
                                 <Grid item md={6} xs={12}>
                                   <TextField
-                                    defaultValue={equipment.purchaseDate}
+                                    defaultValue={equipment.purchase_date.slice(0,10)}
                                     fullWidth
                                     label="Purchase Date"
-                                    name="purchaseDate"
+                                    name="purchase_date"
                                     type="date"
                                   />
                                 </Grid>
@@ -273,13 +273,13 @@ export const EquipmentListTable = (props) => {
                                   }}
                                 >
                                   <TextField
-                                    defaultValue={equipment.warrantyPeriod}
+                                    defaultValue={equipment.warranty_period}
                                     fullWidth
                                     label="warranty Period"
-                                    name="warrantyPeriod"
+                                    name="warranty_period"
                                     InputProps={{
                                       startAdornment: (
-                                        <InputAdornment position="start">year</InputAdornment>
+                                        <InputAdornment position="start">month</InputAdornment>
                                       ),
                                     }}
                                     type="number"

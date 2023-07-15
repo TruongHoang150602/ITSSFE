@@ -20,14 +20,12 @@ const initialValues = (room) => {
   if (room)
     return {
       name: room.name || "",
-      media: "/assets/rooms/room-1.png",
       address: room.address || "",
       acreage: room.acreage || 0,
       submit: null,
     };
   return {
     name: "",
-    media: "/assets/rooms/room-1.png",
     address: "",
     acreage: 0,
     submit: null,

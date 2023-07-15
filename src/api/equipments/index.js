@@ -1,6 +1,5 @@
 import { applyPagination } from 'src/utils/apply-pagination';
 import { deepCopy } from 'src/utils/deep-copy';
-import { equipments } from './data';
 
 class EquipmentsApi {
   getEquipments(request = {}) {

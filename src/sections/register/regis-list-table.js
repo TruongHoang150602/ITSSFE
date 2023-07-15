@@ -29,12 +29,12 @@ export const RegisListTable = (props) => {
         <TableBody>
           {regiss.map((regis) => {
             
-            const createdAt = parseISO(regis.createdAt);
+            const createdAt = parseISO(regis.created_at);
             
             const createdAtMonth = format(createdAt, 'LLL').toUpperCase();
             const createdAtDay = format(createdAt, 'd');
 
-            const totalAmount = numeral(regis.totalAmount).format(`${regis.currency}0,0.00 $`);
+            const totalAmount = numeral(regis.price).format(`0,0.00 $`);
 
             return (
               <TableRow
@@ -75,13 +75,13 @@ export const RegisListTable = (props) => {
                   </Box>
                   <Box sx={{ ml: 2 }}>
                     <Typography variant="subtitle2">
-                      {regis.customer.name}
+                      {regis.customer_name}
                     </Typography>
                     <Typography
                       color="text.secondary"
                       variant="body2"
                     >
-                      {regis.package}
+                      {regis.my_package_name}
                     </Typography>
                   </Box>
                 </TableCell>
@@ -111,7 +111,7 @@ RegisListTable.propTypes = {
   onPageChange: PropTypes.func.isRequired,
   onRowsPerPageChange: PropTypes.func,
   regiss: PropTypes.array.isRequired,
-  regissCount: PropTypes.number.isRequired,
+  regissCount: PropTypes.number,
   page: PropTypes.number.isRequired,
   rowsPerPage: PropTypes.number.isRequired
 };

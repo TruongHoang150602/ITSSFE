@@ -37,6 +37,8 @@ export const PackageListTable = (props) => {
     packages,
     packagesCount,
     rowsPerPage,
+    // handlePackageDelete,
+    // handlePackageUpdate,
     ...other
   } = props;
   const [currentPackage, setCurrentPackage] = useState({

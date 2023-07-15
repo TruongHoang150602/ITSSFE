@@ -54,10 +54,11 @@ const useEquipments = (search) => {
     try {
       const { gymId } = route.query;
       const response = await roomsApi.getRoomById(gymId);
+      console.log(response);
       if (isMounted()) {
         setState({
-          equipments: response.equipment,
-          equipmentsCount: response.count,
+          equipments: response,
+          equipmentsCount: response.length,
         });
       }
     } catch (err) {

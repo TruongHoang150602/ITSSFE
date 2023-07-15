@@ -21,7 +21,7 @@ export const UserMember = ({ register }) => {
           </>
         )} */}
 
-        {register !== null && (
+        {register && (
           <>
             <PropertyListItem align={align} divider label="Member Card" value={register[0].id} />
             <PropertyListItem
