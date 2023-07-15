@@ -10,18 +10,7 @@ export const UserMember = ({ register }) => {
     <Card>
       <CardHeader title="Member" />
       <PropertyList>
-        {/* {register === null && (
-          <>
-            <PropertyListItem align={align} divider label="Member Card" value="" />
-            <PropertyListItem align={align} divider label="Package" value="" />
-            <PropertyListItem align={align} divider label="Registration Date" value="" />
-            <PropertyListItem align={align} divider label="Expiration Date" value="" />
-            <PropertyListItem align={align} divider label="Trainer" value="" />
-            <PropertyListItem align={align} divider label="Registered by" value="" />
-          </>
-        )} */}
-
-        {register !== null && (
+        {register ? (
           <>
             <PropertyListItem align={align} divider label="Member Card" value={register[0].id} />
             <PropertyListItem
@@ -49,6 +38,15 @@ export const UserMember = ({ register }) => {
               label="Registered by"
               value={register[0].register_by_name}
             />
+          </>
+        ) : (
+          <>
+            <PropertyListItem align={align} divider label="Member Card" value="" />
+            <PropertyListItem align={align} divider label="Package" value="" />
+            <PropertyListItem align={align} divider label="Registration Date" value="" />
+            <PropertyListItem align={align} divider label="Expiration Date" value="" />
+            <PropertyListItem align={align} divider label="Trainer" value="" />
+            <PropertyListItem align={align} divider label="Registered by" value="" />
           </>
         )}
       </PropertyList>
