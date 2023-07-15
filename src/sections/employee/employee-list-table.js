@@ -27,7 +27,6 @@ import {
 } from "@mui/material";
 import { Scrollbar } from "src/components/scrollbar";
 import { paths } from "src/paths";
-import { getInitials } from "src/utils/get-initials";
 
 const useSelectionModel = (employees) => {
   const employeeIds = useMemo(() => {
@@ -201,7 +200,7 @@ export const EmployeeListTable = (props) => {
                       </div>
                     </Stack>
                   </TableCell>
-                  <TableCell>{staff.role}</TableCell>
+                  <TableCell>{staff.role_name}</TableCell>
                   <TableCell>{staff.gender}</TableCell>
                   <TableCell>{staff.phone}</TableCell>
                   <TableCell align="right">

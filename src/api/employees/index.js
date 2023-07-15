@@ -1,7 +1,7 @@
-import axios from 'axios';
-import { applyPagination } from 'src/utils/apply-pagination';
-import { applySort } from 'src/utils/apply-sort';
-import { deepCopy } from 'src/utils/deep-copy';
+import axios from "axios";
+import { applyPagination } from "src/utils/apply-pagination";
+import { applySort } from "src/utils/apply-sort";
+import { deepCopy } from "src/utils/deep-copy";
 class EmployeesApi {
   constructor(baseUrl) {
     this.baseUrl = baseUrl;
@@ -12,24 +12,24 @@ class EmployeesApi {
     let data = null;
     try {
       const response = await axios.get(`${this.baseUrl}/staff`);
-      data =  response.data;
+      data = response.data;
     } catch (error) {
-      console.error('Error while fetching employees:', error);
-      window.location.href = '/500';
+      console.error("Error while fetching employees:", error);
+      window.location.href = "/500";
       return null;
     }
     data = deepCopy(data);
-    data = data.filter((option) => option.role !== 'user' && option.role !== 'member' );
+    data = data.filter((option) => option.role !== "user" && option.role !== "member");
     let count = data.length;
 
-    if (typeof filters !== 'undefined') {
+    if (typeof filters !== "undefined") {
       data = data.filter((user) => {
-        if (typeof filters.query !== 'undefined' && filters.query !== '') {
+        if (typeof filters.query !== "undefined" && filters.query !== "") {
           let queryMatched = false;
-          const properties = ['email', 'first_name', 'last_name'];
+          const properties = ["email", "first_name", "last_name"];
 
           properties.forEach((property) => {
-            if ((user[property]).toLowerCase().includes(filters.query.toLowerCase())) {
+            if (user[property].toLowerCase().includes(filters.query.toLowerCase())) {
               queryMatched = true;
             }
           });
@@ -39,28 +39,28 @@ class EmployeesApi {
           }
         }
 
-        if (typeof filters.role !== 'undefined') {
+        if (typeof filters.role !== "undefined") {
           if (user.role_name !== filters.role) {
             return false;
           }
         }
-        
+
         return true;
       });
       count = data.length;
     }
 
-    if (typeof sortBy !== 'undefined' && typeof sortDir !== 'undefined') {
+    if (typeof sortBy !== "undefined" && typeof sortDir !== "undefined") {
       data = applySort(data, sortBy, sortDir);
     }
 
-    if (typeof page !== 'undefined' && typeof rowsPerPage !== 'undefined') {
+    if (typeof page !== "undefined" && typeof rowsPerPage !== "undefined") {
       data = applyPagination(data, page, rowsPerPage);
     }
 
     return Promise.resolve({
       data,
-      count
+      count,
     });
   }
 
@@ -79,7 +79,7 @@ class EmployeesApi {
       const response = await axios.post(`${this.baseUrl}/employees`, newEmployee);
       return response.data;
     } catch (error) {
-      console.error('Error while creating employee:', error);
+      console.error("Error while creating employee:", error);
       return null;
     }
   }
@@ -105,6 +105,6 @@ class EmployeesApi {
   }
 }
 
-const employeesApi = new EmployeesApi('http://localhost:8081/user');
+const employeesApi = new EmployeesApi("http://localhost:8081/user");
 
 export default employeesApi;

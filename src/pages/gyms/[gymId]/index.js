@@ -8,7 +8,6 @@ import {
   Breadcrumbs,
   Button,
   Card,
-  Backdrop,
   Container,
   Link,
   Stack,
@@ -56,46 +55,70 @@ const useEquipments = (search) => {
       const response = await roomsApi.getRoomById(gymId);
       console.log(response);
       if (isMounted()) {
-        setState({
+        setState((prevState) => ({
+          ...prevState,
           equipments: response,
           equipmentsCount: response.length,
-        });
+        }));
       }
     } catch (err) {
       console.error(err);
     }
-  }, [search, isMounted]);
+  }, [route.query, isMounted]);
 
-  useEffect(
-    () => {
-      getEquipments();
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  [search]);
+  useEffect(() => {
+    getEquipments();
+  }, [search, getEquipments]);
 
   const deleteEquip = useCallback(async (equipId) => {
     try {
-      let equip = state.equipments;
-      equip = equip.filter((option) => option.id !== equipId);
       if (isMounted()) {
-        setState({
-          equipments: equip,
-          equipmentsCount: equip.length
+        setState((prevState) => {
+          const updatedEquipments = prevState.equipments.filter((equip) => equip.id !== equipId);
+          return {
+            ...prevState,
+            equipments: updatedEquipments,
+            equipmentsCount: updatedEquipments.length,
+          };
         });
       }
     } catch (err) {
       console.error(err);
     }
-  }, []);
+  }, [isMounted]);
 
-  
-  return {  equipments: state.equipments, equipmentsCount: state.equipmentsCount , deleteEquip };
+  const updateEquip = useCallback(async (equipId, updatedData) => {
+    try {
+      console.log(updatedData);
+      if (isMounted()) {
+        setState((prevState) => {
+          const updatedEquipments = prevState.equipments.map((equip) =>
+            equip.id === equipId ? { ...equip, ...updatedData } : equip
+          );
+          return {
+            ...prevState,
+            equipments: updatedEquipments,
+          };
+        });
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  }, [isMounted]);
+
+  return {
+    equipments: state.equipments,
+    equipmentsCount: state.equipmentsCount,
+    deleteEquip,
+    updateEquip,
+  };
 };
+
 
 const EquipmentList = () => {
   const { gymId } = useRouter().query;
   const { search, updateSearch } = useSearch();
-  const { equipments, equipmentsCount , deleteEquip } = useEquipments(search);
+  const { equipments, equipmentsCount , deleteEquip, updateEquip } = useEquipments(search);
   usePageView();
 
   const handleFiltersChange = useCallback(
@@ -191,6 +214,7 @@ const EquipmentList = () => {
                 equipments={equipments}
                 equipmentsCount={equipmentsCount}
                 deleteEquip = {deleteEquip}
+                updateEquip = {updateEquip}
                 rowsPerPage={search.rowsPerPage}
               />
             </Card>

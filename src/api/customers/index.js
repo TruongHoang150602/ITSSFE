@@ -13,10 +13,10 @@ class CustomersApi {
     let data = null;
     try {
       const response = await axios.get(`${this.baseUrl}/user/customer`);
-      data = response.data;
+      data = response.data.filter((customer) => customer.is_deleted !== true);
     } catch (error) {
       console.error("Error while fetching customers:", error);
-      window.location.href = "/500";
+      // window.location.href = "/500";
       return null;
     }
     let count = data.length;
@@ -97,9 +97,6 @@ class CustomersApi {
 
   async addProcessById(id, newActivity) {
     try {
-      // let updateProcess = await this.getProcessById(id);
-      // updateProcess.process = [newActivity, ...updateProcess.process];
-      console.log(newActivity);
       const response = await axios.put(`${this.baseUrl}/process`, newActivity);
       return response.data;
     } catch (error) {

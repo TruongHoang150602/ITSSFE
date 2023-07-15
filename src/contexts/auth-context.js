@@ -104,10 +104,12 @@ export const AuthProvider = (props) => {
       console.log(user)
       window.sessionStorage.setItem('authenticated', 'true');
 
-      dispatch({
-        type: HANDLERS.SIGN_IN,
-        payload: user
-      });
+      if (user) {
+        dispatch({
+          type: HANDLERS.SIGN_IN,
+          payload: user,
+        });
+      }
     } catch (error) {
       console.error('[Auth Api - Sign In]:', error);
       throw new Error('Please check your gmail and password');

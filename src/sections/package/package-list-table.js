@@ -115,7 +115,7 @@ export const PackageListTable = (props) => {
 
   const handlePackageUpdate = useCallback((packageId) => {
     // packagesApi.updatePackageById(packageId, updatedPackage);
-    updatePackage(packageId, updatePackage);
+    updatePackage(packageId, updatedPackage);
     setCurrentPackage({
       id: '',
       name: '',
