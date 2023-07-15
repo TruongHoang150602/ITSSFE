@@ -42,7 +42,6 @@ const usePackages = (search) => {
       const response = await packagesApi.getPackages();
 
       if (isMounted()) {
-        setPa
         setState({
           packages: response.data,
           packagesCount: response.count,
@@ -51,21 +50,57 @@ const usePackages = (search) => {
     } catch (err) {
       console.error(err);
     }
-  }, [search, isMounted]);
+  }, [isMounted]);
 
-  useEffect(
-    () => {
-      getPackages();
-    },
-    [search]
-  );
+  useEffect(() => {
+    getPackages();
+  }, [search, getPackages]);
 
-  return state;
+  const deletePackage = useCallback(async (packageId) => {
+    try {
+      if (isMounted()) {
+        setState((prevState) => {
+          const updatedPackages = prevState.packages.filter((pkg) => pkg.id !== packageId);
+          return {
+            ...prevState,
+            packages: updatedPackages,
+            packagesCount: updatedPackages.length,
+          };
+        });
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  }, [isMounted]);
+
+  const updatePackage = useCallback(async (packageId, updatedData) => {
+    try {
+      if (isMounted()) {
+        setState((prevState) => {
+          const updatedPackages = prevState.packages.map((pkg) =>
+            pkg.id === packageId ? { ...pkg, ...updatedData } : pkg
+          );
+          return {
+            ...prevState,
+            packages: updatedPackages,
+          };
+        });
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  }, [isMounted]);
+
+  return {
+    ...state,
+    deletePackage,
+    updatePackage,
+  };
 };
 
 const PackageList = () => {
   const { search, updateSearch } = useSearch();
-  const { packages, packagesCount } = usePackages(search);
+  const { packages, packagesCount, deletePackage, updatePackage } = usePackages(search);
   const role_name = useAuth().user.role_name;
   usePageView();
 
@@ -148,6 +183,8 @@ const PackageList = () => {
                 packages={packages}
                 packagesCount={packagesCount}
                 rowsPerPage={search.rowsPerPage}
+                deletePackage={deletePackage}
+                updatePackage={updatePackage}
               />
             </Card>
           </Stack>
