@@ -161,7 +161,7 @@ export const UserListTable = ({
                 />
               </TableCell>
               <TableCell>Name</TableCell>
-              <TableCell>Address</TableCell>
+              <TableCell>Gender</TableCell>
               <TableCell>Phone</TableCell>
               <TableCell align="right">Action</TableCell>
             </TableRow>
