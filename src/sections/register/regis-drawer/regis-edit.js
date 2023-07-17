@@ -8,8 +8,9 @@ import employeesApi from "src/api/staff";
 import packagesApi from "src/api/packages";
 import { toast } from "react-hot-toast";
 import { createResourceId } from "src/utils/create-resource-id";
+import staffApi from "src/api/staff";
 
-const useCoach =  (coachId) => {
+const useCoach = (coachId) => {
   const isMounted = useMounted();
   const [state, setState] = useState({
     coachSelect: [],
@@ -18,17 +19,17 @@ const useCoach =  (coachId) => {
 
   const getEmployees = useCallback(async () => {
     try {
-      const response = await employeesApi.getEmployees(
-      //   {
-      //   filters: {
-      //     query: undefined,
-      //     role: "TRAINER",
-      //   },
-      //   page: 0,
-      //   rowsPerPage: 5,
-      //   sortBy: "updatedAt",
-      //   sortDir: "desc",
-      // }
+      const response = await staffApi.getStaff(
+        {
+          filters: {
+            query: undefined,
+            role: "TRAINER",
+          },
+          page: 0,
+          rowsPerPage: 5,
+          sortBy: "updatedAt",
+          sortDir: "desc",
+        }
       );
       console.log(coachId);
 
@@ -116,7 +117,7 @@ export const RegisEdit = (props) => {
           toast.success("Register updated");
         } else {
           const newRegis = {
-            ... regis,
+            ...regis,
             customer_name: values.customer_name,
             gmail: values.gmail,
             trainer_id: values.trainer ? values.trainer.id : null,
@@ -142,7 +143,7 @@ export const RegisEdit = (props) => {
     },
   });
 
- 
+
 
   const onChangePackage = (value) => {
     if (value) document.getElementById("totalAmountField").value = value.price;
@@ -209,7 +210,7 @@ export const RegisEdit = (props) => {
             value={formik.values.pack}
             autoHighlight
             getOptionLabel={(option) => option.name}
-            onChange={(event, value) => {formik.setFieldValue('pack', value);onChangePackage(value)}}
+            onChange={(event, value) => { formik.setFieldValue('pack', value); onChangePackage(value) }}
             renderOption={(props, option) => (
               <Box
                 component="li"

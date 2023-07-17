@@ -37,6 +37,8 @@ export const PackageListTable = (props) => {
     packages,
     packagesCount,
     rowsPerPage,
+    deletePackage,
+    updatePackage,
     ...other
   } = props;
   const [currentPackage, setCurrentPackage] = useState({
@@ -112,7 +114,8 @@ export const PackageListTable = (props) => {
   }, []);
 
   const handlePackageUpdate = useCallback((packageId) => {
-    packagesApi.updatePackageById(packageId, updatedPackage);
+    // packagesApi.updatePackageById(packageId, updatedPackage);
+    updatePackage(packageId, updatedPackage);
     setCurrentPackage({
       id: '',
       name: '',
@@ -120,11 +123,11 @@ export const PackageListTable = (props) => {
       description: ''
     });
     toast.success("Package updated");
-    window.location.reload();
   }, [updatedPackage]);
 
   const handlePackageDelete = useCallback((packageId) => {
-    packagesApi.deletePackageById(packageId);
+    // packagesApi.deletePackageById(packageId);
+    deletePackage(packageId);
     setCurrentPackage({
       id: '',
       name: '',
@@ -132,7 +135,6 @@ export const PackageListTable = (props) => {
       description: ''
     });
     toast.error("Package cannot be deleted");
-    window.location.reload();
   }, []);
 
   return (

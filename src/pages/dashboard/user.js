@@ -11,7 +11,7 @@ import { usePageView } from "src/hooks/use-page-view";
 import { Layout as DashboardLayout } from "src/layouts/dashboard/layout";
 import { UserCalendar } from "src/sections/user/user-calendar-activity";
 import { UserMember } from "src/sections/user/user-member";
-import { UserLogs } from "src/sections/user/user-logs";
+// import { UserLogs } from "src/sections/user/user-logs";
 import { PricingPlan } from "src/sections/overview/pricing-plan";
 import { useAuth } from "src/hooks/use-auth";
 
@@ -145,7 +145,7 @@ const Page = () => {
             </Grid>
 
             <Grid xs={12}>
-              <UserLogs logs={logs} />
+              {/* <UserLogs logs={logs} /> */}
             </Grid>
           </Grid>
         </Container>

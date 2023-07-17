@@ -28,12 +28,9 @@ import { paths } from "src/paths";
 import { UserBasicDetails } from "src/sections/user/user-basic-details";
 import { UserDataManagement } from "src/sections/user/user-data-management";
 import { UserCalendar } from "src/sections/user/user-calendar-activity";
-import { UserInvoices } from "src/sections/user/user-invoices";
 import { UserMember } from "src/sections/user/user-member";
 import { UserLogs } from "src/sections/user/user-logs";
 import { getInitials } from "src/utils/get-initials";
-import { useAuth } from "src/hooks/use-auth";
-import { ConstructionOutlined } from "@mui/icons-material";
 
 const tabs = [
   { label: "Details", value: "details" },
@@ -42,17 +39,20 @@ const tabs = [
 
 const useCustomer = () => {
   const route = useRouter();
+  const isMounted = useMounted();
   const [customer, setCustomer] = useState(null);
 
   const getCustomer = useCallback(async () => {
     try {
       const customerId = route.query.customerID;
       const response = await customersApi.getCustomerById(customerId);
-      setCustomer(response);
+      if (isMounted()) {
+        setCustomer(response);
+      }
     } catch (err) {
       console.error(err);
     }
-  }, [route.query.customerID]);
+  }, [isMounted]);
 
   useEffect(() => {
     getCustomer();
@@ -70,21 +70,25 @@ const useLogs = () => {
     try {
       const customerId = route.query.customerID;
       const response = await customersApi.getProcessById(customerId);
-      setLogs(response);
+      if (isMounted()) {
+        setLogs(response);
+      }
     } catch (err) {
       console.error(err);
     }
-  }, [route.query.customerID]);
+  }, []);
 
   const addLog = useCallback(async (newLog) => {
     try {
       const { customerId } = route.query;
       const response = await customersApi.addProcessById(customerId, newLog);
-      getLogs();
+      if (isMounted.current) {
+        setLogs((prevLogs) => [newLog, ...prevLogs]);
+      }
     } catch (err) {
       console.error(err);
     }
-  }, []);
+  }, [isMounted, setLogs, route.query]);
 
   useEffect(() => {
     getLogs();
@@ -95,17 +99,20 @@ const useLogs = () => {
 
 const useRegister = () => {
   const route = useRouter();
+  const isMounted = useMounted();
   const [register, setRegister] = useState(null);
 
   const getRegister = useCallback(async () => {
     try {
       const customerId = route.query.customerID;
       const response = await customersApi.getRegisterById(customerId);
-      setRegister(response);
+      if (isMounted()) {
+        setRegister(response);
+      }
     } catch (err) {
       console.error(err);
     }
-  }, [route.query.customerID]);
+  }, [isMounted]);
 
   useEffect(() => {
     getRegister();
@@ -123,7 +130,7 @@ const Page = () => {
 
   usePageView();
 
-  const handleTabsChange = useCallback((value) => {
+  const handleTabsChange = useCallback((event, value) => {
     setCurrentTab(value);
   }, []);
 
