@@ -61,15 +61,13 @@ const useCustomer = () => {
   return customer;
 };
 
-const useLogs = () => {
-  const route = useRouter();
+const useLogs = (register) => {
   const isMounted = useMounted();
   const [logs, setLogs] = useState([]);
 
   const getLogs = useCallback(async () => {
     try {
-      const customerId = route.query.customerID;
-      const response = await customersApi.getProcessById(customerId);
+      const response = await customersApi.getProcessById(register);
       if (isMounted()) {
         setLogs(response);
       }
@@ -88,7 +86,7 @@ const useLogs = () => {
     } catch (err) {
       console.error(err);
     }
-  }, [isMounted, setLogs, route.query]);
+  }, [isMounted, setLogs]);
 
   useEffect(() => {
     getLogs();
@@ -125,7 +123,7 @@ const Page = () => {
   const [currentTab, setCurrentTab] = useState("details");
   const customer = useCustomer();
   const register = useRegister();
-  const { logs, addLog } = useLogs();
+  const { logs, addLog } = useLogs(register);
   const role = "ADMIN";
 
   usePageView();
@@ -240,7 +238,9 @@ const Page = () => {
                     phone={customer.phone}
                     role={customer.role}
                   />
+                  {register && (
                   <UserMember register={register} />
+                  )}
                   <UserDataManagement id={customer.id} />
                 </Stack>
               </div>

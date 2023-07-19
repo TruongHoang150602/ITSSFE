@@ -22,13 +22,14 @@ const initialValues = {
   description: "",
   name: "",
   price: 0,
-  submit: null,
+  time: 0,
 };
 
 const validationSchema = Yup.object({
   description: Yup.string().max(5000),
   name: Yup.string().max(255).required(),
   price: Yup.number().min(0).required(),
+  time: Yup.number().min(0).max(12).required(),
 });
 
 export const PackageCreateForm = (props) => {
@@ -38,7 +39,7 @@ export const PackageCreateForm = (props) => {
     validationSchema,
     onSubmit: async (values, helpers) => {
       try {
-        packagesApi.createPackage(formik.values);
+        packagesApi.createPackage(values);
         toast.success("Package created");
         router.push(paths.packages.index);
       } catch (err) {
@@ -74,12 +75,22 @@ export const PackageCreateForm = (props) => {
                 <TextField
                   error={!!(formik.touched.price && formik.errors.price)}
                   fullWidth
-                  label="price"
+                  label="Price"
                   name="price"
                   onBlur={formik.handleBlur}
                   onChange={formik.handleChange}
                   type="number"
                   value={formik.values.price}
+                />
+                  <TextField
+                  error={!!(formik.touched.time && formik.errors.time)}
+                  fullWidth
+                  label="Time"
+                  name="time"
+                  onBlur={formik.handleBlur}
+                  onChange={formik.handleChange}
+                  type="number"
+                  value={formik.values.time}
                 />
                 <TextField
                   error={!!(formik.touched.description && formik.errors.description)}

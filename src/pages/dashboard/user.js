@@ -5,55 +5,71 @@ import {
   Container,
   Unstable_Grid2 as Grid,
 } from "@mui/material";
-import usersApi from "src/api/customers";
+
 import { useMounted } from "src/hooks/use-mounted";
 import { usePageView } from "src/hooks/use-page-view";
 import { Layout as DashboardLayout } from "src/layouts/dashboard/layout";
 import { UserCalendar } from "src/sections/user/user-calendar-activity";
 import { UserMember } from "src/sections/user/user-member";
-// import { UserLogs } from "src/sections/user/user-logs";
+import { UserLogs } from "src/sections/user/user-logs";
 import { PricingPlan } from "src/sections/overview/pricing-plan";
 import { useAuth } from "src/hooks/use-auth";
+import customersApi from "src/api/customers";
 
-const useLogs = (userId) => {
+const useLogs = (register) => {
   const isMounted = useMounted();
   const [logs, setLogs] = useState([]);
-
   const getLogs = useCallback(async () => {
     try {
-      const response = await usersApi.getProcessById(1);
-      console.log(response);
+      const registerId = register.id;
+      const response = await customersApi.getProcessById(registerId);
+      console.log(response)
       if (isMounted()) {
         setLogs(response);
       }
     } catch (err) {
       console.error(err);
     }
-  }, [userId, isMounted]);
+  }, [isMounted]);
 
-  useEffect(
-    () => {
-      getLogs();
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    []
-  );
+  useEffect(() => {
+    getLogs();
+  }, [getLogs]);
 
   return logs;
 };
 
+const useRegister = (customerId) => {
+  const isMounted = useMounted();
+  const [register, setRegister] = useState(null);
 
+  const getRegister = useCallback(async () => {
+    try {
+      const response = await customersApi.getRegisterById(customerId);
+      console.log(response);
+      if (isMounted()) {
+        setRegister(response);
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  }, [isMounted]);
+
+  useEffect(() => {
+    getRegister();
+  }, [getRegister]);
+
+  return register;
+};
 
 
 const Page = () => {
   const user = useAuth().user;
-  const logs = useLogs(user ? user.id : 0);
+  const register = useRegister(user.id);
+  const logs = useLogs(register);
+  console.log(logs)
 
   usePageView();
-
-  const handleTabsChange = useCallback((event, value) => {
-    setCurrentTab(value);
-  }, []);
 
   if (!user) {
     return null;
@@ -72,6 +88,7 @@ const Page = () => {
         }}
       >
         <Container maxWidth="xl">
+          {register === null && (
           <Grid container spacing={4}>
             <Grid xs={12} md={4}>
               <PricingPlan
@@ -135,19 +152,20 @@ const Page = () => {
               />
             </Grid>
           </Grid>
-
+          ) || (
           <Grid container spacing={4}>
             <Grid xs={12} md={7.5}>
               <UserCalendar activity={logs} />
             </Grid>
             <Grid xs={12} md={4.5} mt={4}>
-              <UserMember />
+                <UserMember register={register} />
             </Grid>
 
             <Grid xs={12}>
-              {/* <UserLogs logs={logs} /> */}
+              <UserLogs register={register} logs={logs} />
             </Grid>
           </Grid>
+          )}
         </Container>
       </Box>
     </>

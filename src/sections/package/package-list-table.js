@@ -27,7 +27,6 @@ import {
   Typography,
 } from "@mui/material";
 import { Scrollbar } from "src/components/scrollbar";
-import packagesApi from "src/api/packages";
 
 export const PackageListTable = (props) => {
   const {
@@ -42,62 +41,69 @@ export const PackageListTable = (props) => {
     ...other
   } = props;
   const [currentPackage, setCurrentPackage] = useState({
-    id: '',
-    name: '',
-    price: '',
-    description: ''
+    id: "",
+    name: "",
+    price: "",
+    description: "",
   });
 
   const [updatedPackage, setUpdatedPackage] = useState({
-    name: '',
-    price: '',
-    description: ''
+    name: "",
+    price: "",
+    description: "",
   });
 
   useEffect(() => {
     setUpdatedPackage({
       name: currentPackage.name,
       price: currentPackage.price,
-      description: currentPackage.description
+      description: currentPackage.description,
     });
   }, [currentPackage]);
 
   const handleUpdatedPackage = (field, value) => {
-    setUpdatedPackage(prevState => ({
+    setUpdatedPackage((prevState) => ({
       ...prevState,
-      [field]: value
+      [field]: value,
     }));
   };
 
   const handleName = (event) => {
     setUpdatedPackage((prevState) => ({
       ...prevState,
-      name: event.target.value
+      name: event.target.value,
     }));
-  }
+  };
+
+  const handleTime = (event) => {
+    setUpdatedPackage((prevState) => ({
+      ...prevState,
+      time: event.target.value,
+    }));
+  };
 
   const handlePrice = (event) => {
     setUpdatedPackage((prevState) => ({
       ...prevState,
-      price: event.target.value
+      price: event.target.value,
     }));
-  }
+  };
 
   const handleDes = (event) => {
     setUpdatedPackage((prevState) => ({
       ...prevState,
-      description: event.target.value
+      description: event.target.value,
     }));
-  }
+  };
 
   const handlePackageToggle = useCallback((pack) => {
     setCurrentPackage((prevPackage) => {
       if (prevPackage === pack) {
         return {
-          id: '',
-          name: '',
-          price: '',
-          description: ''
+          id: "",
+          name: "",
+          price: "",
+          description: "",
         };
       }
       return pack;
@@ -106,33 +112,36 @@ export const PackageListTable = (props) => {
 
   const handlePackageClose = useCallback(() => {
     setCurrentPackage({
-      id: '',
-      name: '',
-      price: '',
-      description: ''
+      id: "",
+      name: "",
+      price: "",
+      description: "",
     });
   }, []);
 
-  const handlePackageUpdate = useCallback((packageId) => {
-    // packagesApi.updatePackageById(packageId, updatedPackage);
-    updatePackage(packageId, updatedPackage);
-    setCurrentPackage({
-      id: '',
-      name: '',
-      price: '',
-      description: ''
-    });
-    toast.success("Package updated");
-  }, [updatedPackage]);
+  const handlePackageUpdate = useCallback(
+    (packageId) => {
+      // packagesApi.updatePackageById(packageId, updatedPackage);
+      updatePackage(packageId, updatedPackage);
+      setCurrentPackage({
+        id: "",
+        name: "",
+        price: "",
+        description: "",
+      });
+      toast.success("Package updated");
+    },
+    [updatedPackage]
+  );
 
   const handlePackageDelete = useCallback((packageId) => {
     // packagesApi.deletePackageById(packageId);
     deletePackage(packageId);
     setCurrentPackage({
-      id: '',
-      name: '',
-      price: '',
-      description: ''
+      id: "",
+      name: "",
+      price: "",
+      description: "",
     });
     toast.error("Package cannot be deleted");
   }, []);
@@ -146,6 +155,7 @@ export const PackageListTable = (props) => {
               <TableCell />
               <TableCell>Name</TableCell>
               <TableCell>Price</TableCell>
+              <TableCell>Time</TableCell>
               <TableCell>Description</TableCell>
             </TableRow>
           </TableHead>
@@ -178,10 +188,12 @@ export const PackageListTable = (props) => {
                         width="25%"
                       >
                         <IconButton onClick={() => handlePackageToggle(pack)}>
-                          <SvgIcon>{isCurrent ? <ChevronDownIcon /> : <ChevronRightIcon />}</SvgIcon>
+                          <SvgIcon>
+                            {isCurrent ? <ChevronDownIcon /> : <ChevronRightIcon />}
+                          </SvgIcon>
                         </IconButton>
                       </TableCell>
-                      <TableCell width="25%">
+                      <TableCell>
                         <Box
                           sx={{
                             alignItems: "center",
@@ -199,7 +211,8 @@ export const PackageListTable = (props) => {
                         </Box>
                       </TableCell>
                       <TableCell>{price}</TableCell>
-                      <TableCell>{pack.description}</TableCell>
+                      <TableCell>{`${pack.time} month`}</TableCell>
+                      <TableCell width={"50%"}>{pack.description}</TableCell>
                     </TableRow>
                     {isCurrent && (
                       <TableRow>
@@ -234,21 +247,42 @@ export const PackageListTable = (props) => {
                                     label="Package name"
                                     name="name"
                                   />
-                                  <TextField
-                                    defaultValue={pack.price}
-                                    onChange={handlePrice}
-                                    fullWidth
-                                    label="Price"
-                                    name="price"
-                                    InputProps={{
-                                      startAdornment: (
-                                        <InputAdornment position="start">
-                                          {pack.currency}
-                                        </InputAdornment>
-                                      ),
-                                    }}
-                                    type="number"
-                                  />
+                                  <Grid container >
+                                    <Grid md={6} pr={0.5}>
+                                      <TextField
+                                        defaultValue={pack.price}
+                                        onChange={handlePrice}
+                                        fullWidth
+                                        label="Price"
+                                        name="price"
+                                        InputProps={{
+                                          startAdornment: (
+                                            <InputAdornment position="start">
+                                              $
+                                            </InputAdornment>
+                                          ),
+                                        }}
+                                        type="number"
+                                      />
+                                    </Grid>
+                                    <Grid md={6} pl={0.5}>
+                                      <TextField
+                                        defaultValue={pack.time}
+                                        onChange={handleTime}
+                                        fullWidth
+                                        label="Time"
+                                        name="time"
+                                        InputProps={{
+                                          startAdornment: (
+                                            <InputAdornment position="start">
+                                              month
+                                            </InputAdornment>
+                                          ),
+                                        }}
+                                        type="number"
+                                      />
+                                    </Grid>
+                                  </Grid>
                                 </Stack>
                               </Grid>
                               <Grid item md={6} xs={12}>
