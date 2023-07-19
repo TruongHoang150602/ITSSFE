@@ -24,8 +24,7 @@ import { Layout as AuthLayout } from "src/layouts/auth/layout";
 
 const initialValues = {
   gmail: "admin@gmail.com",
-  password: "admin123",
-  submit: null,
+  password: "admin"
 };
 
 // Validate credentials

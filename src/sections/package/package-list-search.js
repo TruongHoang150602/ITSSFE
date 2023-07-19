@@ -5,58 +5,6 @@ import { Box, Chip, Divider, Input, Stack, SvgIcon, Typography } from "@mui/mate
 import { MultiSelect } from "src/components/multi-select";
 import { useUpdateEffect } from "src/hooks/use-update-effect";
 
-const categoryOptions = [
-  {
-    label: "Healthcare",
-    value: "healthcare",
-  },
-  {
-    label: "Makeup",
-    value: "makeup",
-  },
-  {
-    label: "Dress",
-    value: "dress",
-  },
-  {
-    label: "Skincare",
-    value: "skincare",
-  },
-  {
-    label: "Jewelry",
-    value: "jewelry",
-  },
-  {
-    label: "Blouse",
-    value: "blouse",
-  },
-];
-
-const statusOptions = [
-  {
-    label: "Published",
-    value: "published",
-  },
-  {
-    label: "Draft",
-    value: "draft",
-  },
-];
-
-const stockOptions = [
-  {
-    label: "All",
-    value: "all",
-  },
-  {
-    label: "Available",
-    value: "available",
-  },
-  {
-    label: "Out of Stock",
-    value: "outOfStock",
-  },
-];
 
 export const PackageListSearch = (props) => {
   const { onFiltersChange, ...other } = props;

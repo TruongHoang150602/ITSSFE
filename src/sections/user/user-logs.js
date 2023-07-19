@@ -24,13 +24,14 @@ import { Scrollbar } from "src/components/scrollbar";
 import AddIcon from "@mui/icons-material/Add";
 // import { useAuth } from "src/hooks/use-auth";
 import { createResourceId } from "src/utils/create-resource-id";
+import { useAuth } from "src/hooks/use-auth";
 
 export const UserLogs = (props) => {
   const { register, logs, addLog, ...other } = props;
   const [openModal, setOpenModal] = useState(false);
-  const role = "ADMIN";
+  const role = useAuth().user.role;
 
-  const trainer = register[0].trainer_name;
+  const trainer = register.trainer_name;
   const activityLogs = logs.map((log) => ({ ...log, trainer_name: trainer }));
 
   const onCloseModel = () => {
@@ -52,7 +53,7 @@ export const UserLogs = (props) => {
       <CardHeader
         action={
           <Grid container spacing={2}>
-            {role === "ADMIN" && (
+            {role === "MANAGER" || role === "TRAINER" && (
               <IconButton
                 aria-label="add"
                 color="primary"
@@ -96,15 +97,6 @@ export const UserLogs = (props) => {
           )}
         </Table>
       </Scrollbar>
-      {/* <TablePagination
-        component="div"
-        count={process ? process.length : 0}
-        onPageChange={() => {}}
-        onRowsPerPageChange={() => {}}
-        page={0}
-        rowsPerPage={10}
-        rowsPerPageOptions={[5, 10, 25]}
-      /> */}
       <Dialog open={openModal} onClose={onCloseModel}>
         <Card sx={{ width: "400px" }}>
           <CardHeader title="Add activity" />
